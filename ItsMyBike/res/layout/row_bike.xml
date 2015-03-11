@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    
+    
+    
+     <ImageView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/bikeImage"
+        android:id="@+id/row_image"
+       
+        
+        />
+     <TextView
+        android:id="@+id/row_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/defaultNickname"
+        android:textColor="@color/textbody" />
+     
+     <TextView
+        android:id="@+id/row_serial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/row_nickname"
+        android:layout_alignBottom="@+id/row_nickname"
+        android:layout_marginLeft="106dp"
+        android:layout_toRightOf="@+id/row_nickname"
+        android:text="@string/defaultSerial"
+        android:textColor="@color/textbody" />
+
+</RelativeLayout>
