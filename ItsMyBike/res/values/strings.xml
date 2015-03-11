@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ItsMyBike</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="registerButton">Register</string>
+    <string name="logInButton">Log In</string>
+    <string name="usernameText">Username</string>
+    <string name="passwordText">Password</string>
+    <string name="dummy_section_text">dummytext</string>
+        <string name="other_dummy_section_text">otherdummytext</string>
+        <string name="profile">profile</string>
+        <string name="defaultNickname">Nickname</string>
+         <string name="defaultSerial">Serial</string>
+         <string name = "bikeImage">Your Bike</string>
+         <string name = "reportForm1">Use this form to report your bike stolen.</string>
+         <string name = "reportForm2">It will then go into our database and be used to show others bike stealing hotspots.</string>
+         <string name = "radiocurrentlocation">Use CurrentLocation</string>
+         <string name = "radioinputlocation">Input a Location using Latitutde and Longitude</string>
+         <string name = "latitude">Latitude</string>
+         <string name = "longitude">Longitude</string>
+         <string name = "apptitle">It\u0027s My Bike</string>
+           <string name = "log_out">Sign Out</string>
+            <string name="edit_profile">Edit</string>
+            <string name="gps_network_not_enabled">gps not enabled</string>
+            <string name = "open_location_settings">open location settings</string>
+            <string name ="location">Location</string>
+            <string name ="serial">Serial No.</string>
+            <string name ="nicname">Nickname</string>
+            <string name = "register_stolen">Register Bike and Location</string>
+             
+         
+
+</resources>

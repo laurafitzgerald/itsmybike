@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/innerbackground" >
+    
+    
+    <ImageView
+        android:id="@+id/img_bike"
+        android:layout_width="100dp"
+        android:layout_height = "100dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="25dp"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:contentDescription="@null"
+        />
+    
+  
+        
+        <LinearLayout
+            
+                  android:layout_alignTop="@+id/img_bike"
+				   android:layout_marginLeft="36dp"
+				        android:layout_marginTop="23dp"
+				        android:layout_toRightOf="@+id/img_bike"
+            android:id="@+id/layout_bike_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal" >
+        
+        
+        	<TextView
+                android:id="@+id/label_bike_nickname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/nicname"
+                android:textColor="@color/textbody"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+ 
+            <TextView
+                android:id="@+id/text_bike_nickname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textColor="@color/textbody"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="normal" />
+        
+        
+        </LinearLayout>
+        
+            <LinearLayout
+                
+                
+           android:layout_alignTop="@+id/img_bike"
+				   android:layout_marginLeft="36dp"
+				        android:layout_marginTop="56dp"
+				        android:layout_toRightOf="@+id/img_bike"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+     
+            android:orientation="horizontal" >
+ 
+            <TextView
+                android:id="@+id/label_bike_serial"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/textbody"
+                android:text="@string/serial"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+ 
+            <TextView
+                android:id="@+id/text_bike_serial"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textColor="@color/textbody"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="normal" />
+        </LinearLayout>
+        
+   <!--              <LinearLayout
+            android:id="@+id/layout_bike_make"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_bike_serial"
+            android:orientation="horizontal" >
+ 
+            <TextView
+                android:id="@+id/label_bike_make"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/textbody"
+                android:text="@string/serial"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+ 
+            <TextView
+                android:id="@+id/text_bike_make"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textColor="@color/textbody"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="normal" />
+        </LinearLayout> -->
+        
+    
+     
+
+</RelativeLayout>
