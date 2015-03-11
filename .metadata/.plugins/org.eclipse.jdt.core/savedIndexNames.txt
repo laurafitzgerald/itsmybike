@@ -1,0 +1,3 @@
+INDEX VERSION 1.126+C:\Users\Laura\Documents\itsmybike\clone\.metadata\.plugins\org.eclipse.jdt.core
+2318669601.index
+3755907667.index
