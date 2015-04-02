@@ -1,6 +1,8 @@
 package wit.lf.itsmybike.main;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -49,9 +51,40 @@ public class AddBike extends Activity {
 
     public void addBikePicture(View view)
     {
-        Intent openGallery = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(openGallery, 1);
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
+        builder.setPositiveButton(getResources().getString(R.string.browse), new DialogInterface.OnClickListener() {
+
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Intent openGallery = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGallery,1);
+            }
+        });
+
+        builder.setNegativeButton(getResources().getString(R.string.takePhoto), new DialogInterface.OnClickListener() {
+
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, 2);
+                }
+            }
+        });
+
+
+
+        AlertDialog dialog=builder.create();
+        dialog.show();
     }
 
     public void saveBike(View view)
@@ -119,18 +152,41 @@ public class AddBike extends Activity {
                 int profilePicWidth=addBikeImage.getWidth();
                 int profilePicHeight=addBikeImage.getHeight();
                 int new_width=profilePicWidth;
-                int new_height = (int) Math.floor((double) heightBeforeScale *( (double) new_width / (double) widthBeforeScale));
+                int new_height=profilePicHeight;
+
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
 
                 addBikeImage.setBackgroundResource(0);
                 addBikeImage.setImageBitmap(scaledBitmap);
-                Toast.makeText(this,"file path"+galleryFilePath,Toast.LENGTH_LONG).show();
-                cursor.close();
 
 
 
 
-            } else {
+
+            }
+
+            else if((requestCode == 2 && resultCode == RESULT_OK
+                    && null != data))
+            {
+                Bundle extras = data.getExtras();
+                Bitmap unscaledBitmap = (Bitmap) extras.get("data");
+
+
+
+                int widthBeforeScale=unscaledBitmap.getWidth();
+                int heightBeforeScale =unscaledBitmap.getHeight();
+                int profilePicWidth=addBikeImage.getWidth();
+                int profilePicHeight=addBikeImage.getHeight();
+                int new_width=profilePicWidth;
+                int new_height=profilePicHeight;
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
+
+                addBikeImage.setBackgroundResource(0);
+                addBikeImage.setImageBitmap(scaledBitmap);
+            }
+
+
+            else {
                 Toast.makeText(this, "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
             }
@@ -140,5 +196,4 @@ public class AddBike extends Activity {
         }
 
     }
-
 }
