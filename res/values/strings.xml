@@ -48,6 +48,10 @@
     <string name="nicknameLabel">Nickname:</string>
     <string name="serialNumberLabel">Serial No:</string>
     <string name="makeLabel">Make:</string>
+    <string name="selectPhotoMethod">Choose to browse gallery for a photo or take photo with camera</string>
+    <string name="takePhoto">Camera</string>
+    <string name="browse">Gallery</string>
+    <string name="title_activity_image_capture">ImageCapture</string>
 
 
 </resources>
