@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/background" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/scrollView"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/editProfileSaveButton"
+        android:fillViewport="false">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@color/background" >
+
+
+            <EditText
+                android:textColor="@color/textbody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/addBikeNickname"
+                android:hint="@string/bikeNicknameHint"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:textColor="@color/textbody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/addBikeSerialNumber"
+                android:layout_marginTop="40dp"
+                android:hint="@string/bikeSerialNumberHint"
+                android:layout_below="@+id/addBikeNickname"
+                android:layout_alignStart="@+id/editProfileFirstName" />
+
+            <EditText
+                android:textColor="@color/textbody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/addBikeMake"
+                android:layout_marginTop="40dp"
+                android:hint="@string/editBikeMakeHint"
+                android:layout_below="@+id/addBikeSerialNumber"
+                android:layout_alignStart="@+id/editProfileFirstName" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/imageRelLayout"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addBikeImage"
+
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addIconAddBikeImage"
+                    android:clickable="true"
+                    android:onClick="addBikePicture"
+                    android:layout_alignBottom="@id/addBikeImage"
+                    android:layout_alignRight="@id/addBikeImage"
+                    />
+
+            </RelativeLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/addBikeMake"
+                android:layout_marginTop="42dp"
+                android:layout_height="wrap_content"
+                android:text="@string/saveProfile"
+                android:id="@+id/editBikeSaveButton"
+                android:onClick="saveBike" />
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
+
+</RelativeLayout>

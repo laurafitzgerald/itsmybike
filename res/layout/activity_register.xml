@@ -1,11 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/background" >
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/scrollView2"
+    android:layout_above="@+id/registerButton"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true">
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
      android:background="@color/background" >
-    
-    
-    
 
-</GridLayout>
+
+    <EditText
+        android:textColor="@color/textbody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/registerFirstName"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:hint="@string/firstNameHint" />
+
+    <EditText
+        android:textColor="@color/textbody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/registerSurname"
+        android:layout_marginTop="40dp"
+        android:hint="@string/surnameHint"
+        android:layout_below="@+id/registerFirstName"
+       android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:textColor="@color/textbody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/registerLocation"
+        android:layout_marginTop="40dp"
+        android:hint="@string/locationHint"
+        android:layout_below="@+id/registerSurname"
+      android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:textColor="@color/textbody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/registerEmail"
+        android:layout_below="@+id/registerLocation"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentLeft="true"
+        android:hint="email address" />
+
+    <EditText
+        android:textColor="@color/textbody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/registerPassword"
+
+        android:layout_marginTop="40dp"
+        android:hint="password"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/registerEmail" />
+
+    <EditText
+        android:textColor="@color/textbody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/retypePassword"
+        android:layout_below="@+id/registerPassword"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="40dp"
+        android:hint="Retype Password" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addProfilePic"
+
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addIconAddProfilePic"
+        android:clickable="true"
+        android:onClick="addProfilePic"
+        android:layout_alignBottom="@id/addProfilePic"
+        android:layout_alignRight="@id/addProfilePic"
+        />
+
+</RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/registerButton"
+        android:id="@+id/registerButton"
+        android:layout_below="@+id/retypePassword"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:onClick="registerUser" />
+
+
+
+
+</RelativeLayout>
+</ScrollView>
+
+
+ </RelativeLayout>

@@ -2,6 +2,8 @@ package wit.lf.itsmybike.data;
 
 //here are some changes
 
+import android.graphics.Bitmap;
+
 public class Bike {
 
 	private int drawableId;
@@ -11,6 +13,10 @@ public class Bike {
 	private String nickname;
 	private String make;
 	private boolean stolen;
+
+
+
+    private Bitmap selectedBikePic;
 	
 	
 
@@ -26,6 +32,8 @@ public class Bike {
 		
 		
 	}
+
+    public Bike(){}
 	
 	
 	public boolean isStolen() {
@@ -66,7 +74,13 @@ public class Bike {
 	}
 
 
+    public Bitmap getSelectedBikePic() {
+        return selectedBikePic;
+    }
 
+    public void setSelectedBikePic(Bitmap selectedBikePic) {
+        this.selectedBikePic = selectedBikePic;
+    }
 
 
 	public String getNickname() {

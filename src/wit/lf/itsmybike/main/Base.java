@@ -1,10 +1,6 @@
 package wit.lf.itsmybike.main;
 
 
-
-
-import wit.lf.itsmybike.data.Bike;
-import wit.lf.itsmybike.data.StolenBike;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +9,15 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+
+import wit.lf.itsmybike.data.Bike;
+import wit.lf.itsmybike.data.StolenBike;
 
 public class Base extends FragmentActivity {
 
@@ -34,20 +36,18 @@ public class Base extends FragmentActivity {
 		
 		
 		case R.id.log_out:
-			
+
 			gs.setLoggedIn(false);
 			Toast.makeText(getApplicationContext(), "Logging Out...", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent(Base.this, LogInScreen.class);
-			startActivity(intent);;
+			startActivity(intent);
 			finish();
 			
 			return true;
 			
-	/*	case R.id.edit_profile:
-			Toast.makeText(getApplicationContext(), "Edit profile Clicked", Toast.LENGTH_SHORT).show();
+
 			
-			return true;*/
-			
+
 		default:
 			return super.onOptionsItemSelected(item);
 			
@@ -71,9 +71,9 @@ public class Base extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
-		
-		
+
+
+
 		
 		gs = (GlobalState) getApplication();
 		
@@ -90,11 +90,8 @@ public class Base extends FragmentActivity {
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
-		
-		 tabsAdapter = new TabsAdapter(this, viewPager);
-	
-	
-		
+		tabsAdapter = new TabsAdapter(this, viewPager);
+
 		tabsAdapter.addTab(actionBar.newTab().setText("Home"), HomeFragment.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setText("Profile"), ProfileFragment.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setText("Report"), ReportFragment.class, null);
@@ -142,17 +139,47 @@ public class Base extends FragmentActivity {
 		
 		
 		
-		Bike bikeOne = new Bike( R.drawable.bike_one, "myPrecious", "abc123", "Claude Butler");
-		Bike bikeTwo = new Bike(R.drawable.bike_two, "myOtherPrecious", "xyz456", "Giant");
+
 		
-		gs.getBikes().add(bikeOne);
-		gs.getBikes().add(bikeTwo);
+		//gs.getBikes().add(bikeOne);
+		//gs.getBikes().add(bikeTwo);
+
 		
 		
 	
 		
 		
 	}
+
+    public void editProfile(View view)
+    {
+        startActivity(new Intent(this,EditProfile.class));
+    }
+
+    public void editBike(View view)
+    {
+        RelativeLayout rowContainingButton=(RelativeLayout)view.getParent();
+
+
+        TextView serialNumberTV=(TextView)rowContainingButton.getChildAt(4);
+        String serialNumber=serialNumberTV.getText().toString();
+
+
+        for (Bike b:gs.getProfile().getListOfBikes())
+        {
+            if (b.getSerialNo().equals(serialNumber))
+            {
+                gs.setBikeToEdit(b);
+            }
+        }
+
+        startActivity(new Intent(this,EditBike.class));
+    }
+
+    public void addBike(View view)
+    {
+        startActivity(new Intent(this,AddBike.class));
+    }
 
 			
 }

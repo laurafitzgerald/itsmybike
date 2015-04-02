@@ -24,7 +24,12 @@ import java.text.SimpleDateFormat;
 
 
 
+
 import com.example.itsmybike.R;
+
+import java.util.List;
+
+import wit.lf.itsmybike.data.Bike;
 
 public class ProfileFragment extends Fragment {
 
@@ -37,6 +42,8 @@ public class ProfileFragment extends Fragment {
 	private GlobalState gs;
 	private ListView bikeListView;
 	private View rootView;
+    private ImageView profileEditIcon;
+    private ImageView plusIcon;
 	
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
@@ -79,17 +86,21 @@ public class ProfileFragment extends Fragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		gs = (GlobalState) getActivity().getApplication();
-		
-		
+        List <Bike>listOfBikes;
+        listOfBikes=gs.getProfile().getListOfBikes();
 		bikeListView = (ListView) getActivity().findViewById(R.id.bikeList);
-		ListBikesAdapter adapter = new ListBikesAdapter(getActivity(), gs.getBikes());
+		ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(),listOfBikes);
 		bikeListView.setAdapter(adapter);
+        profileEditIcon =(ImageView)getActivity().findViewById(R.id.profileEditIcon);
+        profileEditIcon.setBackgroundResource(R.drawable.edit);
 
-		
 		username = (TextView) getActivity().findViewById(R.id.usernameView);
-		location = (TextView) getActivity().findViewById(R.id.locView);	
+		location = (TextView) getActivity().findViewById(R.id.locView);
 		profile = (ImageView) getActivity().findViewById(R.id.profileImageView);
+        plusIcon=(ImageView)getActivity().findViewById(R.id.plusIcon);
+        plusIcon.setBackgroundResource(R.drawable.add);
 		
+
 	
 		profile.setOnLongClickListener(new OnLongClickListener(){
 
@@ -119,14 +130,22 @@ public class ProfileFragment extends Fragment {
 		Log.v("profile first name: ", gs.getProfile().getSecondName());
 		Log.v("profile first name: ", gs.getProfile().getLocation());
 		Log.v("nothing", location.toString());
+
 		
 		
 		username.setText(gs.getProfile().getFirstName() + " " + gs.getProfile().getSecondName());
 		
 		location.setText(gs.getProfile().getLocation());
 		
-		
-		profile.setBackgroundResource(gs.getProfile().getDrawableId());
+
+        if(gs.getProfile().getSelectedProfilePic()!=null)
+        {
+            profile.setBackgroundResource(0);
+            profile.setImageBitmap(gs.getProfile().getSelectedProfilePic());
+        }
+        else {
+            profile.setBackgroundResource(gs.getProfile().getDrawableId());
+        }
 		
 		
 		
@@ -200,5 +219,7 @@ public class ProfileFragment extends Fragment {
 	    private static Uri getOutputMediaFileUri(int type){
 	        return Uri.fromFile(getOutputMediaFile(type));
 	  }
+
+
 
 }

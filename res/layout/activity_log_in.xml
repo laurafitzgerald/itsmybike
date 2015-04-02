@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     tools:context="${relativePackage}.${activityClass}" >
-    
 
 
-    
-    
+
+
+
        <Button
-          android:id="@+id/registerButton"
+          android:id="@+id/editProfilePassword"
           android:textColor="@color/textbody"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -20,15 +20,15 @@
           android:layout_marginBottom="81dp"
           android:onClick="registerButtonPressed"
           android:text="@string/registerButton"
-          android:enabled="false" /> 
+          />
 
       <Button
           android:id="@+id/logInButton"
           android:textColor="@color/textbody"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_above="@+id/registerButton"
-          android:layout_alignLeft="@+id/registerButton"
+          android:layout_above="@+id/editProfilePassword"
+          android:layout_alignLeft="@+id/editProfilePassword"
           android:onClick="logInButtonPressed"
           android:text="@string/logInButton" />
 
@@ -82,8 +82,8 @@
           android:layout_height="wrap_content"
           android:layout_alignBaseline="@+id/logInButton"
           android:layout_alignBottom="@+id/logInButton"
-          android:layout_toRightOf="@+id/registerButton"
-  
+          android:layout_toRightOf="@+id/editProfilePassword"
+
           android:textAppearance="?android:attr/textAppearanceMedium" />
     
 </RelativeLayout>

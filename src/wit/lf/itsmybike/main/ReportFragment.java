@@ -1,7 +1,5 @@
 package wit.lf.itsmybike.main;
 
-import wit.lf.itsmybike.data.Bike;
-import wit.lf.itsmybike.data.StolenBike;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -25,6 +23,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+
+import wit.lf.itsmybike.data.Bike;
+import wit.lf.itsmybike.data.StolenBike;
 
 public class ReportFragment extends Fragment{
 	
@@ -85,7 +86,7 @@ public class ReportFragment extends Fragment{
 			spinner  = (Spinner) getActivity().findViewById(R.id.bikes_spinner);
 			
 			Resources res = getResources();
-			BikeAdapter adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, gs.getBikes(), res);
+			BikeAdapter adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, gs.getProfile().getListOfBikes(), res);
 			spinner.setAdapter(adapter);
 			
 			gl = (GridLayout) getActivity().findViewById(R.id.lat_lng_grid);
@@ -181,7 +182,7 @@ public class ReportFragment extends Fragment{
 			Toast.makeText(getActivity().getApplicationContext(), "Please select a bike first", Toast.LENGTH_SHORT).show();
 			
 		}
-		Bike testBike = gs.getBikes().get(selected-1);
+		Bike testBike = gs.getProfile().getListOfBikes().get(selected-1);
 		if(testBike.isStolen()){
 			
 			return false;
@@ -193,7 +194,7 @@ public class ReportFragment extends Fragment{
 		now.setToNow();
 		String date = now.monthDay + "/" + now.month + "/" + now.year;
 		
-		gs.getBikes().get(selected-1).setStolen(true);
+		gs.getProfile().getListOfBikes().get(selected-1).setStolen(true);
 	
 		gs.getStolenBikes().add(new StolenBike(gs.getCurrentLat(), gs.getCurrentLng(), testBike.getSerialNo(), date));
 		
