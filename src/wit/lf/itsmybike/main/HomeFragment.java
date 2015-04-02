@@ -42,7 +42,7 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 	
 
 	private GlobalState gs;
-	private LocationManager manager;
+    private LocationManager manager;
 	private GoogleApiClient client;
 	private GoogleMap map;
 	private MapFragment mapFr;
@@ -92,31 +92,28 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 		
 		
 		super.onViewCreated(view, savedInstanceState);
-		
-		
-		gs = (GlobalState) getActivity().getApplication();
-		mapFr = (MapFragment)getActivity().getFragmentManager().findFragmentById(R.id.map);
-		map = mapFr.getMap();
 
-		
 
-		
-		client = new GoogleApiClient.Builder(getActivity())
-		.addApi(LocationServices.API)
-		.addConnectionCallbacks(this)
-		.addOnConnectionFailedListener(this)
-		.build();
-		client.connect();
+        manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-		checkGPStatus();
-		
-			
-			manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-			
-			
-			Criteria criteria = new Criteria();
-			String  mBestProvider = manager.getBestProvider(criteria, true);
-		manager.requestLocationUpdates(mBestProvider, 50000, 10000, this);
+
+
+            gs = (GlobalState) getActivity().getApplication();
+            mapFr = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
+            map = mapFr.getMap();
+            Log.v("profiles",""+gs.getProfile().getFirstName());
+
+            client = new GoogleApiClient.Builder(getActivity())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+            client.connect();
+
+
+            Criteria criteria = new Criteria();
+            String mBestProvider = manager.getBestProvider(criteria, true);
+            manager.requestLocationUpdates(mBestProvider, 50000, 10000, this);
 		
 		
 	
@@ -125,77 +122,87 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 			Toast.makeText(getActivity().getApplicationContext(), "no location", Toast.LENGTH_SHORT).show();
 			
 		}*/
-	
-		//manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50000, 10, this);
-		
-		
-		
-		for (int i = 0; i < gs.getStolenBikes().size(); i++){
-			
-			
-			LatLng templl = new LatLng(gs.getStolenBikes().get(i).getLat(), gs.getStolenBikes().get(i).getLng());
+
+            //manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50000, 10, this);
+
+
+            for (int i = 0; i < gs.getStolenBikes().size(); i++) {
+
+
+                LatLng templl = new LatLng(gs.getStolenBikes().get(i).getLat(), gs.getStolenBikes().get(i).getLng());
 			/*map.addMarker( new MarkerOptions()
 			  .position( templl));
 			  //.title("Fence " + fence.getId())
 			  //.snippet("Radius: " + fence.getRadius()) ).showInfoWindow();
 			*/
-			
-			Geofence.Builder fence = new Geofence.Builder();
-			fence.setCircularRegion( templl.latitude, templl.latitude, 10);
-			
-		
-			CircleOptions circleOptions = new CircleOptions()
-			  .center( templl )
-			  .radius( 10 )
-			  .fillColor(getResources().getColor(R.color.locationcolor))
-			  .strokeColor(Color.TRANSPARENT)
-			  .strokeWidth(2);
 
-			
-			map.addCircle(circleOptions);
-			
-		}
-	
-	
-		
+                Geofence.Builder fence = new Geofence.Builder();
+                fence.setCircularRegion(templl.latitude, templl.latitude, 10);
+
+
+                CircleOptions circleOptions = new CircleOptions()
+                        .center(templl)
+                        .radius(10)
+                        .fillColor(getResources().getColor(R.color.locationcolor))
+                        .strokeColor(Color.TRANSPARENT)
+                        .strokeWidth(2);
+
+
+                map.addCircle(circleOptions);
+
+            }
+
+
+
 		
 	}
-	
-
-	
 
 
 
-	private void checkGPStatus() {
+
+
+
+	private boolean checkGPStatus() {
+
+
 		boolean gpsEnabled = false;
 		boolean networkEnabled = false;
 		try{
 			gpsEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            Log.v("checkgps","check gps: "+gpsEnabled);
 		}catch(Exception ex){}
 		try{
 			networkEnabled = manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            Log.v("checkgps","check network: "+networkEnabled);
 		}catch(Exception ex){}
-		
-		if(!gpsEnabled && !networkEnabled){
-			AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-			dialog.setMessage(getActivity().getResources().getString(R.string.gps_network_not_enabled));
-			dialog.setPositiveButton(getActivity().getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
-				
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-					startActivity(intent);
-					
-				}
-			});
+		if(!gpsEnabled && !networkEnabled){
+
+            return false;
 		}
-		
-		
+
+        return true;
 	}
 
 
+public void turnOnLocationServices()
+{
+    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    builder.setMessage(getActivity().getResources().getString(R.string.gps_network_not_enabled));
+    builder.setPositiveButton(getActivity().getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
 
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+
+        }
+    });
+
+    AlertDialog dialog=builder.create();
+    dialog.show();
+}
 
 
 	@Override
@@ -216,10 +223,12 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 
 	@Override
 	public void onLocationChanged(Location location) {
+
+
 		LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
 		gs.setCurrentLat(location.getLatitude());
 		gs.setCurrentLng(location.getLongitude());
-		
+
 		map.moveCamera(CameraUpdateFactory.newLatLng(latlng));
 		map.animateCamera(CameraUpdateFactory.zoomTo(16));
 		
@@ -247,6 +256,7 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 
 	@Override
 	public void onProviderDisabled(String provider) {
+
 		// TODO Auto-generated method stub
 		
 	}
@@ -264,15 +274,23 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		
-		checkGPStatus();
-		Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(client);
-		
-		gs.setCurrentLat(lastKnownLocation.getLatitude());
-		gs.setCurrentLng(lastKnownLocation.getLongitude());
-		map = mapFr.getMap();
-		map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng( lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
-		
-		map.animateCamera(CameraUpdateFactory.zoomTo(16));
+            if(!checkGPStatus())
+            {
+                turnOnLocationServices();
+            }
+        else {
+
+
+                Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(client);
+                gs.setCurrentLat(lastKnownLocation.getLatitude());
+                gs.setCurrentLng(lastKnownLocation.getLongitude());
+                map = mapFr.getMap();
+                map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())));
+
+                map.animateCamera(CameraUpdateFactory.zoomTo(16));
+
+            }
+
 		
 	}
 

@@ -2,7 +2,6 @@ package wit.lf.itsmybike.main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.itsmybike.R;
+
+import java.util.List;
+
+import wit.lf.itsmybike.data.Bike;
 
 public class ProfileFragment extends Fragment {
 
@@ -24,6 +27,8 @@ public class ProfileFragment extends Fragment {
 	private GlobalState gs;
 	private ListView bikeListView;
 	private View rootView;
+    private ImageView profileEditIcon;
+    private ImageView plusIcon;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -57,35 +62,41 @@ public class ProfileFragment extends Fragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		gs = (GlobalState) getActivity().getApplication();
-		
-		
+        List <Bike>listOfBikes;
+        listOfBikes=gs.getProfile().getListOfBikes();
 		bikeListView = (ListView) getActivity().findViewById(R.id.bikeList);
-		ListBikesAdapter adapter = new ListBikesAdapter(getActivity(), gs.getBikes());
+		ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(),listOfBikes);
 		bikeListView.setAdapter(adapter);
+        profileEditIcon =(ImageView)getActivity().findViewById(R.id.profileEditIcon);
+        profileEditIcon.setBackgroundResource(R.drawable.edit);
 
-		
 		username = (TextView) getActivity().findViewById(R.id.usernameView);
-		location = (TextView) getActivity().findViewById(R.id.locView);	
+		location = (TextView) getActivity().findViewById(R.id.locView);
 		profile = (ImageView) getActivity().findViewById(R.id.profileImageView);
+        plusIcon=(ImageView)getActivity().findViewById(R.id.plusIcon);
+        plusIcon.setBackgroundResource(R.drawable.add);
 		
-		Log.v("usernamebox: ", username.toString());
-		
-		Log.v("profile: ", gs.getProfile().toString());
-		Log.v("profile first name: ", gs.getProfile().getFirstName());
-		Log.v("profile first name: ", gs.getProfile().getSecondName());
-		Log.v("profile first name: ", gs.getProfile().getLocation());
-		Log.v("nothing", location.toString());
+
 		
 		
 		username.setText(gs.getProfile().getFirstName() + " " + gs.getProfile().getSecondName());
 		
 		location.setText(gs.getProfile().getLocation());
 		
-		
-		profile.setBackgroundResource(gs.getProfile().getDrawableId());
+
+        if(gs.getProfile().getSelectedProfilePic()!=null)
+        {
+            profile.setBackgroundResource(0);
+            profile.setImageBitmap(gs.getProfile().getSelectedProfilePic());
+        }
+        else {
+            profile.setBackgroundResource(gs.getProfile().getDrawableId());
+        }
 		
 		
 		
 	}
+
+
 
 }

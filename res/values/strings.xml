@@ -21,14 +21,33 @@
          <string name = "longitude">Longitude</string>
          <string name = "apptitle">It\u0027s My Bike</string>
            <string name = "log_out">Sign Out</string>
-            <string name="edit_profile">Edit</string>
-            <string name="gps_network_not_enabled">gps not enabled</string>
-            <string name = "open_location_settings">open location settings</string>
+            <string name="edit_profile">Edit Profile</string>
+            <string name="gps_network_not_enabled">Locations Services Must Be On. Open Location Settings?</string>
+            <string name = "open_location_settings">OK</string>
+            <string name = "do_not_open_location_settings">Cancel</string>
             <string name ="location">Location</string>
             <string name ="serial">Serial No.</string>
             <string name ="nicname">Nickname</string>
             <string name = "register_stolen">Register Bike and Location</string>
-             
-         
+    <string name="firstNameHint">First Name</string>
+    <string name="surnameHint">Surname</string>
+    <string name="phoneNumberHint">Phone Number e.g 0871234567</string>
+    <string name="title_activity_main">editProfile</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_edit_profile">EditProfile</string>
+    <string name="saveProfile">Save</string>
+    <string name="bikesHeading">Registered Bikes</string>
+    <string name="editPasswordButton">Change Password</string>
+    <string name="title_activity_edit_password">EditPassword</string>
+    <string name="title_activity_edit_bike">EditBike</string>
+    <string name="bikeNicknameHint">Bike Nickname</string>
+    <string name="bikeSerialNumberHint">Bike Serial Number</string>
+    <string name="title_activity_add_bike">AddBike</string>
+    <string name="editBikeMakeHint">Bike make</string>
+    <string name="locationHint">Location</string>
+    <string name="nicknameLabel">Nickname:</string>
+    <string name="serialNumberLabel">Serial No:</string>
+    <string name="makeLabel">Make:</string>
+
 
 </resources>

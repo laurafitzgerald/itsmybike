@@ -1,0 +1,144 @@
+package wit.lf.itsmybike.main;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.example.itsmybike.R;
+
+import wit.lf.itsmybike.data.Bike;
+
+public class AddBike extends Activity {
+
+    private EditText addBikeNickname;
+    private EditText addBikeSerialNumber;
+    private EditText addBikeMake;
+    private ImageView addBikeImage;
+    private ImageView addIconAddBikeImage;
+    private GlobalState gs;
+    private String galleryFilePath;
+    private Bitmap scaledBitmap;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_bike);
+        gs=(GlobalState)getApplication();
+        addBikeNickname=(EditText)findViewById(R.id.addBikeNickname);
+        addBikeSerialNumber=(EditText)findViewById(R.id.addBikeSerialNumber);
+        addBikeMake=(EditText)findViewById(R.id.addBikeMake);
+        addBikeImage =(ImageView)findViewById(R.id.addBikeImage);
+        addIconAddBikeImage=(ImageView)findViewById(R.id.addIconAddBikeImage);
+        addBikeImage.setBackgroundResource(R.drawable.no_bike_pic);
+        addIconAddBikeImage.setBackgroundResource(R.drawable.add);
+
+
+
+
+
+    }
+
+    public void addBikePicture(View view)
+    {
+        Intent openGallery = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(openGallery, 1);
+    }
+
+    public void saveBike(View view)
+
+
+    {
+      if (addBikeNickname.getText().toString().equals(""))
+      {
+          Toast.makeText(this,"Please enter nickname",Toast.LENGTH_SHORT).show();
+          addBikeNickname.requestFocus();
+      }
+        else if (addBikeSerialNumber.getText().toString().equals(""))
+        {
+            Toast.makeText(this,"Please enter serial number",Toast.LENGTH_SHORT).show();
+            addBikeSerialNumber.requestFocus();
+        }
+
+      else if (addBikeMake.getText().toString().equals(""))
+      {
+          Toast.makeText(this,"Please enter make",Toast.LENGTH_SHORT).show();
+          addBikeMake.requestFocus();
+
+      }
+
+        else {
+
+
+
+          Bike bikeToAdd=new Bike(R.drawable.no_bike_pic, addBikeNickname.getText().toString(), addBikeSerialNumber.getText().toString(), addBikeMake.getText().toString());
+          if(scaledBitmap!=null) {
+              bikeToAdd.setSelectedBikePic(scaledBitmap);
+          }
+          gs.getProfile().getListOfBikes().add(bikeToAdd);
+          Toast.makeText(this, "Bike added", Toast.LENGTH_SHORT).show();
+          startActivity(new Intent(this, Base.class));
+      }
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            // When an Image is picked
+            if (requestCode == 1 && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
+
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                galleryFilePath = cursor.getString(columnIndex);
+
+                Bitmap unscaledBitmap= BitmapFactory.decodeFile(galleryFilePath);
+
+                int widthBeforeScale=unscaledBitmap.getWidth();
+                int heightBeforeScale =unscaledBitmap.getHeight();
+                int profilePicWidth=addBikeImage.getWidth();
+                int profilePicHeight=addBikeImage.getHeight();
+                int new_width=profilePicWidth;
+                int new_height = (int) Math.floor((double) heightBeforeScale *( (double) new_width / (double) widthBeforeScale));
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
+
+                addBikeImage.setBackgroundResource(0);
+                addBikeImage.setImageBitmap(scaledBitmap);
+                Toast.makeText(this,"file path"+galleryFilePath,Toast.LENGTH_LONG).show();
+                cursor.close();
+
+
+
+
+            } else {
+                Toast.makeText(this, "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+                    .show();
+        }
+
+    }
+
+}

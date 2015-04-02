@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/innerbackground" >
+
+
+    <ImageView
+        android:id="@+id/img_bike_editable"
+        android:layout_width="wrap_content"
+        android:layout_height = "wrap_content"
+        android:contentDescription="@null"
+        android:layout_marginTop="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+
+
+
+    >
+    <TextView
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/img_bike_editable"
+        android:id="@+id/nicknameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textbody"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"
+        android:text="@string/nicknameLabel" />
+
+
+    <TextView
+        android:layout_toRightOf="@+id/nicknameLabel"
+        android:layout_marginLeft="10dp"
+        android:layout_alignTop="@+id/img_bike_editable"
+        android:id="@+id/bike_nickname_editable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textbody"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="normal" />
+
+    <TextView
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/nicknameLabel"
+        android:id="@+id/serialNumberLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textbody"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="15dp"
+        android:textStyle="bold"
+        android:text="@string/serialNumberLabel" />
+
+
+
+
+    <TextView
+        android:id="@+id/bike_serial_editable"
+        android:layout_toRightOf="@+id/serialNumberLabel"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/bike_nickname_editable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textbody"
+        android:layout_marginTop="15dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="normal" />
+
+    <TextView
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/img_bike_editable"
+        android:id="@+id/makeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textbody"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"
+        android:text="@string/makeLabel" />
+
+    <TextView
+        android:id="@+id/bike_make_editable"
+       android:layout_toRightOf="@+id/makeLabel"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textbody"
+        android:layout_alignBottom="@+id/img_bike_editable"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="normal" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editIcon"
+        android:clickable="true"
+        android:onClick="editBike"
+        android:focusable="false"
+        android:layout_toLeftOf= "@+id/img_bike_editable"
+        android:layout_alignBottom="@+id/img_bike_editable"
+      android:layout_marginRight= "5dp"
+        android:focusableInTouchMode="false"
+
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/nicknameLabel"
+        android:id="@+id/nickname"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/serialNumberLabel"
+        android:id="@+id/serialNumber"
+        android:layout_below="@+id/nickname"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="55dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/makeLabel"
+        android:id="@+id/make"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/bike_serial_editable" />
+
+
+</RelativeLayout>

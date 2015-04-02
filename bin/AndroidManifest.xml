@@ -1,40 +1,85 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<manifest android:versionCode="1" android:versionName="1.0"
-    package="com.example.itsmybike" xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.itsmybike"
+    android:versionCode="1"
+    android:versionName="1.0" > <!-- Google MAP API key -->
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="17" />
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!--Google MAP API key-->
-    <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="17"/>
-    <application android:allowBackup="true"
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
+
+    <application
+        android:name="wit.lf.itsmybike.main.GlobalState"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" android:theme="@style/AppTheme"
-        android:name="wit.lf.itsmybike.main.GlobalState">
-        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyD_cNf05heVtDJbroZJLt0UUBVWY9cl9Ko"/>
-        
-          <activity
-        android:name="wit.lf.itsmybike.main.SplashScreen"
-        android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-        
-        <activity android:label="@string/app_name" android:name="wit.lf.itsmybike.main.LogInScreen">
-          
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyD_cNf05heVtDJbroZJLt0UUBVWY9cl9Ko" />
+
+        <activity
+            android:name="wit.lf.itsmybike.main.SplashScreen"
+            android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <!--created by AORM plugin at 2015-02-16 16:36:01-->
-        <activity android:name="wit.lf.itsmybike.main.HomeScreen"/>
-        <!--created by AORM plugin at 2015-02-16 17:27:03-->
-        <activity android:name="wit.lf.itsmybike.main.Base"/>
-        <!--created by AORM plugin at 2015-02-25 20:07:55-->
-      
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+        <activity
+            android:name="wit.lf.itsmybike.main.LogInScreen"
+            android:label="@string/app_name" >
+        </activity>
+        <!-- created by AORM plugin at 2015-02-16 16:36:01 -->
+        <activity android:name="wit.lf.itsmybike.main.HomeScreen" />
+        <!-- created by AORM plugin at 2015-02-16 17:27:03 -->
+        <activity android:name="wit.lf.itsmybike.main.Base" />
+        <!-- created by AORM plugin at 2015-02-25 20:07:55 -->
+
+        <activity android:name="wit.lf.itsmybike.main.Register" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name="wit.lf.itsmybike.main.MainActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+        <activity
+            android:name="wit.lf.itsmybike.main.EditProfile"
+            android:label="@string/title_activity_edit_profile" >
+        </activity>
+        <activity
+            android:name="wit.lf.itsmybike.main.EditBike"
+            android:label="@string/title_activity_edit_bike" >
+        </activity>
+        <activity
+            android:name="wit.lf.itsmybike.main.AddBike"
+            android:label="@string/title_activity_add_bike" >
+        </activity>
     </application>
+
 </manifest>

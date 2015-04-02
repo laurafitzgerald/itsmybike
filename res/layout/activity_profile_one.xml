@@ -1,66 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical" >
+
     
     <RelativeLayout
-            android:layout_width="match_parent"
-        	android:layout_height="wrap_content"
-      		android:layout_marginTop="39dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
       		android:background="@color/innerbackground"
-        	android:layout_marginRight="25dp"
-        	android:layout_marginLeft="25dp"
-        	 >
+        	        	 >
       
 
 			    <ImageView
 			        android:id="@+id/profileImageView"
-			        android:layout_width="100dp"
-			        android:layout_height="100dp"
-			        android:layout_alignParentLeft="true"
-			        android:layout_alignParentTop="true"
-			        android:layout_margin="25dp"
-			         />
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
 			
 
 				    <TextView
 				        android:id="@+id/usernameView"
 				        android:layout_width="wrap_content"
 				        android:layout_height="wrap_content"
-				        android:layout_alignTop="@+id/profileImageView"
-				        android:layout_marginLeft="36dp"
-				        android:layout_marginTop="23dp"
-				        android:layout_toRightOf="@+id/profileImageView"
-				        android:text="@string/usernameText"
-				        android:textAppearance="?android:attr/textAppearanceMedium"
-				        android:textColor="@color/textbody" />
+                        android:text="@string/usernameText"
+				        android:textAppearance="?android:attr/textAppearanceSmall"
+				        android:textColor="@color/textbody"
+                        android:layout_below="@+id/profileImageView"
+                        android:layout_marginTop="15dp"
+                       android:layout_alignParentLeft="true" />
 					
 					    <TextView
 					        android:id="@+id/locView"
 					        android:layout_width="wrap_content"
 					        android:layout_height="wrap_content"
-					        android:layout_alignRight="@+id/usernameView"
+					        android:layout_alignParentLeft="true"
 					        android:layout_below="@+id/usernameView"
 					        android:layout_marginTop="15dp"
 					        android:text="@string/location"
 					        android:textAppearance="?android:attr/textAppearanceSmall"
 					        android:textColor="@color/textbody" />
-					    
-					    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/bikesHeading"
+        android:id="@+id/bikesHeading"
+        android:textColor="@color/textbody"
+        android:textStyle="bold"
+         android:layout_below="@+id/locView"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"/>
+    <ListView
+        android:id="@+id/bikeList"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/plusIcon"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profileEditIcon"
+        android:layout_alignBottom="@+id/locView"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:onClick="editProfile" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/plusIcon"
+        android:layout_marginTop="15dp"
+        android:clickable="true"
+        android:onClick="addBike"
+       android:layout_below="@+id/bikesHeading" />
+
+
+</RelativeLayout>
 					    
     
-    
-                  <ListView
-                       android:layout_marginLeft="25dp"
-			        android:layout_marginTop="25dp"
-			        android:layout_marginBottom="25dp"
-			        android:layout_marginRight="25dp"
-            android:id="@+id/bikeList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-					/>   
     
 
-</LinearLayout>
+    
+
+
