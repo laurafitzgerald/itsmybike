@@ -3,7 +3,9 @@ package wit.lf.itsmybike.main;
 import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.StolenBike;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
@@ -107,6 +109,11 @@ public class ReportFragment extends Fragment{
 				public void onCheckedChanged(RadioGroup group, int checkedId) {
 					
 					if(input.isChecked()){
+						
+						Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps"));
+						startActivity(intent);
+						
+						
 						gl.setEnabled(true);
 						editlat.setEnabled(true);
 						editlat.setText("");
@@ -160,6 +167,8 @@ public class ReportFragment extends Fragment{
 				
 			});
 	}
+	
+
 	
 	public boolean reportBike(){
 		

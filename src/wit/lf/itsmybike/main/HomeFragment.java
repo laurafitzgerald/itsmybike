@@ -1,6 +1,8 @@
 package wit.lf.itsmybike.main;
 
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,8 +19,10 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.itsmybike.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -29,18 +33,24 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapController;
+import com.google.android.maps.Overlay;
+
 
 public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnMapReadyCallback, OnMapLongClickListener {
 	
 
 
 	
-
+	private MapController controller;
 	private GlobalState gs;
 	private LocationManager manager;
 	private GoogleApiClient client;
@@ -157,6 +167,15 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 		}
 	
 	
+		
+		map.setOnMapClickListener(new OnMapClickListener() {
+			
+			@Override
+			public void onMapClick(LatLng point) {
+				Toast.makeText(getActivity(), point.latitude + " " + point.longitude, Toast.LENGTH_SHORT).show();
+				
+			}
+		});
 		
 		
 	}
@@ -281,6 +300,37 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 	@Override
 	public void onConnectionSuspended(int cause) {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	public void onTouchEvent(MotionEvent event, MapView mapView){
+		
+		Toast.makeText(getActivity(), "Map point touched", Toast.LENGTH_SHORT).show();
+		
+		if(event.getAction() == 1){
+			
+			
+			
+			
+			
+			
+			GeoPoint p = new GeoPoint(
+					(int) event.getX(),
+					(int) event.getY());
+			controller.animateTo(p);
+			controller.setZoom(12);
+			
+			//MapOverlay mapOverlay = new MapOverlay();
+			
+			
+			Toast.makeText(getActivity(),
+					 p.getLatitudeE6() / 1E6 + "," + 
+				             p.getLongitudeE6() /1E6 , 
+				             Toast.LENGTH_SHORT).show();
+					
+		}
+		
+		
 		
 	}
 
