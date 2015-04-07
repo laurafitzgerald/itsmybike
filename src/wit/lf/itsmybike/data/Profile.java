@@ -4,12 +4,22 @@ package wit.lf.itsmybike.data;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Profile {
+import com.parse.FindCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+@ParseClassName("_User")
+public class Profile extends ParseUser {
 
 	
 	
-	private String firstName;
+/*	private String firstName;
 	private String secondName;
 	//private Integer noOfBikes;
 	private String password;
@@ -21,144 +31,84 @@ public class Profile {
 
 
     private Bitmap selectedProfilePic;
+	*/
+	
+
+
+
+    //default constructor
+    public Profile(){};
+
+
+	private static ParseQuery<Profile> createQuery() {
+		ParseQuery<Profile> query = new ParseQuery<Profile>(Profile.class);
+		query.include("userId");
+		query.include("lng");
+		query.include("serialNumber");
+		query.include("createdAt");
+		//query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
+		return query;
+	}
+
 	
 	
-
-
-
-
-public Profile(){};
-
-	public Profile(String firstName, String secondName,String email,String password,String location,int drawableId,ArrayList<Bike>listOfBikes){
+	public static void findInBackground(String email, final FindCallback<Profile> callback){
 		
+		ParseQuery<Profile> query = Profile.createQuery();
 		
-		this.firstName = firstName;
-		this.secondName = secondName;
-		this.location = location;
-		//this.noOfBikes = noOfBikes;
-		this.drawableId = drawableId;
-		this.email = email;
-		this.password = password;
-        this.listOfBikes=listOfBikes;
-
-		
+		if(email != null){
 			
+				query.whereEqualTo("email", email);
+			
+		}
 		
-		
+		query.findInBackground(new FindCallback<Profile>(){
+			
+			@Override
+			public void done(List<Profile> profile, ParseException e) {
+				
+				callback.done(profile, e);
+			}});
 		
 		
 	}
-
-
-
-
 
 
 	public String getPassword() {
-		return password;
+		return getString("password");
 	}
-
-
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-
 
 	public String getEmail() {
-		return email;
+		return getString("email");
 	}
-
-
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-
 
 	public String getFirstName() {
-		return firstName;
+		return getString("firstName");
 	}
-
-
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-
 
 	public String getSecondName() {
-		return secondName;
+		return getString("secondName");
 	}
-
-
-
-	public void setSecondName(String secondName) {
-		this.secondName = secondName;
-	}
-
-
-
-	/*public Integer getNoOfBikes() {
-		return noOfBikes;
-	}*/
-
-
-
-	/*public void setNoOfBikes(Integer noOfBikes) {
-		this.noOfBikes = noOfBikes;
-	}*/
-
-
-
-
 
 	public int getDrawableId() {
-		return drawableId;
+		return getInt("drawableId");
 	}
-
-
-
-
-
-
-	public void setDrawableId(int drawableId) {
-		this.drawableId = drawableId;
-	}
-
-
-
-
 
 
 	public String getLocation() {
-		return location;
+		return getString("location");
 	}
 
 
 
-    public Bitmap getSelectedProfilePic() {
-        return selectedProfilePic;
+
+    public ParseFile getSelectedProfilePic() {
+      
+    	return getParseFile("profilePic");
+//TODO    	return getselectedProfilePic;
+    	
     }
 
-    public void setSelectedProfilePic(Bitmap selectedProfilePic) {
-        this.selectedProfilePic = selectedProfilePic;
-    }
 
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-    public ArrayList<Bike> getListOfBikes() {
-        return listOfBikes;
-    }
-
-    public void setListOfBikes(ArrayList<Bike> listOfBikes) {
-        this.listOfBikes = listOfBikes;
-    }
 
 }

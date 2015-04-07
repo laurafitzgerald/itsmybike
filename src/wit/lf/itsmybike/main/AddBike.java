@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.itsmybike.R;
 
 import wit.lf.itsmybike.data.Bike;
+import wit.lf.itsmybike.data.StolenBike;
 
 public class AddBike extends Activity {
 
@@ -113,11 +114,18 @@ public class AddBike extends Activity {
 
 
 
-          Bike bikeToAdd=new Bike(R.drawable.no_bike_pic, addBikeNickname.getText().toString(), addBikeSerialNumber.getText().toString(), addBikeMake.getText().toString());
+    /*      //Bike bikeToAdd=new Bike(R.drawable.no_bike_pic, , , );
           if(scaledBitmap!=null) {
               bikeToAdd.setSelectedBikePic(scaledBitmap);
-          }
-          gs.getProfile().getListOfBikes().add(bikeToAdd);
+          }*/
+          
+          Bike bike = Bike.create(Bike.class);
+  			bike.put("nickname", addBikeNickname.getText().toString());
+  		bike.put("serialNumber", addBikeSerialNumber.getText().toString());
+  		bike.put("make", addBikeMake.getText().toString());
+  		bike.saveInBackground();
+  		
+          //gs.getProfile().getListOfBikes().add(bikeToAdd);
           Toast.makeText(this, "Bike added", Toast.LENGTH_SHORT).show();
           startActivity(new Intent(this, Base.class));
       }

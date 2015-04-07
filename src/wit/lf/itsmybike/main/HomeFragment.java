@@ -3,6 +3,7 @@ package wit.lf.itsmybike.main;
 
 import java.util.List;
 
+import wit.lf.itsmybike.data.StolenBike;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -43,6 +44,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.Overlay;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 
 
 public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnMapReadyCallback, OnMapLongClickListener {
@@ -102,28 +105,31 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 		
 		
 		super.onViewCreated(view, savedInstanceState);
+		
+		
+		gs = (GlobalState) getActivity().getApplication();
+		mapFr = (MapFragment)getActivity().getFragmentManager().findFragmentById(R.id.map);
+		map = mapFr.getMap();
 
+		
 
-        manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+		
+		client = new GoogleApiClient.Builder(getActivity())
+		.addApi(LocationServices.API)
+		.addConnectionCallbacks(this)
+		.addOnConnectionFailedListener(this)
+		.build();
+		client.connect();
 
-
-
-            gs = (GlobalState) getActivity().getApplication();
-            mapFr = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
-            map = mapFr.getMap();
-            Log.v("profiles",""+gs.getProfile().getFirstName());
-
-            client = new GoogleApiClient.Builder(getActivity())
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-            client.connect();
-
-
-            Criteria criteria = new Criteria();
-            String mBestProvider = manager.getBestProvider(criteria, true);
-            manager.requestLocationUpdates(mBestProvider, 50000, 10000, this);
+		checkGPStatus();
+		
+			
+			manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+			
+			
+			Criteria criteria = new Criteria();
+			String  mBestProvider = manager.getBestProvider(criteria, true);
+		manager.requestLocationUpdates(mBestProvider, 50000, 10000, this);
 		
 		
 	
@@ -132,26 +138,64 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 			Toast.makeText(getActivity().getApplicationContext(), "no location", Toast.LENGTH_SHORT).show();
 			
 		}*/
-
-            //manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50000, 10, this);
-
-
-            for (int i = 0; i < gs.getStolenBikes().size(); i++) {
-
-
-                LatLng templl = new LatLng(gs.getStolenBikes().get(i).getLat(), gs.getStolenBikes().get(i).getLng());
-			/*map.addMarker( new MarkerOptions()
-			  .position( templl));
-			  //.title("Fence " + fence.getId())
-			  //.snippet("Radius: " + fence.getRadius()) ).showInfoWindow();
-			*/
-
-<<<<<<< HEAD
-			
-			map.addCircle(circleOptions);
-			
-		}
 	
+		//manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50000, 10, this);
+		
+		
+		
+		StolenBike.findInBackground(new FindCallback<StolenBike>(){
+
+			@Override
+			public void done(List<StolenBike> stolenBikes, ParseException e) {
+				if(e!=null){
+					
+					Toast toast = Toast.makeText(getActivity().getApplicationContext(),
+								e.getMessage(), Toast.LENGTH_LONG);
+								toast.show();
+						return;
+					
+				}
+				if(stolenBikes !=null){
+					
+					
+					for (int i = 0; i < stolenBikes.size(); i++){
+						
+						
+						LatLng templl = new LatLng(stolenBikes.get(i).getLat(), stolenBikes.get(i).getLng());
+						/*map.addMarker( new MarkerOptions()
+						  .position( templl));
+						  //.title("Fence " + fence.getId())
+						  //.snippet("Radius: " + fence.getRadius()) ).showInfoWindow();
+						*/
+						
+						Geofence.Builder fence = new Geofence.Builder();
+						fence.setCircularRegion( templl.latitude, templl.latitude, 10);
+						
+					
+						CircleOptions circleOptions = new CircleOptions()
+						  .center( templl )
+						  .radius( 10 )
+						  .fillColor(getResources().getColor(R.color.locationcolor))
+						  .strokeColor(Color.TRANSPARENT)
+						  .strokeWidth(2);
+
+						
+						map.addCircle(circleOptions);
+						
+					}
+				
+					
+					
+				}
+				
+			}
+			
+			
+			
+			
+		});
+		
+		
 	
 		
 		map.setOnMapClickListener(new OnMapClickListener() {
@@ -163,28 +207,11 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 			}
 		});
 		
-=======
-                Geofence.Builder fence = new Geofence.Builder();
-                fence.setCircularRegion(templl.latitude, templl.latitude, 10);
-
-
-                CircleOptions circleOptions = new CircleOptions()
-                        .center(templl)
-                        .radius(10)
-                        .fillColor(getResources().getColor(R.color.locationcolor))
-                        .strokeColor(Color.TRANSPARENT)
-                        .strokeWidth(2);
-
-
-                map.addCircle(circleOptions);
-
-            }
-
-
-
->>>>>>> 2fe5e98569227609dd7ef2ad724ec659f67dfe23
 		
 	}
+
+
+
 
 
 

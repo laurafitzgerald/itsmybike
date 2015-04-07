@@ -1,6 +1,7 @@
 package wit.lf.itsmybike.main;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import wit.lf.itsmybike.data.Bike;
 import android.content.Context;
@@ -16,17 +17,17 @@ import com.example.itsmybike.R;
 public class BikeAdapter extends ArrayAdapter<Bike> {
 
     private Context context;
-    private ArrayList<Bike> bikes;
+    private List<Bike> bikes;
     public Resources res;
     Bike currRowVal = null;
     LayoutInflater inflater;
 
     public BikeAdapter(Context context,
-            int textViewResourceId, ArrayList<Bike> bikes,
+            int textViewResourceId, List<Bike> list,
             Resources resLocal) {
-        super(context, textViewResourceId, bikes);
+        super(context, textViewResourceId, list);
         this.context = context;
-        this.bikes = bikes;
+        this.bikes = list;
         this.res = resLocal;        
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

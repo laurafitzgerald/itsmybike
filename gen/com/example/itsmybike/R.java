@@ -638,6 +638,7 @@ containing a value of this type.
         public static final int bikeNicknameHint=0x7f06004a;
         public static final int bikeSerialNumberHint=0x7f06004b;
         public static final int bikesHeading=0x7f060046;
+        public static final int browse=0x7f060054;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f060009;
@@ -761,6 +762,8 @@ containing a value of this type.
         public static final int nicname=0x7f06003d;
         public static final int open_location_settings=0x7f060039;
         public static final int other_dummy_section_text=0x7f06002a;
+        public static final int parse_application_id=0x7f060056;
+        public static final int parse_client_key=0x7f060057;
         public static final int passwordText=0x7f060028;
         public static final int phoneNumberHint=0x7f060041;
         public static final int profile=0x7f06002b;
@@ -771,15 +774,18 @@ containing a value of this type.
         public static final int reportForm1=0x7f06002f;
         public static final int reportForm2=0x7f060030;
         public static final int saveProfile=0x7f060045;
+        public static final int selectPhotoMethod=0x7f060052;
         public static final int serial=0x7f06003c;
         public static final int serialNumberLabel=0x7f060050;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
         public static final int surnameHint=0x7f060040;
+        public static final int takePhoto=0x7f060053;
         public static final int title_activity_add_bike=0x7f06004c;
         public static final int title_activity_edit_bike=0x7f060049;
         public static final int title_activity_edit_password=0x7f060048;
         public static final int title_activity_edit_profile=0x7f060044;
+        public static final int title_activity_image_capture=0x7f060055;
         public static final int title_activity_main=0x7f060042;
         public static final int usernameText=0x7f060027;
         /**  Text on a placeholder buy button when Google Play services is not

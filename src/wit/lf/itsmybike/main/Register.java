@@ -18,6 +18,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -177,11 +182,58 @@ public class Register extends Activity {
     public void registerUser(View view)
     {
         Log.v("Reg","Button Pressed");
-        Profile newUser=new Profile();
+        //Profile newUser=new Profile();
         Pattern p2=Pattern.compile("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$");
         Matcher m2=p2.matcher(email.getText().toString());
-        boolean userExists=false;
+        //boolean userExists=false;
+        
+      
+        if(!password.getText().toString().equals(retypePassword.getText().toString()))
+        {
+            Toast.makeText(this,"Passwords do not match",Toast.LENGTH_LONG).show();
+            password.setText("");
+            retypePassword.setText("");
+            password.requestFocus();
+        }
+        
+        
+        ParseUser user = new ParseUser();
+        user.setPassword(password.getText().toString());
+        user.setEmail(email.getText().toString());
+        user.put("firstName", firstName.getText().toString());
+        user.put("surName", surname.getText().toString());
+        user.put("location", location.getText().toString());
+        user.setUsername(email.getText().toString());
+        
+        
+        user.signUpInBackground(new SignUpCallback() {
 
+			@Override
+			public void done(ParseException e) {
+				if(!(e==null)){
+					
+					Log.v("Something went wrong!!" + e, e.toString());
+					
+					
+				}else{
+					
+					  Toast.makeText(getApplicationContext(),"Welcome "+firstName.getText().toString(),Toast.LENGTH_SHORT).show();
+				        startActivity(new Intent(Register.this, Base.class));
+				}
+				
+			}
+        	
+        	
+        	
+        	
+        	
+        });
+        
+      
+        
+        
+        
+/*
         for(Profile pr :gs.getListOfProfiles())
         {
             if (pr.getEmail().equals(email.getText().toString()))
@@ -236,27 +288,30 @@ public class Register extends Activity {
 
         else
         {
-            newUser.setFirstName(firstName.getText().toString());
-            newUser.setSecondName(surname.getText().toString());
-            newUser.setEmail(email.getText().toString());
-            newUser.setPassword(password.getText().toString());
-            newUser.setLocation(location.getText().toString());
-            newUser.setListOfBikes(new ArrayList<Bike>());
+        	
+        	ParseObject user = Profile.create(Profile.class);
+        	user.put("firstName", firstName.getText().toString());
+        	user.put("secondName", surname.getText().toString());
+        	user.put("email", email.getText().toString());
+        	user.put("password", password.getText().toString());
+        	user.put("location", location.getText().toString());
+        	
+           
             newUser.setDrawableId(R.drawable.no_profile_pic);
             if(scaledBitmap!=null) {
                 newUser.setSelectedProfilePic(scaledBitmap);
             }
-            gs.getListOfProfiles().add(newUser);
-            gs.setProfile(newUser);
+            //gs.getListOfProfiles().add(newUser);
+            //gs.setProfile(newUser);
             gs.setLoggedIn(true);
-            Toast.makeText(this,"Welcome "+newUser.getFirstName(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Welcome "+firstName.getText().toString(),Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, Base.class));
 
 
         }
 
 
-
+*/
 
     }
 }

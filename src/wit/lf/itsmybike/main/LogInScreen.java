@@ -14,8 +14,13 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.FindCallback;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.Profile;
@@ -28,7 +33,7 @@ public class LogInScreen extends Activity {
 	private Button registerButton;
 	private Button login;
 	private GlobalState gs;
-
+	private Boolean found = false;
 	private EditText usernameInput = null;
 
 	private EditText passwordInput = null;
@@ -43,7 +48,7 @@ public class LogInScreen extends Activity {
 		setContentView(R.layout.activity_log_in);
 
 		gs = (GlobalState) getApplication();
-        gs.getListOfProfiles().add(new Profile("John","Hodmon", "johnhodmon@gmail.com","pass","Waterford",R.drawable.profile_pic_john,new ArrayList<Bike>()));
+       // gs.getListOfProfiles().add(new Profile("John","Hodmon", "johnhodmon@gmail.com","pass","Waterford",R.drawable.profile_pic_john,new ArrayList<Bike>()));
 		Log.v("profiles", "Count: " + gs.getListOfProfiles().size());
 
 		
@@ -74,7 +79,7 @@ public class LogInScreen extends Activity {
 
         usernameInput.setText("johnhodmon@gmail.com");
         passwordInput.setText("pass");
-        login.performClick();
+        //login.performClick();
 
 
 
@@ -85,56 +90,103 @@ public class LogInScreen extends Activity {
 
 	public void logInButtonPressed(View view){
 		
-		Boolean profileFound=false;
-        Profile profileToUse=new Profile();
-
-        for (Profile p: gs.getListOfProfiles() )
-        {
-
-
-            if(p.getEmail().equals(usernameInput.getText().toString())&&p.getPassword().equals(passwordInput.getText().toString()))
-            {
-                profileFound=true;
-                profileToUse=p;
-
-            }
-        }
-
-        Log.v("profiles","true or not:" +profileFound);
-
-        if (profileFound)
-
-			
-        {
-
-            Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
-			gs.setProfile(profileToUse);
-            gs.setLoggedIn(true);
-            Bike bikeOne = new Bike( R.drawable.bike_one, "Big Bertha", "HN5879556B", "High Nelly");
-            Bike bikeTwo = new Bike(R.drawable.bike_two, "Mountain Goat", "MB8874113A", "Raleigh");
-            gs.getProfile().getListOfBikes().add(bikeOne);
-            gs.getProfile().getListOfBikes().add(bikeTwo);
-			Intent intent = new Intent(this, Base.class);
-			startActivity(intent);
-			
-		}
 		
-		else{
+
+		
+		Profile.logInInBackground(usernameInput.getText().toString(), passwordInput.getText().toString(), new LogInCallback() {
 			
-			Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
-			attempts.setBackgroundColor(getResources().getColor(R.color.locationcolor));
-			counter--;
-			attempts.setText( Integer.toString(counter) +" attempts left");
-			attempts.setTextColor(getResources().getColor(R.color.textbody));
-			if(counter==0){
+			@Override
+			public void done(ParseUser user, ParseException e) {
+				if(user !=null){
+					
+
+		        	 Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(LogInScreen.this, Base.class);
+					startActivity(intent);
+					
+				}else{
+					
+					failedAttempt();
+					
+				}
+				
+			}
+				
+			
+			private void failedAttempt(){
 				
 				
-				login.setEnabled(false);
+				Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
+				attempts.setBackgroundColor(getResources().getColor(R.color.locationcolor));
+				counter--;
+				attempts.setText( Integer.toString(counter) +" attempts left");
+				attempts.setTextColor(getResources().getColor(R.color.textbody));
+				found =false;
+				if(counter==0){
+					
+					
+					login.setEnabled(false);
+				}
+				return;
+				
 			}
 			
 			
-		}
+			
+			
+			
+		});
+	/*	Profile.findInBackground(usernameInput.getText().toString(), new FindCallback<Profile>(){
+			
 		
+
+			@Override
+			public void done(List<Profile> profiles, ParseException e) {
+				if(profiles.size() == 0 || profiles == null){
+				
+					failedAttempt();
+
+				}else if (profiles.get(0).getPassword().equals(passwordInput.getText().toString()));
+				
+				gs.setProfile(profiles.get(0));
+				
+				 found = true;
+				 
+				
+			}
+			
+			private void failedAttempt(){
+				
+				
+				Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
+				attempts.setBackgroundColor(getResources().getColor(R.color.locationcolor));
+				counter--;
+				attempts.setText( Integer.toString(counter) +" attempts left");
+				attempts.setTextColor(getResources().getColor(R.color.textbody));
+				found =false;
+				if(counter==0){
+					
+					
+					login.setEnabled(false);
+				}
+				return;
+				
+			}
+			
+			
+		});
+		*/
+		
+	
+   
+
+        Log.v("profiles","true or not:" +found);
+
+        if (found){
+
+	
+		}
+
 		
 	}
 

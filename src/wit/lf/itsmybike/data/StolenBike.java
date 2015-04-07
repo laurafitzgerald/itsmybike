@@ -1,61 +1,79 @@
 package wit.lf.itsmybike.data;
 
-public class StolenBike {
+import java.util.Date;
+import java.util.List;
+
+import com.parse.FindCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseQuery.CachePolicy;
+
+
+
+
+@ParseClassName("StolenBike")
+public class StolenBike extends ParseObject {
 
 	
-	private Double lat;
-	private Double lng;
-	private String serialNumber;
-	private String date;
 	
-	public StolenBike(Double lat, Double lng, String serialNumber, String date){
+	public StolenBike(){
+
+	}
+	
+	
+	private static ParseQuery<StolenBike> createQuery() {
+		ParseQuery<StolenBike> query = new ParseQuery<StolenBike>(StolenBike.class);
+	/*	query.include("lat");
+		query.include("lng");
+		query.include("serialNumber");
+		query.include("createdAt");*/
+		//query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
+		return query;
+	}
+	
+	
+	//getallStolenBikeRecords
+	public static void findInBackground(final FindCallback<StolenBike> callback){
 		
-		this.lat = lat;
-		this.lng = lng;
-		this.serialNumber = serialNumber;
-		this.date = date;
+		ParseQuery<StolenBike> query = StolenBike.createQuery();
 		
+		query.findInBackground(new FindCallback<StolenBike>(){
+			
+			@Override
+			public void done(List<StolenBike> objects, ParseException e) {
+				
+				callback.done(objects, e);
+			}});
 		
 		
 	}
+	
+	
 
 	public String getSerialNumber() {
-		return serialNumber;
+		return getString("serialNumber");
 	}
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+
+	public Date getDate() {
+		return getDate("date");
 	}
 
-	public String getDate() {
-		return date;
+
+
+	public double getLat(){
+		
+		
+		return getDouble("lat");
 	}
 
-	public void setDate(String date) {
-		this.date = date;
-	}
 
-	public void setLat(Double lat) {
-		this.lat = lat;
-	}
-
-	public void setLng(Double lng) {
-		this.lng = lng;
-	}
-
-	public double getLat() {
-		return lat;
-	}
-
-	public void setLat(double lat) {
-		this.lat = lat;
-	}
 
 	public double getLng() {
-		return lng;
+		return getDouble("lng");
 	}
 
-	public void setLng(double lng) {
-		this.lng = lng;
-	}
+	
 }

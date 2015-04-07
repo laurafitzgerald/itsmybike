@@ -58,7 +58,7 @@ public class EditBike extends Activity {
         Bike bikeFromProfile=new Bike();
 
 
-
+/*
         for (Bike b:gs.getProfile().getListOfBikes())
         {
             if(b.getSerialNo().equals(gs.getBikeToEdit().getSerialNo()))
@@ -66,7 +66,7 @@ public class EditBike extends Activity {
                 bikeFromProfile=b;
             }
         }
-
+*/
         if (editBikeNickname.getText().toString().equals(""))
         {
             Toast.makeText(this,"Please enter nickname",Toast.LENGTH_SHORT).show();
@@ -88,13 +88,13 @@ public class EditBike extends Activity {
 
         else {
 
-            if(scaledBitmap!=null) {
+          /*  if(scaledBitmap!=null) {
                 gs.getProfile().getListOfBikes().get(gs.getProfile().getListOfBikes().indexOf(bikeFromProfile)).setSelectedBikePic(scaledBitmap);
             }
             gs.getProfile().getListOfBikes().get(gs.getProfile().getListOfBikes().indexOf(bikeFromProfile)).setNickname(editBikeNickname.getText().toString());
             gs.getProfile().getListOfBikes().get(gs.getProfile().getListOfBikes().indexOf(bikeFromProfile)).setSerialNo(editBikeSerialNumber.getText().toString());
             gs.getProfile().getListOfBikes().get(gs.getProfile().getListOfBikes().indexOf(bikeFromProfile)).setMake(editBikeMake.getText().toString());
-            Toast.makeText(this, "Bike Updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Bike Updated", Toast.LENGTH_SHORT).show();*/
             startActivity(new Intent(this, Base.class));
         }
     }

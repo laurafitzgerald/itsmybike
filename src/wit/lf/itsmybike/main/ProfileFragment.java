@@ -25,11 +25,19 @@ import java.text.SimpleDateFormat;
 
 
 
+
+
+
+
 import com.example.itsmybike.R;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.List;
 
 import wit.lf.itsmybike.data.Bike;
+import wit.lf.itsmybike.data.Profile;
 
 public class ProfileFragment extends Fragment {
 
@@ -86,10 +94,30 @@ public class ProfileFragment extends Fragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		gs = (GlobalState) getActivity().getApplication();
-        List <Bike>listOfBikes;
-        listOfBikes=gs.getProfile().getListOfBikes();
+        Bike.findInBackground(gs.getProfile(), new FindCallback<Bike>(){
+
+			@Override
+			public void done(List<Bike> bikes, ParseException e) {
+				
+				
+				
+				
+				
+				
+				gs.setListOfBikes(bikes);
+				
+			}
+        	
+        	
+        	
+        	
+        	
+        });
+        
+        
+       
 		bikeListView = (ListView) getActivity().findViewById(R.id.bikeList);
-		ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(),listOfBikes);
+		ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(),gs.getListOfBikes());
 		bikeListView.setAdapter(adapter);
         profileEditIcon =(ImageView)getActivity().findViewById(R.id.profileEditIcon);
         profileEditIcon.setBackgroundResource(R.drawable.edit);
@@ -123,28 +151,36 @@ public class ProfileFragment extends Fragment {
 			
 		});
 		
-		Log.v("usernamebox: ", username.toString());
+	/*	Log.v("usernamebox: ", username.toString());
 		
 		Log.v("profile: ", gs.getProfile().toString());
 		Log.v("profile first name: ", gs.getProfile().getFirstName());
 		Log.v("profile first name: ", gs.getProfile().getSecondName());
 		Log.v("profile first name: ", gs.getProfile().getLocation());
 		Log.v("nothing", location.toString());
-
+*/
 		
 		
-		username.setText(gs.getProfile().getFirstName() + " " + gs.getProfile().getSecondName());
+		/*
+		ParseUser user = Profile.getCurrentUser();
+		user.get*/
 		
-		location.setText(gs.getProfile().getLocation());
+		Profile user =  (Profile) ParseUser.getCurrentUser();
+		
+		
+		
+		username.setText(user.getFirstName() + " " + user.getSecondName());
+		
+		location.setText(user.getLocation());
 		
 
         if(gs.getProfile().getSelectedProfilePic()!=null)
         {
-            profile.setBackgroundResource(0);
-            profile.setImageBitmap(gs.getProfile().getSelectedProfilePic());
+            //user.setBackgroundResource(0);
+            //profile.setImageBitmap(gs.getProfile().getSelectedProfilePic());
         }
         else {
-            profile.setBackgroundResource(gs.getProfile().getDrawableId());
+            //profile.setBackgroundResource(gs.getProfile().getDrawableId());
         }
 		
 		

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.StolenBike;
@@ -37,6 +39,7 @@ public class Base extends FragmentActivity {
 		
 		case R.id.log_out:
 
+			ParseUser.logOut();
 			gs.setLoggedIn(false);
 			Toast.makeText(getApplicationContext(), "Logging Out...", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent(Base.this, LogInScreen.class);
@@ -126,6 +129,8 @@ public class Base extends FragmentActivity {
 		
 		
 		
+		/*StolenBike parseTest = new StolenBike(52.249030, -7.137352, "", "24/06/2014");
+		
 		gs.getStolenBikes().add(new StolenBike(52.249030, -7.137352, "", "24/06/2014"));
 		gs.getStolenBikes().add(new StolenBike(52.246323, -7.142427, "", "20/12/2014"));
 		gs.getStolenBikes().add(new StolenBike(52.245758, -7.131462, "", "01/01/2015"));
@@ -135,7 +140,7 @@ public class Base extends FragmentActivity {
 		gs.getStolenBikes().add(new StolenBike(52.252345, -7.131876, "", "08/10/2014"));
 		gs.getStolenBikes().add(new StolenBike(52.253487, -7.137654, "", "09/02/2015"));
 		gs.getStolenBikes().add(new StolenBike(52.249056, -7.138754, "", "15/01/2015"));
-		
+		*/
 		
 		
 		
@@ -165,13 +170,13 @@ public class Base extends FragmentActivity {
         String serialNumber=serialNumberTV.getText().toString();
 
 
-        for (Bike b:gs.getProfile().getListOfBikes())
+ /*       for (Bike b:gs.getProfile().getListOfBikes())
         {
             if (b.getSerialNo().equals(serialNumber))
             {
                 gs.setBikeToEdit(b);
             }
-        }
+        }*/
 
         startActivity(new Intent(this,EditBike.class));
     }

@@ -61,7 +61,7 @@ public class EditProfile extends Activity {
         if(gs.getProfile().getSelectedProfilePic()!=null)
         {
             editProfilePic.setBackgroundResource(0);
-            editProfilePic.setImageBitmap(gs.getProfile().getSelectedProfilePic());
+            //editProfilePic.setImageBitmap(gs.getProfile().getSelectedProfilePic());
         }
         else {
             editProfilePic.setBackgroundResource(gs.getProfile().getDrawableId());
@@ -85,13 +85,13 @@ public class EditProfile extends Activity {
 
 
     public void saveProfile(View view) {
-        gs.getProfile().setFirstName(editProfileFirstName.getText().toString());
+    /*    gs.getProfile().setFirstName(editProfileFirstName.getText().toString());
         gs.getProfile().setSecondName(editProfileSurname.getText().toString());
         gs.getProfile().setLocation(editProfileLocation.getText().toString());
         if(scaledBitmap!=null) {
             gs.getProfile().setSelectedProfilePic(scaledBitmap);
         }
-
+*/
 
         if (passwordBeingChanged) {
 
