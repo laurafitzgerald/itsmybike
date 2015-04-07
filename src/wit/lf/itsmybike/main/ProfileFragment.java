@@ -93,18 +93,33 @@ public class ProfileFragment extends Fragment {
 	
 		super.onViewCreated(view, savedInstanceState);
 		
+	       
+	       
+			
+	        profileEditIcon =(ImageView)getActivity().findViewById(R.id.profileEditIcon);
+	        profileEditIcon.setBackgroundResource(R.drawable.edit);
+
+			username = (TextView) getActivity().findViewById(R.id.usernameView);
+			location = (TextView) getActivity().findViewById(R.id.locView);
+			profile = (ImageView) getActivity().findViewById(R.id.profileImageView);
+	        plusIcon=(ImageView)getActivity().findViewById(R.id.plusIcon);
+	        plusIcon.setBackgroundResource(R.drawable.add);
+			
+		
 		gs = (GlobalState) getActivity().getApplication();
-        Bike.findInBackground(gs.getProfile(), new FindCallback<Bike>(){
+        
+		
+		
+		Bike.findInBackground(ParseUser.getCurrentUser(), new FindCallback<Bike>(){
 
 			@Override
 			public void done(List<Bike> bikes, ParseException e) {
-				
-				
-				
-				
-				
-				
+	
 				gs.setListOfBikes(bikes);
+				
+				bikeListView = (ListView) getActivity().findViewById(R.id.bikeList);
+				ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(),bikes);
+				bikeListView.setAdapter(adapter);
 				
 			}
         	
@@ -114,20 +129,7 @@ public class ProfileFragment extends Fragment {
         	
         });
         
-        
-       
-		bikeListView = (ListView) getActivity().findViewById(R.id.bikeList);
-		ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(),gs.getListOfBikes());
-		bikeListView.setAdapter(adapter);
-        profileEditIcon =(ImageView)getActivity().findViewById(R.id.profileEditIcon);
-        profileEditIcon.setBackgroundResource(R.drawable.edit);
-
-		username = (TextView) getActivity().findViewById(R.id.usernameView);
-		location = (TextView) getActivity().findViewById(R.id.locView);
-		profile = (ImageView) getActivity().findViewById(R.id.profileImageView);
-        plusIcon=(ImageView)getActivity().findViewById(R.id.plusIcon);
-        plusIcon.setBackgroundResource(R.drawable.add);
-		
+ 
 
 	
 		profile.setOnLongClickListener(new OnLongClickListener(){
@@ -151,19 +153,7 @@ public class ProfileFragment extends Fragment {
 			
 		});
 		
-	/*	Log.v("usernamebox: ", username.toString());
-		
-		Log.v("profile: ", gs.getProfile().toString());
-		Log.v("profile first name: ", gs.getProfile().getFirstName());
-		Log.v("profile first name: ", gs.getProfile().getSecondName());
-		Log.v("profile first name: ", gs.getProfile().getLocation());
-		Log.v("nothing", location.toString());
-*/
-		
-		
-		/*
-		ParseUser user = Profile.getCurrentUser();
-		user.get*/
+
 		
 		Profile user =  (Profile) ParseUser.getCurrentUser();
 		
@@ -173,7 +163,7 @@ public class ProfileFragment extends Fragment {
 		
 		location.setText(user.getLocation());
 		
-
+/*
         if(gs.getProfile().getSelectedProfilePic()!=null)
         {
             //user.setBackgroundResource(0);
@@ -182,7 +172,7 @@ public class ProfileFragment extends Fragment {
         else {
             //profile.setBackgroundResource(gs.getProfile().getDrawableId());
         }
-		
+		*/
 		
 		
 	}

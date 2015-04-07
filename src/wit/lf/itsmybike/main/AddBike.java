@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.ParseUser;
 
 import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.StolenBike;
@@ -123,6 +124,9 @@ public class AddBike extends Activity {
   			bike.put("nickname", addBikeNickname.getText().toString());
   		bike.put("serialNumber", addBikeSerialNumber.getText().toString());
   		bike.put("make", addBikeMake.getText().toString());
+  		
+  		bike.put("userId", ParseUser.getCurrentUser());
+  		
   		bike.saveInBackground();
   		
           //gs.getProfile().getListOfBikes().add(bikeToAdd);

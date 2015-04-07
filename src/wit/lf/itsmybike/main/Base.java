@@ -1,6 +1,8 @@
 package wit.lf.itsmybike.main;
 
 
+import java.util.List;
+
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -155,12 +159,12 @@ public class Base extends FragmentActivity {
 		
 		
 	}
-
+/*
     public void editProfile(View view)
     {
         startActivity(new Intent(this,EditProfile.class));
     }
-
+*/
     public void editBike(View view)
     {
         RelativeLayout rowContainingButton=(RelativeLayout)view.getParent();
@@ -170,15 +174,21 @@ public class Base extends FragmentActivity {
         String serialNumber=serialNumberTV.getText().toString();
 
 
- /*       for (Bike b:gs.getProfile().getListOfBikes())
-        {
-            if (b.getSerialNo().equals(serialNumber))
-            {
-                gs.setBikeToEdit(b);
-            }
-        }*/
+        
+        Bike.findInBackgroudBySerial(serialNumber, new FindCallback<Bike>(){
 
-        startActivity(new Intent(this,EditBike.class));
+			@Override
+			public void done(List<Bike> bikeToEdit, ParseException e) {
+				gs.setBikeToEdit(bikeToEdit.get(0));
+				 startActivity(new Intent(Base.this,EditBike.class));
+				
+			}
+        	
+        	
+        	
+        });
+        
+       
     }
 
     public void addBike(View view)

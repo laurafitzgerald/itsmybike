@@ -48,9 +48,6 @@ public class LogInScreen extends Activity {
 		setContentView(R.layout.activity_log_in);
 
 		gs = (GlobalState) getApplication();
-       // gs.getListOfProfiles().add(new Profile("John","Hodmon", "johnhodmon@gmail.com","pass","Waterford",R.drawable.profile_pic_john,new ArrayList<Bike>()));
-		Log.v("profiles", "Count: " + gs.getListOfProfiles().size());
-
 		
 		registerButton = (Button) findViewById(R.id.editProfilePassword);
 		login = (Button) findViewById(R.id.logInButton);
@@ -74,13 +71,6 @@ public class LogInScreen extends Activity {
 				    }
 
 				});
-
-
-
-        usernameInput.setText("johnhodmon@gmail.com");
-        passwordInput.setText("pass");
-        //login.performClick();
-
 
 
 
@@ -177,15 +167,7 @@ public class LogInScreen extends Activity {
 		});
 		*/
 		
-	
-   
 
-        Log.v("profiles","true or not:" +found);
-
-        if (found){
-
-	
-		}
 
 		
 	}

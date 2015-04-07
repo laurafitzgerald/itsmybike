@@ -9,6 +9,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import android.graphics.Bitmap;
 
@@ -17,13 +18,13 @@ import android.graphics.Bitmap;
 public class Bike extends ParseObject{
 
 	private int drawableId;
-
+/*
 	private String serialNo;
 	
 	private String nickname;
 	private String make;
 	private boolean stolen;
-
+*/
 
 
     private Bitmap selectedBikePic;
@@ -41,13 +42,13 @@ public class Bike extends ParseObject{
 		return query;
 	}
 	
-	public static void findInBackground(Profile profile, final FindCallback<Bike> callback){
+	public static void findInBackground(ParseUser user, final FindCallback<Bike> callback){
 		
 		ParseQuery<Bike> query = Bike.createQuery();
 		
-		if(profile != null){
+		if(user != null){
 			
-				query.whereEqualTo("userId", profile.getObjectId());
+				query.whereEqualTo("userId", user);
 			
 		}
 		
@@ -58,6 +59,28 @@ public class Bike extends ParseObject{
 				
 				callback.done(bikes, e);
 			}});
+		
+		
+	}
+	
+	public static void findInBackgroudBySerial(String serialNumber, final FindCallback<Bike> callback){
+		
+		ParseQuery<Bike> query = Bike.createQuery();
+		
+		query.whereEqualTo("serialNumber", serialNumber);
+		
+		query.findInBackground(new FindCallback<Bike>()  {
+
+			@Override
+			public void done(List<Bike> bikes, ParseException e) {
+				callback.done(bikes, e);;
+				
+			}
+			
+			
+			
+			
+		});
 		
 		
 	}
@@ -79,13 +102,6 @@ public class Bike extends ParseObject{
     public Bike(){}
 	
 	
-	public boolean isStolen() {
-		return stolen;
-	}
-
-	public void setStolen(boolean stolen) {
-		this.stolen = stolen;
-	}
 
 	public int getDrawableId() {
 		return drawableId;
@@ -98,23 +114,16 @@ public class Bike extends ParseObject{
 
 
 	public String getMake() {
-		return make;
-	}
-
-
-	public void setMake(String make) {
-		this.make = make;
+		return getString("make");
 	}
 
 
 	public String getSerialNo() {
-		return serialNo;
+		return getString("serialNumber");
 	}
 
 
-	public void setSerialNo(String serialNo) {
-		this.serialNo = serialNo;
-	}
+	
 
 
     public Bitmap getSelectedBikePic() {
@@ -127,11 +136,10 @@ public class Bike extends ParseObject{
 
 
 	public String getNickname() {
-		return nickname;
+		return getString("nickname");
 	}
 
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+
+
 }

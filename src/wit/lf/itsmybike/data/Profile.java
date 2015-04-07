@@ -17,26 +17,12 @@ import com.parse.ParseUser;
 @ParseClassName("_User")
 public class Profile extends ParseUser {
 
-	
-	
-/*	private String firstName;
-	private String secondName;
-	//private Integer noOfBikes;
-	private String password;
-	private String email;
-	private String location;
-	private int drawableId;
-    private ArrayList<Bike>listOfBikes;
-
-
+/*	
 
     private Bitmap selectedProfilePic;
 	*/
 	
 
-
-
-    //default constructor
     public Profile(){};
 
 
@@ -87,7 +73,7 @@ public class Profile extends ParseUser {
 	}
 
 	public String getSecondName() {
-		return getString("secondName");
+		return getString("surName");
 	}
 
 	public int getDrawableId() {

@@ -45,7 +45,7 @@ public class EditBike extends Activity {
         editBikeMake.setText(gs.getBikeToEdit().getMake());
         editBikeImage=(ImageView)findViewById(R.id.editBikeImage);
         editIconEditBikeImage=(ImageView)findViewById(R.id.editIconEditBikeImage);
-       editBikeImage.setBackgroundResource(gs.getBikeToEdit().getDrawableId());
+      // editBikeImage.setBackgroundResource(gs.getBikeToEdit().getDrawableId());
         editIconEditBikeImage.setBackgroundResource(R.drawable.edit);
 
 

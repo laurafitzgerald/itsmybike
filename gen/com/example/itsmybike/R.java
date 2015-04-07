@@ -492,7 +492,7 @@ containing a value of this type.
         public static final int splashbackground=0x7f02002f;
     }
     public static final class id {
-        public static final int action_settings=0x7f070067;
+        public static final int action_settings=0x7f070064;
         public static final int addBikeImage=0x7f07001f;
         public static final int addBikeMake=0x7f07001d;
         public static final int addBikeNickname=0x7f07001a;
@@ -546,16 +546,14 @@ containing a value of this type.
         public static final int latitudeInput=0x7f070051;
         public static final int locView=0x7f070038;
         public static final int logInButton=0x7f070030;
-        public static final int log_out=0x7f070066;
+        public static final int log_out=0x7f070063;
         public static final int longitude=0x7f070052;
         public static final int longitudeInput=0x7f070053;
-        public static final int make=0x7f070062;
         public static final int makeLabel=0x7f07005d;
         public static final int map=0x7f070048;
         public static final int match_parent=0x7f07000e;
         public static final int monochrome=0x7f070016;
         public static final int newPassword=0x7f07002a;
-        public static final int nickname=0x7f070060;
         public static final int nicknameLabel=0x7f070059;
         public static final int none=0x7f070000;
         public static final int normal=0x7f070003;
@@ -577,15 +575,14 @@ containing a value of this type.
         public static final int registerSurname=0x7f070040;
         public static final int retypeNewPassword=0x7f07002b;
         public static final int retypePassword=0x7f070044;
-        public static final int row_image=0x7f070065;
-        public static final int row_nickname=0x7f070063;
-        public static final int row_serial=0x7f070064;
+        public static final int row_image=0x7f070062;
+        public static final int row_nickname=0x7f070060;
+        public static final int row_serial=0x7f070061;
         public static final int sandbox=0x7f07000a;
         public static final int satellite=0x7f070004;
         public static final int scrollView=0x7f070018;
         public static final int scrollView2=0x7f07003d;
         public static final int selectionDetails=0x7f07000d;
-        public static final int serialNumber=0x7f070061;
         public static final int serialNumberLabel=0x7f07005b;
         public static final int spinnerItem=0x7f070047;
         public static final int strict_sandbox=0x7f07000b;

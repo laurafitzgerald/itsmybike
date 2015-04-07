@@ -39,7 +39,7 @@ import com.parse.ParseUser;
 			//gs.setProfile(new Profile("Laura", "Fitzgerald", "Waterford", 2, R.drawable.bikeprofile, "laura@laura.com", "pass"));
 			//gs.setLoggedIn(tString password,rue);
 			
-			ParseUser.logOut();
+			//ParseUser.logOut();
 		
 		
 			new Handler().postDelayed(new Runnable(){

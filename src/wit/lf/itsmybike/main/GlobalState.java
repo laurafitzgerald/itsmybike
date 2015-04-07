@@ -21,6 +21,16 @@ import wit.lf.itsmybike.data.StolenBike;
 public class GlobalState extends Application{
 
 	
+
+	private ArrayList <StolenBike> stolenBikes = new ArrayList<StolenBike>();
+	private Profile profile;
+	//private ArrayList<Bike> bikes = new ArrayList<Bike>();
+	private boolean loggedIn;
+	private Double currentLat;
+	private Double currentLng;
+    private List<Profile> listOfProfiles=new ArrayList<Profile>();
+    private Bike bikeToEdit;
+	private List <Bike> listOfBikes = new ArrayList<Bike>();
 	
 	public void onCreate(){
 		
@@ -41,17 +51,9 @@ public class GlobalState extends Application{
 	}
 	
 	
-	private List <Bike> listOfBikes = new ArrayList<Bike>();
+
 	
 
-	private ArrayList <StolenBike> stolenBikes = new ArrayList<StolenBike>();
-	private Profile profile;
-	//private ArrayList<Bike> bikes = new ArrayList<Bike>();
-	private boolean loggedIn;
-	private Double currentLat;
-	private Double currentLng;
-    private List<Profile> listOfProfiles=new ArrayList<Profile>();
-    private Bike bikeToEdit;
     public List<Profile> getListOfProfiles() {
         return listOfProfiles;
     }

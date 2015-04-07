@@ -204,7 +204,7 @@ public class Register extends Activity {
         user.put("surName", surname.getText().toString());
         user.put("location", location.getText().toString());
         user.setUsername(email.getText().toString());
-        
+        user.pinInBackground();
         
         user.signUpInBackground(new SignUpCallback() {
 
@@ -216,6 +216,7 @@ public class Register extends Activity {
 					
 					
 				}else{
+					
 					
 					  Toast.makeText(getApplicationContext(),"Welcome "+firstName.getText().toString(),Toast.LENGTH_SHORT).show();
 				        startActivity(new Intent(Register.this, Base.class));

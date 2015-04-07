@@ -40,6 +40,16 @@
                  
                  
              </activity>
+             
+                  <activity android:label="@string/app_name" android:name="wit.lf.itsmybike.main.AddBike">
+                 
+                 
+             </activity>
+             
+                        <activity android:label="@string/app_name" android:name="wit.lf.itsmybike.main.EditBike">
+                 
+                 
+             </activity>
           
         <!--created by AORM plugin at 2015-02-16 16:36:01-->
         <activity android:name="wit.lf.itsmybike.main.HomeScreen"/>

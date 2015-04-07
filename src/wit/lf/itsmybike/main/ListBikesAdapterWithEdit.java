@@ -47,7 +47,7 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
         return listBikes.get(position);
     }
 
-    @Override
+  @Override
     public long getItemId(int position) {
         return listBikes.get(position).getDrawableId();
     }
@@ -87,7 +87,7 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
             viewHolder.imgBike_editable.setImageBitmap(bike.getSelectedBikePic());
         }
         else {
-            viewHolder.imgBike_editable.setImageResource(bike.getDrawableId());
+            //viewHolder.imgBike_editable.setImageResource(bike.getDrawableId());
         }
         viewHolder.editIcon.setImageResource(R.drawable.edit);
 
