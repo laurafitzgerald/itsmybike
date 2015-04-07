@@ -30,6 +30,8 @@ public class Bike extends ParseObject{
     private Bitmap selectedBikePic;
 	
     
+    
+    
 
 	
 	private static ParseQuery<Bike> createQuery() {
@@ -58,7 +60,9 @@ public class Bike extends ParseObject{
 			public void done(List<Bike> bikes, ParseException e) {
 				
 				callback.done(bikes, e);
-			}});
+			}
+			
+		});
 		
 		
 	}
@@ -76,28 +80,12 @@ public class Bike extends ParseObject{
 				callback.done(bikes, e);;
 				
 			}
-			
-			
-			
-			
+
 		});
 		
 		
 	}
 	
-
-
-/*	public Bike(int drawableId, String nickname, String serialNo, String make ){
-		
-		this.drawableId = drawableId;
-		this.serialNo = serialNo;
-		
-		this.nickname = nickname;
-		this.make = make;
-		this.stolen = false;
-		
-		
-	}*/
 
     public Bike(){}
 	
