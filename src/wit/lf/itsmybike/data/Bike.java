@@ -2,8 +2,6 @@ package wit.lf.itsmybike.data;
 
 //here are some changes
 
-import java.util.List;
-
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -11,7 +9,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import android.graphics.Bitmap;
+import java.util.List;
 
 
 @ParseClassName("Bike")
@@ -27,7 +25,6 @@ public class Bike extends ParseObject{
 */
 
 
-    private Bitmap selectedBikePic;
 	
     
     
@@ -47,6 +44,7 @@ public class Bike extends ParseObject{
 	public static void findInBackground(ParseUser user, final FindCallback<Bike> callback){
 		
 		ParseQuery<Bike> query = Bike.createQuery();
+        query.fromLocalDatastore();
 		
 		if(user != null){
 			
@@ -67,38 +65,21 @@ public class Bike extends ParseObject{
 		
 	}
 	
-	public static void findInBackgroudBySerial(String serialNumber, final FindCallback<Bike> callback){
-		
-		ParseQuery<Bike> query = Bike.createQuery();
-		
-		query.whereEqualTo("serialNumber", serialNumber);
-		
-		query.findInBackground(new FindCallback<Bike>()  {
 
-			@Override
-			public void done(List<Bike> bikes, ParseException e) {
-				callback.done(bikes, e);;
-				
-			}
-
-		});
-		
-		
-	}
 	
 
     public Bike(){}
-	
-	
 
-	public int getDrawableId() {
+
+
+    public void setDrawableId(int drawableId) {
+        this.drawableId = drawableId;
+    }public int getDrawableId() {
 		return drawableId;
 	}
 
 
-	public void setDrawableId(int drawableId) {
-		this.drawableId = drawableId;
-	}
+
 
 
 	public String getMake() {
@@ -111,16 +92,12 @@ public class Bike extends ParseObject{
 	}
 
 
-	
 
 
-    public Bitmap getSelectedBikePic() {
-        return selectedBikePic;
-    }
 
-    public void setSelectedBikePic(Bitmap selectedBikePic) {
-        this.selectedBikePic = selectedBikePic;
-    }
+
+
+
 
 
 	public String getNickname() {

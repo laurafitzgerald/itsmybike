@@ -1,6 +1,7 @@
 package wit.lf.itsmybike.main;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.itsmybike.R;
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 
 import java.util.List;
 
@@ -24,6 +28,10 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
 
     protected List<Bike> listBikes;
     LayoutInflater inflater;
+    private ParseFile fileContainingBikePic;
+
+
+    private ViewHolder viewHolder;
 
     public ListBikesAdapterWithEdit(Context context, List<Bike> listBikes){
 
@@ -54,7 +62,7 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+
         if(convertView == null){
             viewHolder = new ViewHolder();
             convertView = this.inflater.inflate(R.layout.list_bike_with_edit_option, parent, false);
@@ -80,15 +88,7 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
         viewHolder.nickname_editable.setText(bike.getNickname());
         viewHolder.serial_editable.setText(bike.getSerialNo());
         viewHolder.make_editable.setText(bike.getMake());
-        //viewHolder.txtMake.setTag(bike.getMake());
-        if(bike.getSelectedBikePic()!=null)
-        {
-            viewHolder.imgBike_editable.setImageResource(0);
-            viewHolder.imgBike_editable.setImageBitmap(bike.getSelectedBikePic());
-        }
-        else {
-            //viewHolder.imgBike_editable.setImageResource(bike.getDrawableId());
-        }
+        getBikePicAsBitmap(bike);
         viewHolder.editIcon.setImageResource(R.drawable.edit);
 
         return convertView;
@@ -103,6 +103,28 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
         TextView make_editable;
         ImageView imgBike_editable;
         ImageView editIcon;
+
+    }
+
+    public void getBikePicAsBitmap(Bike bike) {
+
+        fileContainingBikePic=(ParseFile)bike.get("bikePic");
+        fileContainingBikePic.getDataInBackground(new GetDataCallback() {
+
+            public void done(byte[] data, ParseException e) {
+                if (e == null) {
+
+                    viewHolder.imgBike_editable.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
+
+
+
+                } else {
+
+                }
+            }
+        });
+
+
 
     }
 

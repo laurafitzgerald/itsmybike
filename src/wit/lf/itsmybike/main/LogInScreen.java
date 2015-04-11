@@ -14,15 +14,10 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
-import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.Profile;
 
 
@@ -35,10 +30,9 @@ public class LogInScreen extends Activity {
 	private GlobalState gs;
 	private Boolean found = false;
 	private EditText usernameInput = null;
-
 	private EditText passwordInput = null;
-	
 	private TextView attempts;
+    private Profile user;
 	int counter = 3;
 	
 	
@@ -72,6 +66,8 @@ public class LogInScreen extends Activity {
 
 				});
 
+        user=new Profile();
+
 
 
 	}
@@ -84,28 +80,28 @@ public class LogInScreen extends Activity {
 
 		
 		Profile.logInInBackground(usernameInput.getText().toString(), passwordInput.getText().toString(), new LogInCallback() {
-			
+
 			@Override
 			public void done(ParseUser user, ParseException e) {
 				if(user !=null){
-					
+
 
 		        	 Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent(LogInScreen.this, Base.class);
 					startActivity(intent);
-					
+
 				}else{
-					
+
 					failedAttempt();
-					
+
 				}
-				
+
 			}
-				
-			
+
+
 			private void failedAttempt(){
-				
-				
+
+
 				Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
 				attempts.setBackgroundColor(getResources().getColor(R.color.locationcolor));
 				counter--;
@@ -113,18 +109,18 @@ public class LogInScreen extends Activity {
 				attempts.setTextColor(getResources().getColor(R.color.textbody));
 				found =false;
 				if(counter==0){
-					
-					
+
+
 					login.setEnabled(false);
 				}
 				return;
-				
+
 			}
-			
-			
-			
-			
-			
+
+
+
+
+
 		});
 	/*	Profile.findInBackground(usernameInput.getText().toString(), new FindCallback<Profile>(){
 			
