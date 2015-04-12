@@ -3,6 +3,7 @@ package wit.lf.itsmybike.main;
 
 
 import android.app.Application;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.Profile;
@@ -40,7 +42,8 @@ public class GlobalState extends Application{
 		Parse.initialize(this, getString(com.example.itsmybike.R.string.parse_application_id) , getString(R.string.parse_client_key));
 		
 		ParseObject.registerSubclass(StolenBike.class);
-		ParseObject.registerSubclass(Profile.class);
+		ParseUser.registerSubclass(Profile.class);
+
 		ParseObject.registerSubclass(Bike.class);
 		
 		ParseInstallation.getCurrentInstallation().saveInBackground();

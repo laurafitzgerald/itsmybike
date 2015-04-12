@@ -52,6 +52,7 @@ public class Register extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        gs= (GlobalState) getApplication();
         firstName=(EditText)findViewById(R.id.registerFirstName);
         surname=(EditText)findViewById(R.id.registerSurname);
         location=(EditText)findViewById(R.id.registerLocation);
@@ -63,7 +64,7 @@ public class Register extends Activity {
         password=(EditText)findViewById(R.id.registerPassword);
         retypePassword=(EditText)findViewById(R.id.retypePassword);
         registerButton =(Button)findViewById(R.id.registerButton);
-        gs=(GlobalState)getApplication();
+      
         firstName.requestFocus();
     }
 
@@ -196,8 +197,11 @@ public class Register extends Activity {
             password.requestFocus();
         }
         
+    	
+		
         
-        ParseUser user = new ParseUser();
+		
+        ParseUser user = (Profile) new Profile();
         user.setPassword(password.getText().toString());
         user.setEmail(email.getText().toString());
         user.put("firstName", firstName.getText().toString());
