@@ -17,10 +17,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
-import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 
@@ -64,7 +64,7 @@ public class EditProfile extends Activity {
         editProfileFirstName.setText(userProfile.getFirstName());
         editProfileSurname.setText(userProfile.getSecondName());
         editProfileLocation.setText(userProfile.getLocation());
-         getProfilePicAsBitmap(userProfile);
+        getProfilePicAsBitmap();
         editProfilePicEditIcon.setBackgroundResource(R.drawable.edit);
         newPassword = (EditText) findViewById(R.id.newPassword);
         changePasswordButton = (Button) findViewById(R.id.editPasswordButton);
@@ -79,27 +79,11 @@ public class EditProfile extends Activity {
 
     }
 
-    public void getProfilePicAsBitmap(Profile user) {
+    public void getProfilePicAsBitmap() {
 
-        fileContainingProfilePic=(ParseFile)user.get("profilePic");
-        fileContainingProfilePic.getDataInBackground(new GetDataCallback() {
-
-            public void done(byte[] data, ParseException e) {
-                if (e == null) {
-
-
-                    editProfilePic.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
-
-
-
-                } else {
-
-                }
-            }
-        });
-
-
-
+        byte[] data=gs.readLocalProfilePic();
+        scaledBitmap=BitmapFactory.decodeByteArray(data, 0, data.length);
+        editProfilePic.setImageBitmap(scaledBitmap);
     }
 
 
@@ -115,7 +99,6 @@ public class EditProfile extends Activity {
 
 
     public void saveProfile(View view) {
-
 
         if (passwordBeingChanged) {
 
@@ -142,10 +125,26 @@ public class EditProfile extends Activity {
                 userProfile.put("firstName", editProfileFirstName.getText().toString());
                 userProfile.put("surName", editProfileSurname.getText().toString());
                 userProfile.put("location", editProfileLocation.getText().toString());
-                userProfile.put("profilePic",fileContainingProfilePic);
+                gs.saveProfilePicLocally(prepareProfilePicForSaving());
                 userProfile.setPassword(newPassword.getText().toString());
+                userProfile.saveEventually(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
 
-                userProfile.saveEventually();
+                        if (e==null)
+                        {
+                            gs.saveProfilePicToParse(prepareProfilePicForSaving());
+                        }
+
+                        else
+                        {
+                            Toast.makeText(EditProfile.this,"Something went wrong",Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                });
+
+
             }
             Toast.makeText(EditProfile.this, "Profile Updated", Toast.LENGTH_LONG).show();
 
@@ -167,11 +166,24 @@ public class EditProfile extends Activity {
                 userProfile.put("firstName", editProfileFirstName.getText().toString());
                 userProfile.put("surName", editProfileSurname.getText().toString());
                 userProfile.put("location", editProfileLocation.getText().toString());
-                userProfile.put("profilePic",fileContainingProfilePic);
-                userProfile.saveEventually();
+                gs.saveProfilePicLocally(prepareProfilePicForSaving());
+                userProfile.saveEventually(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
 
+                        if (e==null)
+                        {
+                            gs.saveProfilePicToParse(prepareProfilePicForSaving());
+                        }
+
+                        else
+                        {
+                            Toast.makeText(EditProfile.this,"Something went wrong",Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                });
                 Toast.makeText(EditProfile.this, "Profile Updated", Toast.LENGTH_LONG).show();
-
                 startActivity(new Intent(EditProfile.this, Base.class));
 
             }
@@ -221,13 +233,12 @@ public class EditProfile extends Activity {
 
     }
 
-    public void prepareProfilePicForParse() {
+    public byte[] prepareProfilePicForSaving() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
+        return byteArray;
 
-        fileContainingProfilePic = new ParseFile("profilePicFile.txt", byteArray);
-        fileContainingProfilePic.saveInBackground();
     }
 
 
@@ -264,7 +275,7 @@ public class EditProfile extends Activity {
 
                          editProfilePic.setImageBitmap(scaledBitmap);
 
-                prepareProfilePicForParse();
+
 
 
 

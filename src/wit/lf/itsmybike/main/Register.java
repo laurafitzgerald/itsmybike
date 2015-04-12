@@ -48,6 +48,7 @@ public class Register extends Activity {
     private ParseFile fileContainingProfilePic;
     private Profile user;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +68,7 @@ public class Register extends Activity {
         registerButton = (Button) findViewById(R.id.registerButton);
         gs = (GlobalState) getApplication();
         firstName.requestFocus();
-        prepareProfilePicForParse();
+        //prepareProfilePicForSaving();
         user = new Profile();
     }
 
@@ -142,15 +143,13 @@ public class Register extends Activity {
                 addProfilePic.setBackgroundResource(0);
                 addProfilePic.setImageBitmap(scaledBitmap);
 
-                prepareProfilePicForParse();
+               // prepareProfilePicForSaving();
 
 
             } else if ((requestCode == 2 && resultCode == RESULT_OK
                     && null != data)) {
                 Bundle extras = data.getExtras();
                 Bitmap unscaledBitmap = (Bitmap) extras.get("data");
-
-
                 int widthBeforeScale = unscaledBitmap.getWidth();
                 int heightBeforeScale = unscaledBitmap.getHeight();
                 int profilePicWidth = addProfilePic.getWidth();
@@ -158,10 +157,9 @@ public class Register extends Activity {
                 int new_width = profilePicWidth;
                 int new_height = profilePicHeight;
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, new_width, new_height, true);
-
                 addProfilePic.setBackgroundResource(0);
                 addProfilePic.setImageBitmap(scaledBitmap);
-                prepareProfilePicForParse();
+               // prepareProfilePicForSaving();
             } else {
                 Toast.makeText(this, "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
@@ -174,14 +172,15 @@ public class Register extends Activity {
     }
 
 
-    public void prepareProfilePicForParse() {
+   /* public void prepareProfilePicForSaving() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-
-        fileContainingProfilePic = new ParseFile("profilePicFile.txt", byteArray);
-        fileContainingProfilePic.saveInBackground();
-    }
+        byte[]byteArray = stream.toByteArray();
+        gs.saveProfilePicLocally(byteArray);
+        gs.saveProfilePicToParse(byteArray);
+        //fileContainingProfilePic = new ParseFile("profilePicFile.txt", byteArray);
+        //fileContainingProfilePic.saveInBackground();
+    }*/
 
     public void registerUser(View view) {
         Log.v("Reg", "Button Pressed");
@@ -206,7 +205,8 @@ public class Register extends Activity {
             user.put("surName", surname.getText().toString());
             user.put("location", location.getText().toString());
             user.setUsername(email.getText().toString());
-            user.put("profilePic",fileContainingProfilePic);
+
+            //user.put("profilePic",fileContainingProfilePic);
 
             user.pinInBackground();
 
@@ -215,10 +215,15 @@ public class Register extends Activity {
                 public void done(ParseException e) {
                     if (!(e == null)) {
 
+                        Toast.makeText(Register.this,e.toString(),Toast.LENGTH_LONG).show();
                         Log.v("Something went wrong!!" + e, e.toString());
                     } else {
 
-
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        byte[]byteArray = stream.toByteArray();
+                        gs.saveProfilePicLocally(byteArray);
+                        gs.saveProfilePicToParse(byteArray);
                         Toast.makeText(Register.this, "Welcome " + firstName.getText().toString(), Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(Register.this, Base.class));
 
