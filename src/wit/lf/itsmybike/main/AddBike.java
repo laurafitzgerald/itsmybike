@@ -16,10 +16,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.io.ByteArrayOutputStream;
+
 import wit.lf.itsmybike.data.Bike;
-import wit.lf.itsmybike.data.StolenBike;
 
 public class AddBike extends Activity {
 
@@ -31,6 +33,7 @@ public class AddBike extends Activity {
     private GlobalState gs;
     private String galleryFilePath;
     private Bitmap scaledBitmap;
+    private ParseFile fileContainingBikePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +45,12 @@ public class AddBike extends Activity {
         addBikeMake=(EditText)findViewById(R.id.addBikeMake);
         addBikeImage =(ImageView)findViewById(R.id.addBikeImage);
         addIconAddBikeImage=(ImageView)findViewById(R.id.addIconAddBikeImage);
-        addBikeImage.setBackgroundResource(R.drawable.no_bike_pic);
+
+        scaledBitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.no_bike_pic);
+        addBikeImage.setImageBitmap(scaledBitmap);
         addIconAddBikeImage.setBackgroundResource(R.drawable.add);
+        prepareBikePicForParse();
 
 
 
@@ -89,6 +96,15 @@ public class AddBike extends Activity {
         dialog.show();
     }
 
+    public void prepareBikePicForParse() {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        fileContainingBikePic = new ParseFile("bikePicFile.txt", byteArray);
+        fileContainingBikePic.saveInBackground();
+    }
+
     public void saveBike(View view)
 
 
@@ -115,19 +131,15 @@ public class AddBike extends Activity {
 
 
 
-    /*      //Bike bikeToAdd=new Bike(R.drawable.no_bike_pic, , , );
-          if(scaledBitmap!=null) {
-              bikeToAdd.setSelectedBikePic(scaledBitmap);
-          }*/
           
-          Bike bike = Bike.create(Bike.class);
-  			bike.put("nickname", addBikeNickname.getText().toString());
+        Bike bike = Bike.create(Bike.class);
+  		bike.put("nickname", addBikeNickname.getText().toString());
   		bike.put("serialNumber", addBikeSerialNumber.getText().toString());
   		bike.put("make", addBikeMake.getText().toString());
-  		
   		bike.put("userId", ParseUser.getCurrentUser());
-  		
-  		bike.saveInBackground();
+        bike.put("bikePic",fileContainingBikePic);
+        bike.pinInBackground();
+  		bike.saveEventually();
   		
           //gs.getProfile().getListOfBikes().add(bikeToAdd);
           Toast.makeText(this, "Bike added", Toast.LENGTH_SHORT).show();
@@ -167,9 +179,9 @@ public class AddBike extends Activity {
                 int new_height=profilePicHeight;
 
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
-
-                addBikeImage.setBackgroundResource(0);
                 addBikeImage.setImageBitmap(scaledBitmap);
+                   prepareBikePicForParse();
+
 
 
 
@@ -192,9 +204,8 @@ public class AddBike extends Activity {
                 int new_width=profilePicWidth;
                 int new_height=profilePicHeight;
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
-
-                addBikeImage.setBackgroundResource(0);
                 addBikeImage.setImageBitmap(scaledBitmap);
+                prepareBikePicForParse();
             }
 
 

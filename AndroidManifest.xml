@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <manifest android:versionCode="1" android:versionName="1.0"
     package="com.example.itsmybike" xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
@@ -40,6 +40,11 @@
         <!--created by AORM plugin at 2015-02-16 17:27:03-->
         <activity android:name="wit.lf.itsmybike.main.Base"/>
         <!--created by AORM plugin at 2015-02-25 20:07:55-->
+
+        <activity android:name="wit.lf.itsmybike.main.Register"/>
+        <activity android:name="wit.lf.itsmybike.main.EditProfile"/>
+        <activity android:name="wit.lf.itsmybike.main.AddBike"/>
+        <activity android:name="wit.lf.itsmybike.main.EditBike"/>
       
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
     </application>

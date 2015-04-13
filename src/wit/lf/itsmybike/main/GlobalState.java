@@ -5,16 +5,14 @@ package wit.lf.itsmybike.main;
 import android.app.Application;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.example.itsmybike.R;
-import com.parse.FindCallback;
 import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.Profile;
@@ -33,6 +31,7 @@ public class GlobalState extends Application{
     private List<Profile> listOfProfiles=new ArrayList<Profile>();
     private Bike bikeToEdit;
 	private List <Bike> listOfBikes = new ArrayList<Bike>();
+
 	
 	public void onCreate(){
 		
@@ -47,13 +46,9 @@ public class GlobalState extends Application{
 		ParseObject.registerSubclass(Bike.class);
 		
 		ParseInstallation.getCurrentInstallation().saveInBackground();
-		
-
-		
-		
 	}
-	
-	
+
+
 
 	
 
@@ -99,7 +94,8 @@ public class GlobalState extends Application{
 	}
 
 	public void setProfile(Profile profile) {
-		this.profile = profile;
+
+        this.profile = profile;
 	}
 
 	public ArrayList<StolenBike> getStolenBikes() {
@@ -120,7 +116,6 @@ public class GlobalState extends Application{
     }
 
 
-	
-	
+
 	
 }
