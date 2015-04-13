@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.itsmybike.R;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 
 import java.util.List;
@@ -29,15 +27,19 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
     protected List<Bike> listBikes;
     LayoutInflater inflater;
     private ParseFile fileContainingBikePic;
+    private GlobalState gs;
+
+
 
 
     private ViewHolder viewHolder;
 
-    public ListBikesAdapterWithEdit(Context context, List<Bike> listBikes){
+    public ListBikesAdapterWithEdit(Context context, List<Bike> listBikes,GlobalState gs){
 
         this.listBikes = listBikes;
         this.inflater = LayoutInflater.from(context);
         this.context = context;
+        this.gs=gs;
 
 
 
@@ -106,23 +108,21 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
 
     }
 
-    public void getBikePicAsBitmap(Bike bike) {
+    public void getBikePicAsBitmap(Bike bike)
+    {
 
-        fileContainingBikePic=(ParseFile)bike.get("bikePic");
-        fileContainingBikePic.getDataInBackground(new GetDataCallback() {
+        if(gs.readLocalBikePic(bike.getSerialNo())!=null) {
+            byte[] data = gs.readLocalBikePic(bike.getSerialNo());
+            viewHolder.imgBike_editable.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
+        }
 
-            public void done(byte[] data, ParseException e) {
-                if (e == null) {
+        else
+        {
+            viewHolder.imgBike_editable.setBackgroundResource(R.drawable.no_bike_pic);
+        }
 
-                    viewHolder.imgBike_editable.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
 
 
-
-                } else {
-
-                }
-            }
-        });
 
 
 

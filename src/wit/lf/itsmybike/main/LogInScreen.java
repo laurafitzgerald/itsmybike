@@ -14,8 +14,10 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.GetDataCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import wit.lf.itsmybike.data.Profile;
@@ -85,10 +87,26 @@ public class LogInScreen extends Activity {
 			public void done(ParseUser user, ParseException e) {
 				if(user !=null){
 
+                    ParseFile parseFileWithProfilePic=(ParseFile)user.get("profilePic");
+                    parseFileWithProfilePic.getDataInBackground(new GetDataCallback() {
+                        @Override
+                        public void done(byte[] bytes, ParseException e) {
+                            if (e==null) {
 
-		        	 Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
-					Intent intent = new Intent(LogInScreen.this, Base.class);
-					startActivity(intent);
+                                gs.saveProfilePicLocally(bytes);
+                                Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LogInScreen.this, Base.class);
+                                startActivity(intent);
+                            }
+
+                            else
+                            {
+                                Toast.makeText(LogInScreen.this,"oops",Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    });
+
 
 				}else{
 

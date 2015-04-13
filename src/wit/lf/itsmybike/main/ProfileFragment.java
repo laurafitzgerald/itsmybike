@@ -17,6 +17,7 @@ import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -37,7 +38,8 @@ public class ProfileFragment extends Fragment {
 	private View rootView;
     private ImageView profileEditIcon;
     private ImageView plusIcon;
-    private ParseFile fileContainingProfilePic;
+    private String serialNumber;
+
 
 
 	@Override
@@ -78,55 +80,61 @@ public class ProfileFragment extends Fragment {
         plusIcon = (ImageView) getActivity().findViewById(R.id.plusIcon);
         plusIcon.setBackgroundResource(R.drawable.add);
         gs = (GlobalState) getActivity().getApplication();
-
-
-       Bike.findInBackground(ParseUser.getCurrentUser(), new FindCallback<Bike>() {
-
+        ParseQuery<Bike>query=new ParseQuery<Bike>("Bike");
+        query.whereEqualTo("userId",ParseUser.getCurrentUser());
+        //query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<Bike>() {
             @Override
             public void done(List<Bike> bikes, ParseException e) {
-                gs.setListOfBikes(bikes);
-                bikeListView = (ListView) getActivity().findViewById(R.id.bikeList);
-                ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(), bikes);
-                bikeListView.setAdapter(adapter);
+
+                if (e==null)
+                {
+                    ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(), bikes,gs);
+                    for (Bike b:bikes)
+                    {
+                       ParseFile pf=(ParseFile)b.get("bikePic");
+                       serialNumber=b.getSerialNo();
+
+
+                        pf.getDataInBackground(new GetDataCallback() {
+                            @Override
+                            public void done(byte[] bytes, ParseException e)
+                            {
+                                gs.saveBikePicLocally(bytes,serialNumber);
+
+                            }
+                        });
+
+                    }
+                    bikeListView = (ListView) getActivity().findViewById(R.id.bikeList);
+                    gs.setListOfBikes(bikes);
+
+                    bikeListView.setAdapter(adapter);
+
+
+                }
+
+                else
+                {
+
+                }
+
 
             }
-
-
-
-
         });
-
-
-
-
         Profile userProfile = (Profile) ParseUser.getCurrentUser();
         username.setText(userProfile.getFirstName() + " " + userProfile.getSecondName());
         location.setText(userProfile.getLocation());
-        getProfilePicAsBitmap(userProfile);
+        getProfilePicAsBitmap();
 
 
     }
 
-    public void getProfilePicAsBitmap(Profile user) {
-
-        fileContainingProfilePic=(ParseFile)user.get("profilePic");
-        fileContainingProfilePic.getDataInBackground(new GetDataCallback() {
-
-            public void done(byte[] data, ParseException e) {
-                if (e == null) {
+    public void getProfilePicAsBitmap() {
 
 
-                    profilePic.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
-
-
-
-                } else {
-
-                }
-            }
-        });
-
-
+        byte[] data=gs.readLocalProfilePic();
+        profilePic.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
 
     }
 

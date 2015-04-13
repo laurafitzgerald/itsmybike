@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.itsmybike.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -48,13 +49,14 @@ public class Register extends Activity {
     private ParseFile fileContainingProfilePic;
     private Profile user;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scaledBitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.no_profile_pic);
         setContentView(R.layout.activity_register);
-<<<<<<< HEAD
+
         gs= (GlobalState) getApplication();
         firstName=(EditText)findViewById(R.id.registerFirstName);
         surname=(EditText)findViewById(R.id.registerSurname);
@@ -68,22 +70,9 @@ public class Register extends Activity {
         retypePassword=(EditText)findViewById(R.id.retypePassword);
         registerButton =(Button)findViewById(R.id.registerButton);
       
-=======
-        firstName = (EditText) findViewById(R.id.registerFirstName);
-        surname = (EditText) findViewById(R.id.registerSurname);
-        location = (EditText) findViewById(R.id.registerLocation);
-        addProfilePic = (ImageView) findViewById(R.id.addProfilePic);
-        addIconProfilePic = (ImageView) findViewById(R.id.addIconAddProfilePic);
-        addProfilePic.setImageBitmap(scaledBitmap);
-        addIconProfilePic.setBackgroundResource(R.drawable.add);
-        email = (EditText) findViewById(R.id.registerEmail);
-        password = (EditText) findViewById(R.id.registerPassword);
-        retypePassword = (EditText) findViewById(R.id.retypePassword);
-        registerButton = (Button) findViewById(R.id.registerButton);
-        gs = (GlobalState) getApplication();
->>>>>>> fd9c6092687db7a75f25810f4f94a0336440373c
+
         firstName.requestFocus();
-        prepareProfilePicForParse();
+        //prepareProfilePicForSaving();
         user = new Profile();
     }
 
@@ -158,15 +147,13 @@ public class Register extends Activity {
                 addProfilePic.setBackgroundResource(0);
                 addProfilePic.setImageBitmap(scaledBitmap);
 
-                prepareProfilePicForParse();
+               // prepareProfilePicForSaving();
 
 
             } else if ((requestCode == 2 && resultCode == RESULT_OK
                     && null != data)) {
                 Bundle extras = data.getExtras();
                 Bitmap unscaledBitmap = (Bitmap) extras.get("data");
-
-
                 int widthBeforeScale = unscaledBitmap.getWidth();
                 int heightBeforeScale = unscaledBitmap.getHeight();
                 int profilePicWidth = addProfilePic.getWidth();
@@ -174,10 +161,9 @@ public class Register extends Activity {
                 int new_width = profilePicWidth;
                 int new_height = profilePicHeight;
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, new_width, new_height, true);
-
                 addProfilePic.setBackgroundResource(0);
                 addProfilePic.setImageBitmap(scaledBitmap);
-                prepareProfilePicForParse();
+               // prepareProfilePicForSaving();
             } else {
                 Toast.makeText(this, "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
@@ -190,14 +176,15 @@ public class Register extends Activity {
     }
 
 
-    public void prepareProfilePicForParse() {
+   /* public void prepareProfilePicForSaving() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-
-        fileContainingProfilePic = new ParseFile("profilePicFile.txt", byteArray);
-        fileContainingProfilePic.saveInBackground();
-    }
+        byte[]byteArray = stream.toByteArray();
+        gs.saveProfilePicLocally(byteArray);
+        gs.saveProfilePicToParse(byteArray);
+        //fileContainingProfilePic = new ParseFile("profilePicFile.txt", byteArray);
+        //fileContainingProfilePic.saveInBackground();
+    }*/
 
     public void registerUser(View view) {
         Log.v("Reg", "Button Pressed");
@@ -205,9 +192,7 @@ public class Register extends Activity {
         //Profile newUser=new Profile();
         Pattern p2 = Pattern.compile("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$");
         Matcher m2 = p2.matcher(email.getText().toString());
-        //boolean userExists=false;
-<<<<<<< HEAD
-        
+   
       
         if(!password.getText().toString().equals(retypePassword.getText().toString()))
         {
@@ -256,57 +241,8 @@ public class Register extends Activity {
         
       
         
-        
-        
-/*
-        for(Profile pr :gs.getListOfProfiles())
-        {
-            if (pr.getEmail().equals(email.getText().toString()))
-            {
-                userExists=true;
-            }
-        }
-=======
->>>>>>> fd9c6092687db7a75f25810f4f94a0336440373c
-
-
-        if (!password.getText().toString().equals(retypePassword.getText().toString())) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_LONG).show();
-            password.setText("");
-            retypePassword.setText("");
-            password.requestFocus();
-        } else {
-
-
-            user.setPassword(password.getText().toString());
-            user.setEmail(email.getText().toString());
-            user.put("firstName", firstName.getText().toString());
-            user.put("surName", surname.getText().toString());
-            user.put("location", location.getText().toString());
-            user.setUsername(email.getText().toString());
-            user.put("profilePic",fileContainingProfilePic);
-
-            user.pinInBackground();
-
-            user.signUpInBackground(new SignUpCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (!(e == null)) {
-
-                        Log.v("Something went wrong!!" + e, e.toString());
-                    } else {
-
-
-                        Toast.makeText(Register.this, "Welcome " + firstName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(Register.this, Base.class));
-
-
-                    }
-                }
-            });
-        }
     }
+    
 }
-
 
 

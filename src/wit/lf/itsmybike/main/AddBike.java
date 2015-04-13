@@ -16,8 +16,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 
@@ -50,7 +52,6 @@ public class AddBike extends Activity {
                 R.drawable.no_bike_pic);
         addBikeImage.setImageBitmap(scaledBitmap);
         addIconAddBikeImage.setBackgroundResource(R.drawable.add);
-        prepareBikePicForParse();
 
 
 
@@ -96,13 +97,14 @@ public class AddBike extends Activity {
         dialog.show();
     }
 
-    public void prepareBikePicForParse() {
+    public byte[] prepareBikePicForSave() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
+        return byteArray;
 
-        fileContainingBikePic = new ParseFile("bikePicFile.txt", byteArray);
-        fileContainingBikePic.saveInBackground();
+
+
     }
 
     public void saveBike(View view)
@@ -137,11 +139,16 @@ public class AddBike extends Activity {
   		bike.put("serialNumber", addBikeSerialNumber.getText().toString());
   		bike.put("make", addBikeMake.getText().toString());
   		bike.put("userId", ParseUser.getCurrentUser());
-        bike.put("bikePic",fileContainingBikePic);
+        gs.saveBikePicLocally(prepareBikePicForSave(),addBikeSerialNumber.getText().toString());
         bike.pinInBackground();
-  		bike.saveEventually();
-  		
-          //gs.getProfile().getListOfBikes().add(bikeToAdd);
+  		bike.saveEventually(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                gs.saveBikePicToParse(prepareBikePicForSave(),addBikeSerialNumber.getText().toString());
+
+            }
+        });
+
           Toast.makeText(this, "Bike added", Toast.LENGTH_SHORT).show();
           startActivity(new Intent(this, Base.class));
       }
@@ -180,7 +187,7 @@ public class AddBike extends Activity {
 
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
                 addBikeImage.setImageBitmap(scaledBitmap);
-                   prepareBikePicForParse();
+
 
 
 
@@ -205,7 +212,7 @@ public class AddBike extends Activity {
                 int new_height=profilePicHeight;
                 scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
                 addBikeImage.setImageBitmap(scaledBitmap);
-                prepareBikePicForParse();
+
             }
 
 
