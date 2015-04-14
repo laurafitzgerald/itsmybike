@@ -39,6 +39,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profileEditIcon;
     private ImageView plusIcon;
     private String serialNumber;
+    private Bike bike;
 
 
 
@@ -80,8 +81,10 @@ public class ProfileFragment extends Fragment {
         plusIcon = (ImageView) getActivity().findViewById(R.id.plusIcon);
         plusIcon.setBackgroundResource(R.drawable.add);
         gs = (GlobalState) getActivity().getApplication();
+
         
         Bike.findInBackground(ParseUser.getCurrentUser(), new FindCallback<Bike>() {
+
             @Override
             public void done(List<Bike> bikes, ParseException e) {
 
@@ -93,11 +96,15 @@ public class ProfileFragment extends Fragment {
                         try {
                             ParseFile pf = (ParseFile) b.get("bikePic");
                             serialNumber = b.getSerialNo();
+                            bike=b;
                             pf.getDataInBackground(new GetDataCallback() {
                                 @Override
                                 public void done(byte[] bytes, ParseException e) {
 
                                     gs.saveBikePicLocally(bytes, serialNumber);
+                                    bike.saveEventually();
+
+
 
                                 }
                             });
@@ -136,7 +143,13 @@ public class ProfileFragment extends Fragment {
     public void getProfilePicAsBitmap() {
 
 
-        byte[] data=gs.readLocalProfilePic();
+
+
+
+        byte[] data = gs.readLocalProfilePic();
+
+
+
         profilePic.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
 
     }

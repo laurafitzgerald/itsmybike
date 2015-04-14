@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.example.itsmybike.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -252,48 +251,9 @@ public class Register extends Activity {
             ex.printStackTrace();
 
         }
-        
-    	
-		
-        
-		
-        ParseUser user = (Profile) new Profile();
-        user.setPassword(password.getText().toString());
-        user.setEmail(email.getText().toString());
-        user.put("firstName", firstName.getText().toString());
-        user.put("surName", surname.getText().toString());
-        user.put("location", location.getText().toString());
-        user.setUsername(email.getText().toString());
-        user.pinInBackground();
-        
-        user.signUpInBackground(new SignUpCallback() {
-
-			@Override
-			public void done(ParseException e) {
-				if(!(e==null)){
-					
-					Log.v("Something went wrong!!" + e, e.toString());
-					
-					
-				}else{
-					
-					
-					  Toast.makeText(getApplicationContext(),"Welcome "+firstName.getText().toString(),Toast.LENGTH_SHORT).show();
-				        startActivity(new Intent(Register.this, Base.class));
-				}
-				
-			}
-        	
-        	
-        	
-        	
-        	
-        });
-        
-      
-        
     }
 
 }
+
 
 

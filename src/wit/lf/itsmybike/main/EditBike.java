@@ -67,7 +67,9 @@ public class EditBike extends Activity {
 
         try {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Bike");
-            query.fromLocalDatastore();
+            if(gs.connectedToInternet(this)==false) {
+                query.fromLocalDatastore();
+            }
             query.whereEqualTo("serialNumber", serialNumber);
             query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> bikeList, ParseException e) {
