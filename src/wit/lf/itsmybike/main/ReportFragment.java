@@ -179,7 +179,7 @@ public class ReportFragment extends Fragment{
 /*	
 		int selected = spinner.getSelectedItemPosition();
 		
-		//TODO
+		
 		if(selected==0){
 			Toast.makeText(getActivity().getApplicationContext(), "Please select a bike first", Toast.LENGTH_SHORT).show();
 			
@@ -202,7 +202,6 @@ public class ReportFragment extends Fragment{
 		stolenBike.put("lat", gs.getCurrentLat());
 		stolenBike.put("lng", gs.getCurrentLng());
 		stolenBike.put("serialNumber", "testSerial - need to fix");
-		//stolenBike.put("bikeId", selectdBike);
 		stolenBike.saveInBackground();
 		
 		//gs.getStolenBikes().add(new StolenBike(gs.getCurrentLat(), gs.getCurrentLng(), testBike.getSerialNo(), date));

@@ -88,60 +88,68 @@ public class LogInScreen extends Activity {
 		
 try {
 
-    Profile.logInInBackground(usernameInput.getText().toString(), passwordInput.getText().toString(), new LogInCallback() {
+    if (gs.connectedToInternet(this) == false) {
+        Toast.makeText(this, "Check your internet connection and try again", Toast.LENGTH_LONG).show();
+    } else {
 
-        @Override
-        public void done(ParseUser user, ParseException e) {
-            if (user != null) {
 
-                ParseFile parseFileWithProfilePic = (ParseFile) user.get("profilePic");
-                parseFileWithProfilePic.getDataInBackground(new GetDataCallback() {
-                    @Override
-                    public void done(byte[] bytes, ParseException e) {
-                        if (e == null) {
+        Profile.logInInBackground(usernameInput.getText().toString(), passwordInput.getText().toString(), new LogInCallback() {
 
-                            gs.saveProfilePicLocally(bytes);
-                            Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LogInScreen.this, Base.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(LogInScreen.this, "oops", Toast.LENGTH_LONG).show();
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (user != null) {
+
+
+                    ParseFile parseFileWithProfilePic = (ParseFile) user.get("profilePic");
+                    parseFileWithProfilePic.getDataInBackground(new GetDataCallback() {
+                        @Override
+                        public void done(byte[] bytes, ParseException e) {
+                            if (e == null) {
+
+                                gs.saveProfilePicLocally(bytes);
+                                Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LogInScreen.this, Base.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(LogInScreen.this, "oops", Toast.LENGTH_LONG).show();
+                            }
+
                         }
-
-                    }
-                });
+                    });
 
 
-            } else {
+                } else {
 
-                failedAttempt();
+                    failedAttempt();
+
+                }
 
             }
 
-        }
+
+            private void failedAttempt() {
 
 
-        private void failedAttempt() {
+                Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
+                attempts.setBackgroundColor(getResources().getColor(R.color.locationcolor));
+                counter--;
+                attempts.setText(Integer.toString(counter) + " attempts left");
+                attempts.setTextColor(getResources().getColor(R.color.textbody));
+                found = false;
+                if (counter == 0) {
 
 
-            Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
-            attempts.setBackgroundColor(getResources().getColor(R.color.locationcolor));
-            counter--;
-            attempts.setText(Integer.toString(counter) + " attempts left");
-            attempts.setTextColor(getResources().getColor(R.color.textbody));
-            found = false;
-            if (counter == 0) {
+                    login.setEnabled(false);
+                }
+                return;
 
-
-                login.setEnabled(false);
             }
-            return;
-
-        }
 
 
-    });
+        });
 
+
+    }
 
 }
 

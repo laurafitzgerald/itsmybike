@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.example.itsmybike.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -51,7 +50,6 @@ public class Register extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-<<<<<<< HEAD
         try {
             super.onCreate(savedInstanceState);
             scaledBitmap = BitmapFactory.decodeResource(getResources(),
@@ -76,30 +74,6 @@ public class Register extends Activity {
         {
             ex.printStackTrace();
         }
-=======
-        super.onCreate(savedInstanceState);
-        scaledBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.no_profile_pic);
-        setContentView(R.layout.activity_register);
-
-        gs= (GlobalState) getApplication();
-        firstName=(EditText)findViewById(R.id.registerFirstName);
-        surname=(EditText)findViewById(R.id.registerSurname);
-        location=(EditText)findViewById(R.id.registerLocation);
-        addProfilePic=(ImageView)findViewById(R.id.addProfilePic);
-        addIconProfilePic=(ImageView)findViewById(R.id.addIconAddProfilePic);
-        addProfilePic.setBackgroundResource(R.drawable.no_profile_pic);
-        addIconProfilePic.setBackgroundResource(R.drawable.add);
-        email=(EditText)findViewById(R.id.registerEmail);
-        password=(EditText)findViewById(R.id.registerPassword);
-        retypePassword=(EditText)findViewById(R.id.retypePassword);
-        registerButton =(Button)findViewById(R.id.registerButton);
-      
-
-        firstName.requestFocus();
-        //prepareProfilePicForSaving();
-        user = new Profile();
->>>>>>> 61f8e2fc324ba6be535550f16874ba39dfc03d84
     }
 
 
@@ -215,7 +189,6 @@ public class Register extends Activity {
         try {
 
 
-<<<<<<< HEAD
             if (!password.getText().toString().equals(retypePassword.getText().toString())) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_LONG).show();
                 password.setText("");
@@ -273,66 +246,10 @@ public class Register extends Activity {
         catch (Exception ex)
         {
             ex.printStackTrace();
-=======
-        //Profile newUser=new Profile();
-        Pattern p2 = Pattern.compile("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$");
-        Matcher m2 = p2.matcher(email.getText().toString());
-   
-      
-        if(!password.getText().toString().equals(retypePassword.getText().toString()))
-        {
-            Toast.makeText(this,"Passwords do not match",Toast.LENGTH_LONG).show();
-            password.setText("");
-            retypePassword.setText("");
-            password.requestFocus();
->>>>>>> 61f8e2fc324ba6be535550f16874ba39dfc03d84
         }
-        
-    	
-		
-        
-		
-        ParseUser user = (Profile) new Profile();
-        user.setPassword(password.getText().toString());
-        user.setEmail(email.getText().toString());
-        user.put("firstName", firstName.getText().toString());
-        user.put("surName", surname.getText().toString());
-        user.put("location", location.getText().toString());
-        user.setUsername(email.getText().toString());
-        user.pinInBackground();
-        
-        user.signUpInBackground(new SignUpCallback() {
-
-			@Override
-			public void done(ParseException e) {
-				if(!(e==null)){
-					
-					Log.v("Something went wrong!!" + e, e.toString());
-					
-					
-				}else{
-					
-					
-					  Toast.makeText(getApplicationContext(),"Welcome "+firstName.getText().toString(),Toast.LENGTH_SHORT).show();
-				        startActivity(new Intent(Register.this, Base.class));
-				}
-				
-			}
-        	
-        	
-        	
-        	
-        	
-        });
-        
-      
-        
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 61f8e2fc324ba6be535550f16874ba39dfc03d84
 }
+
 
 

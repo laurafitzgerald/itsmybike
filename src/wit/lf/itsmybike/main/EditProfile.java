@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.itsmybike.R;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -41,8 +40,9 @@ public class EditProfile extends Activity {
     private ImageView editProfilePicEditIcon;
     private String galleryFilePath;
     private Bitmap scaledBitmap;
-    private ParseFile fileContainingProfilePic;
+
     private Profile userProfile;
+
 
 
 
@@ -147,10 +147,11 @@ public class EditProfile extends Activity {
                     newPassword.requestFocus();
                 } else {
 
+
                     userProfile.put("firstName", editProfileFirstName.getText().toString());
                     userProfile.put("surName", editProfileSurname.getText().toString());
                     userProfile.put("location", editProfileLocation.getText().toString());
-                    gs.saveProfilePicLocally(prepareProfilePicForSaving());
+                     gs.saveProfilePicLocally(prepareProfilePicForSaving());
                     userProfile.setPassword(newPassword.getText().toString());
                     userProfile.saveEventually(new SaveCallback() {
                         @Override
@@ -269,7 +270,8 @@ public class EditProfile extends Activity {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        return byteArray;
+               return byteArray;
+
 
     }
 
