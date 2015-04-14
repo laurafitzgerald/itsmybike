@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
    
-    android:padding="1dip" >
+    android:padding="1dp" 
+    android:background="@color/background">
     <TextView
         android:id="@+id/spinnerItem"
         android:textColor="@color/textbody"

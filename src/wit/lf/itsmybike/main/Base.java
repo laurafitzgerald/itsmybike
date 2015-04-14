@@ -76,9 +76,7 @@ public class Base extends FragmentActivity {
 
 		
 		gs = (GlobalState) getApplication();
-		
-		populateData();
-		
+	
 		viewPager = new ViewPager(this);
 		viewPager.setId(R.id.base);
 		
@@ -122,36 +120,6 @@ public class Base extends FragmentActivity {
 
 	
 	
-	private void populateData(){
-		
-		
-		
-		/*StolenBike parseTest = new StolenBike(52.249030, -7.137352, "", "24/06/2014");
-		
-		gs.getStolenBikes().add(new StolenBike(52.249030, -7.137352, "", "24/06/2014"));
-		gs.getStolenBikes().add(new StolenBike(52.246323, -7.142427, "", "20/12/2014"));
-		gs.getStolenBikes().add(new StolenBike(52.245758, -7.131462, "", "01/01/2015"));
-		gs.getStolenBikes().add(new StolenBike(52.245698, -7.141462, "", "05/02/2014"));
-		gs.getStolenBikes().add(new StolenBike(52.246565, -7.141462, "", "06/07/2014"));
-		gs.getStolenBikes().add(new StolenBike(52.254243, -7.142345, "", "15/10/2014"));
-		gs.getStolenBikes().add(new StolenBike(52.252345, -7.131876, "", "08/10/2014"));
-		gs.getStolenBikes().add(new StolenBike(52.253487, -7.137654, "", "09/02/2015"));
-		gs.getStolenBikes().add(new StolenBike(52.249056, -7.138754, "", "15/01/2015"));
-		*/
-		
-		
-		
-
-		
-		//gs.getBikes().add(bikeOne);
-		//gs.getBikes().add(bikeTwo);
-
-		
-		
-	
-		
-		
-	}
 
     public void editProfile(View view)
     {

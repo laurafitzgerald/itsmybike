@@ -80,10 +80,8 @@ public class ProfileFragment extends Fragment {
         plusIcon = (ImageView) getActivity().findViewById(R.id.plusIcon);
         plusIcon.setBackgroundResource(R.drawable.add);
         gs = (GlobalState) getActivity().getApplication();
-        ParseQuery<Bike>query=new ParseQuery<Bike>("Bike");
-        query.whereEqualTo("userId",ParseUser.getCurrentUser());
-        query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<Bike>() {
+        
+        Bike.findInBackground(ParseUser.getCurrentUser(), new FindCallback<Bike>() {
             @Override
             public void done(List<Bike> bikes, ParseException e) {
 

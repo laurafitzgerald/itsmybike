@@ -492,7 +492,7 @@ containing a value of this type.
         public static final int splashbackground=0x7f02002f;
     }
     public static final class id {
-        public static final int action_settings=0x7f070064;
+        public static final int action_settings=0x7f07005e;
         public static final int addBikeImage=0x7f07001f;
         public static final int addBikeMake=0x7f07001d;
         public static final int addBikeNickname=0x7f07001a;
@@ -505,11 +505,11 @@ containing a value of this type.
         public static final int apptitle=0x7f070017;
         public static final int attempts=0x7f070035;
         public static final int base=0x7f070022;
-        public static final int bikeList=0x7f07003a;
-        public static final int bike_make_editable=0x7f07005e;
-        public static final int bike_nickname_editable=0x7f07005a;
-        public static final int bike_serial_editable=0x7f07005c;
-        public static final int bikesHeading=0x7f070039;
+        public static final int bikeList=0x7f07003b;
+        public static final int bike_make_editable=0x7f07005b;
+        public static final int bike_nickname_editable=0x7f070057;
+        public static final int bike_serial_editable=0x7f070059;
+        public static final int bikesHeading=0x7f07003a;
         public static final int bikes_spinner=0x7f070049;
         public static final int book_now=0x7f070012;
         public static final int button_report=0x7f070054;
@@ -523,7 +523,7 @@ containing a value of this type.
         public static final int editBikeNickname=0x7f070023;
         public static final int editBikeSaveButton=0x7f070021;
         public static final int editBikeSerialNumber=0x7f070024;
-        public static final int editIcon=0x7f07005f;
+        public static final int editIcon=0x7f07005c;
         public static final int editIconEditBikeImage=0x7f070027;
         public static final int editPasswordButton=0x7f07002c;
         public static final int editProfileFirstName=0x7f07001c;
@@ -538,30 +538,29 @@ containing a value of this type.
         public static final int holo_light=0x7f070008;
         public static final int hybrid=0x7f070006;
         public static final int imageRelLayout=0x7f07001e;
-        public static final int img_bike=0x7f070055;
-        public static final int img_bike_editable=0x7f070058;
+        public static final int img_bike_editable=0x7f070055;
         public static final int lat_lng_grid=0x7f070050;
         public static final int lat_lng_radiogroup=0x7f07004b;
         public static final int latitude=0x7f07004d;
         public static final int latitudeInput=0x7f070051;
         public static final int locView=0x7f070038;
         public static final int logInButton=0x7f070030;
-        public static final int log_out=0x7f070063;
+        public static final int log_out=0x7f07005d;
         public static final int longitude=0x7f070052;
         public static final int longitudeInput=0x7f070053;
-        public static final int makeLabel=0x7f07005d;
+        public static final int makeLabel=0x7f07005a;
         public static final int map=0x7f070048;
         public static final int match_parent=0x7f07000e;
         public static final int monochrome=0x7f070016;
         public static final int newPassword=0x7f07002a;
-        public static final int nicknameLabel=0x7f070059;
+        public static final int nicknameLabel=0x7f070056;
         public static final int none=0x7f070000;
         public static final int normal=0x7f070003;
         public static final int passwordInput=0x7f070034;
         public static final int passwordText=0x7f070033;
-        public static final int plusIcon=0x7f07003b;
+        public static final int plusIcon=0x7f07003c;
         public static final int production=0x7f070009;
-        public static final int profileEditIcon=0x7f07003c;
+        public static final int profileEditIcon=0x7f070039;
         public static final int profileImageView=0x7f070036;
         public static final int radioButton2=0x7f07004f;
         public static final int radioCurrentLocation=0x7f07004e;
@@ -575,20 +574,15 @@ containing a value of this type.
         public static final int registerSurname=0x7f070040;
         public static final int retypeNewPassword=0x7f07002b;
         public static final int retypePassword=0x7f070044;
-        public static final int row_image=0x7f070062;
-        public static final int row_nickname=0x7f070060;
-        public static final int row_serial=0x7f070061;
         public static final int sandbox=0x7f07000a;
         public static final int satellite=0x7f070004;
         public static final int scrollView=0x7f070018;
         public static final int scrollView2=0x7f07003d;
         public static final int selectionDetails=0x7f07000d;
-        public static final int serialNumberLabel=0x7f07005b;
+        public static final int serialNumberLabel=0x7f070058;
         public static final int spinnerItem=0x7f070047;
         public static final int strict_sandbox=0x7f07000b;
         public static final int terrain=0x7f070005;
-        public static final int text_bike_nickname=0x7f070056;
-        public static final int text_bike_serial=0x7f070057;
         public static final int usernameInput=0x7f070032;
         public static final int usernameText=0x7f070031;
         public static final int usernameView=0x7f070037;
@@ -611,10 +605,7 @@ containing a value of this type.
         public static final int fragment_home=0x7f03000a;
         public static final int fragment_profile=0x7f03000b;
         public static final int fragment_report=0x7f03000c;
-        public static final int layout_list_bike=0x7f03000d;
-        public static final int layout_list_bike_one=0x7f03000e;
-        public static final int list_bike_with_edit_option=0x7f03000f;
-        public static final int row_bike=0x7f030010;
+        public static final int list_bike_with_edit_option=0x7f03000d;
     }
     public static final class menu {
         public static final int menu=0x7f0b0000;

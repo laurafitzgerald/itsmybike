@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,7 +52,7 @@ public class Register extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-<<<<<<< HEAD
+
         try {
             super.onCreate(savedInstanceState);
             scaledBitmap = BitmapFactory.decodeResource(getResources(),
@@ -76,30 +77,7 @@ public class Register extends Activity {
         {
             ex.printStackTrace();
         }
-=======
-        super.onCreate(savedInstanceState);
-        scaledBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.no_profile_pic);
-        setContentView(R.layout.activity_register);
 
-        gs= (GlobalState) getApplication();
-        firstName=(EditText)findViewById(R.id.registerFirstName);
-        surname=(EditText)findViewById(R.id.registerSurname);
-        location=(EditText)findViewById(R.id.registerLocation);
-        addProfilePic=(ImageView)findViewById(R.id.addProfilePic);
-        addIconProfilePic=(ImageView)findViewById(R.id.addIconAddProfilePic);
-        addProfilePic.setBackgroundResource(R.drawable.no_profile_pic);
-        addIconProfilePic.setBackgroundResource(R.drawable.add);
-        email=(EditText)findViewById(R.id.registerEmail);
-        password=(EditText)findViewById(R.id.registerPassword);
-        retypePassword=(EditText)findViewById(R.id.retypePassword);
-        registerButton =(Button)findViewById(R.id.registerButton);
-      
-
-        firstName.requestFocus();
-        //prepareProfilePicForSaving();
-        user = new Profile();
->>>>>>> 61f8e2fc324ba6be535550f16874ba39dfc03d84
     }
 
 
@@ -215,7 +193,6 @@ public class Register extends Activity {
         try {
 
 
-<<<<<<< HEAD
             if (!password.getText().toString().equals(retypePassword.getText().toString())) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_LONG).show();
                 password.setText("");
@@ -273,19 +250,7 @@ public class Register extends Activity {
         catch (Exception ex)
         {
             ex.printStackTrace();
-=======
-        //Profile newUser=new Profile();
-        Pattern p2 = Pattern.compile("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$");
-        Matcher m2 = p2.matcher(email.getText().toString());
-   
-      
-        if(!password.getText().toString().equals(retypePassword.getText().toString()))
-        {
-            Toast.makeText(this,"Passwords do not match",Toast.LENGTH_LONG).show();
-            password.setText("");
-            retypePassword.setText("");
-            password.requestFocus();
->>>>>>> 61f8e2fc324ba6be535550f16874ba39dfc03d84
+
         }
         
     	
@@ -328,11 +293,7 @@ public class Register extends Activity {
       
         
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 61f8e2fc324ba6be535550f16874ba39dfc03d84
 }
 
 

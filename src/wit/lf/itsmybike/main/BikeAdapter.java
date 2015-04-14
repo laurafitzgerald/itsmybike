@@ -48,12 +48,10 @@ public class BikeAdapter extends ArrayAdapter<Bike> {
         currRowVal = (Bike) bikes.get(position);
         TextView label = (TextView) row.findViewById(R.id.spinnerItem);
    
-        if (position == 0) {
-           label.setText("Please select bike");
-        } else {
+        
             label.setText(currRowVal.getNickname());
           
-        }
+        
 
         return row;
     }

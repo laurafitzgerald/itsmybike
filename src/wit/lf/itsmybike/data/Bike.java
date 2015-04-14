@@ -11,22 +11,14 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+import wit.lf.itsmybike.main.GlobalState;
+
 
 @ParseClassName("Bike")
 public class Bike extends ParseObject{
 
 	private int drawableId;
-/*
-	private String serialNo;
-	
-	private String nickname;
-	private String make;
-	private boolean stolen;
-*/
 
-
-	
-    
     
     
 
@@ -44,7 +36,10 @@ public class Bike extends ParseObject{
 	public static void findInBackground(ParseUser user, final FindCallback<Bike> callback){
 		
 		ParseQuery<Bike> query = Bike.createQuery();
-        query.fromLocalDatastore();
+        
+		
+		
+		//query.fromLocalDatastore();
 		
 		if(user != null){
 			

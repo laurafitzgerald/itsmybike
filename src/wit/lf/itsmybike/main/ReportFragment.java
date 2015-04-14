@@ -1,5 +1,7 @@
 package wit.lf.itsmybike.main;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -23,7 +25,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.StolenBike;
@@ -86,9 +91,30 @@ public class ReportFragment extends Fragment{
 			
 			spinner  = (Spinner) getActivity().findViewById(R.id.bikes_spinner);
 			
-			Resources res = getResources();
-			BikeAdapter adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, gs.getListOfBikes(), res);
-			spinner.setAdapter(adapter);
+			
+			
+			
+			
+			
+			
+			Bike.findInBackground(ParseUser.getCurrentUser(), new FindCallback<Bike>(){
+
+				@Override
+				public void done(List<Bike> bikes, ParseException e) {
+					
+					Resources res = getResources();
+					BikeAdapter adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, bikes, res);
+					spinner.setAdapter(adapter);
+					
+				}
+				
+				
+				
+				
+				
+				
+			});
+			
 			
 			gl = (GridLayout) getActivity().findViewById(R.id.lat_lng_grid);
 			
