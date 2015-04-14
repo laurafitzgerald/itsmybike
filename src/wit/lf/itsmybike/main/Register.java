@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +22,6 @@ import com.parse.ParseFile;
 import com.parse.SignUpCallback;
 
 import java.io.ByteArrayOutputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import wit.lf.itsmybike.data.Profile;
 
@@ -32,6 +29,8 @@ import wit.lf.itsmybike.data.Profile;
  * Created by john on 31/03/2015.
  */
 public class Register extends Activity {
+
+
 
     private EditText firstName;
     private EditText surname;
@@ -51,61 +50,75 @@ public class Register extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        scaledBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.no_profile_pic);
-        setContentView(R.layout.activity_register);
-        firstName = (EditText) findViewById(R.id.registerFirstName);
-        surname = (EditText) findViewById(R.id.registerSurname);
-        location = (EditText) findViewById(R.id.registerLocation);
-        addProfilePic = (ImageView) findViewById(R.id.addProfilePic);
-        addIconProfilePic = (ImageView) findViewById(R.id.addIconAddProfilePic);
-        addProfilePic.setImageBitmap(scaledBitmap);
-        addIconProfilePic.setBackgroundResource(R.drawable.add);
-        email = (EditText) findViewById(R.id.registerEmail);
-        password = (EditText) findViewById(R.id.registerPassword);
-        retypePassword = (EditText) findViewById(R.id.retypePassword);
-        registerButton = (Button) findViewById(R.id.registerButton);
-        gs = (GlobalState) getApplication();
-        firstName.requestFocus();
-        //prepareProfilePicForSaving();
-        user = new Profile();
+        try {
+            super.onCreate(savedInstanceState);
+            scaledBitmap = BitmapFactory.decodeResource(getResources(),
+                    R.drawable.no_profile_pic);
+            setContentView(R.layout.activity_register);
+            firstName = (EditText) findViewById(R.id.registerFirstName);
+            surname = (EditText) findViewById(R.id.registerSurname);
+            location = (EditText) findViewById(R.id.registerLocation);
+            addProfilePic = (ImageView) findViewById(R.id.addProfilePic);
+            addIconProfilePic = (ImageView) findViewById(R.id.addIconAddProfilePic);
+            addProfilePic.setImageBitmap(scaledBitmap);
+            addIconProfilePic.setBackgroundResource(R.drawable.add);
+            email = (EditText) findViewById(R.id.registerEmail);
+            password = (EditText) findViewById(R.id.registerPassword);
+            retypePassword = (EditText) findViewById(R.id.retypePassword);
+            registerButton = (Button) findViewById(R.id.registerButton);
+            gs = (GlobalState) getApplication();
+            firstName.requestFocus();
+            user = new Profile();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
 
     public void addProfilePic(View view) {
 
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
-        builder.setPositiveButton(getResources().getString(R.string.browse), new DialogInterface.OnClickListener() {
+        try {
 
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Intent openGallery = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(openGallery, 1);
-            }
-        });
-
-        builder.setNegativeButton(getResources().getString(R.string.takePhoto), new DialogInterface.OnClickListener() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
+            builder.setPositiveButton(getResources().getString(R.string.browse), new DialogInterface.OnClickListener() {
 
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, 2);
+                    Intent openGallery = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(openGallery, 1);
                 }
+            });
+
+            builder.setNegativeButton(getResources().getString(R.string.takePhoto), new DialogInterface.OnClickListener() {
+
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(takePictureIntent, 2);
+                    }
+                }
+            });
+
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+
             }
-        });
-
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
 
@@ -161,7 +174,7 @@ public class Register extends Activity {
                 addProfilePic.setImageBitmap(scaledBitmap);
                // prepareProfilePicForSaving();
             } else {
-                Toast.makeText(this, "You haven't picked Image",
+                Toast.makeText(this, "You haven't picked an image",
                         Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
@@ -171,68 +184,71 @@ public class Register extends Activity {
 
     }
 
-
-   /* public void prepareProfilePicForSaving() {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[]byteArray = stream.toByteArray();
-        gs.saveProfilePicLocally(byteArray);
-        gs.saveProfilePicToParse(byteArray);
-        //fileContainingProfilePic = new ParseFile("profilePicFile.txt", byteArray);
-        //fileContainingProfilePic.saveInBackground();
-    }*/
-
     public void registerUser(View view) {
-        Log.v("Reg", "Button Pressed");
 
-        //Profile newUser=new Profile();
-        Pattern p2 = Pattern.compile("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$");
-        Matcher m2 = p2.matcher(email.getText().toString());
-        //boolean userExists=false;
+        try {
 
 
-        if (!password.getText().toString().equals(retypePassword.getText().toString())) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_LONG).show();
-            password.setText("");
-            retypePassword.setText("");
-            password.requestFocus();
-        } else {
+            if (!password.getText().toString().equals(retypePassword.getText().toString())) {
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_LONG).show();
+                password.setText("");
+                retypePassword.setText("");
+                password.requestFocus();
+            }
+
+           else if (gs.connectedToInternet(Register.this)==false)
+            {
+                Toast.makeText(Register.this,"Check your internet connection and try again",Toast.LENGTH_LONG).show();
+            }
+            else {
 
 
-            user.setPassword(password.getText().toString());
-            user.setEmail(email.getText().toString());
-            user.put("firstName", firstName.getText().toString());
-            user.put("surName", surname.getText().toString());
-            user.put("location", location.getText().toString());
-            user.setUsername(email.getText().toString());
-
-            //user.put("profilePic",fileContainingProfilePic);
-
-            user.pinInBackground();
-
-            user.signUpInBackground(new SignUpCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (!(e == null)) {
-
-                        Toast.makeText(Register.this,e.toString(),Toast.LENGTH_LONG).show();
-                        Log.v("Something went wrong!!" + e, e.toString());
-                    } else {
-
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                        byte[]byteArray = stream.toByteArray();
-                        gs.saveProfilePicLocally(byteArray);
-                        gs.saveProfilePicToParse(byteArray);
-                        Toast.makeText(Register.this, "Welcome " + firstName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(Register.this, Base.class));
+                user.setPassword(password.getText().toString());
+                user.setEmail(email.getText().toString());
+                user.put("firstName", firstName.getText().toString());
+                user.put("surName", surname.getText().toString());
+                user.put("location", location.getText().toString());
+                user.setUsername(email.getText().toString());
 
 
+
+
+
+
+                user.pinInBackground();
+
+                user.signUpInBackground(new SignUpCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (!(e == null))
+                        {
+
+                          Toast.makeText(Register.this,"Unable to login at this time",Toast.LENGTH_LONG);
+                        }
+
+                        else {
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                            byte[] byteArray = stream.toByteArray();
+                            gs.saveProfilePicLocally(byteArray);
+                            gs.saveProfilePicToParse(byteArray);
+                            Toast.makeText(Register.this, "Welcome " + firstName.getText().toString(), Toast.LENGTH_SHORT).show();
+                            finish();
+                            startActivity(new Intent(Register.this, Base.class));
+
+
+                        }
                     }
-                }
-            });
+                });
+            }
+        }
+
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
         }
     }
+
 }
 
 

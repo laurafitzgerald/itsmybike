@@ -34,7 +34,8 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
 
     private ViewHolder viewHolder;
 
-    public ListBikesAdapterWithEdit(Context context, List<Bike> listBikes,GlobalState gs){
+    public ListBikesAdapterWithEdit(Context context, List<Bike> listBikes,GlobalState gs)
+    {
 
         this.listBikes = listBikes;
         this.inflater = LayoutInflater.from(context);
@@ -64,6 +65,9 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+
+
 
         if(convertView == null){
             viewHolder = new ViewHolder();
@@ -111,16 +115,19 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
     public void getBikePicAsBitmap(Bike bike)
     {
 
-        if(gs.readLocalBikePic(bike.getSerialNo())!=null) {
-            byte[] data = gs.readLocalBikePic(bike.getSerialNo());
-            viewHolder.imgBike_editable.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
-        }
+       try {
+           if (gs.readLocalBikePic(bike.getSerialNo()) != null) {
+               byte[] data = gs.readLocalBikePic(bike.getSerialNo());
+               viewHolder.imgBike_editable.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
+           } else {
+               viewHolder.imgBike_editable.setBackgroundResource(R.drawable.no_bike_pic);
+           }
+       }
 
-        else
-        {
-            viewHolder.imgBike_editable.setBackgroundResource(R.drawable.no_bike_pic);
-        }
-
+       catch (Exception ex)
+       {
+           ex.printStackTrace();
+       }
 
 
 

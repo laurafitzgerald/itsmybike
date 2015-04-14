@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,20 +40,27 @@ public class AddBike extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_bike);
-        gs=(GlobalState)getApplication();
-        addBikeNickname=(EditText)findViewById(R.id.addBikeNickname);
-        addBikeSerialNumber=(EditText)findViewById(R.id.addBikeSerialNumber);
-        addBikeMake=(EditText)findViewById(R.id.addBikeMake);
-        addBikeImage =(ImageView)findViewById(R.id.addBikeImage);
-        addIconAddBikeImage=(ImageView)findViewById(R.id.addIconAddBikeImage);
 
-        scaledBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.no_bike_pic);
-        addBikeImage.setImageBitmap(scaledBitmap);
-        addIconAddBikeImage.setBackgroundResource(R.drawable.add);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_add_bike);
+            gs = (GlobalState) getApplication();
+            addBikeNickname = (EditText) findViewById(R.id.addBikeNickname);
+            addBikeSerialNumber = (EditText) findViewById(R.id.addBikeSerialNumber);
+            addBikeMake = (EditText) findViewById(R.id.addBikeMake);
+            addBikeImage = (ImageView) findViewById(R.id.addBikeImage);
+            addIconAddBikeImage = (ImageView) findViewById(R.id.addIconAddBikeImage);
 
+            scaledBitmap = BitmapFactory.decodeResource(getResources(),
+                    R.drawable.no_bike_pic);
+            addBikeImage.setImageBitmap(scaledBitmap);
+            addIconAddBikeImage.setBackgroundResource(R.drawable.add);
+        }
+
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+            }
 
 
 
@@ -62,48 +70,62 @@ public class AddBike extends Activity {
     public void addBikePicture(View view)
     {
 
+        try {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
+            builder.setPositiveButton(getResources().getString(R.string.browse), new DialogInterface.OnClickListener() {
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
-        builder.setPositiveButton(getResources().getString(R.string.browse), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Intent openGallery = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(openGallery,1);
-            }
-        });
-
-        builder.setNegativeButton(getResources().getString(R.string.takePhoto), new DialogInterface.OnClickListener() {
-
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, 2);
+                    Intent openGallery = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(openGallery, 1);
                 }
-            }
-        });
+            });
+
+            builder.setNegativeButton(getResources().getString(R.string.takePhoto), new DialogInterface.OnClickListener() {
 
 
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-        AlertDialog dialog=builder.create();
-        dialog.show();
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(takePictureIntent, 2);
+                    }
+                }
+            });
+
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     public byte[] prepareBikePicForSave() {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        return byteArray;
 
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            return byteArray;
+        }
 
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return null;
 
     }
 
@@ -111,46 +133,48 @@ public class AddBike extends Activity {
 
 
     {
-      if (addBikeNickname.getText().toString().equals(""))
-      {
-          Toast.makeText(this,"Please enter nickname",Toast.LENGTH_SHORT).show();
-          addBikeNickname.requestFocus();
+      try {
+          if (addBikeNickname.getText().toString().equals("")) {
+              Toast.makeText(this, "Please enter nickname", Toast.LENGTH_SHORT).show();
+              addBikeNickname.requestFocus();
+          } else if (addBikeSerialNumber.getText().toString().equals("")) {
+              Toast.makeText(this, "Please enter serial number", Toast.LENGTH_SHORT).show();
+              addBikeSerialNumber.requestFocus();
+          } else if (addBikeMake.getText().toString().equals("")) {
+              Toast.makeText(this, "Please enter make", Toast.LENGTH_SHORT).show();
+              addBikeMake.requestFocus();
+
+          } else {
+              Bike bike = Bike.create(Bike.class);
+              bike.put("nickname", addBikeNickname.getText().toString());
+              bike.put("serialNumber", addBikeSerialNumber.getText().toString());
+              bike.put("make", addBikeMake.getText().toString());
+              bike.put("userId", ParseUser.getCurrentUser());
+              Log.v("SaveEventually","user: "+ParseUser.getCurrentUser());
+              gs.saveBikePicLocally(prepareBikePicForSave(), addBikeSerialNumber.getText().toString());
+              bike.saveEventually(new SaveCallback() {
+                  @Override
+                  public void done(ParseException e) {
+
+                      if (e != null) {
+                          gs.saveBikePicToParse(prepareBikePicForSave(), addBikeSerialNumber.getText().toString());
+                      } else {
+                          Log.v("SaveEventually", "Bike save can't complete");
+                      }
+
+                  }
+              });
+
+              finish();
+              Toast.makeText(this, "Bike added", Toast.LENGTH_SHORT).show();
+              startActivity(new Intent(this, Base.class));
+          }
+
       }
-        else if (addBikeSerialNumber.getText().toString().equals(""))
-        {
-            Toast.makeText(this,"Please enter serial number",Toast.LENGTH_SHORT).show();
-            addBikeSerialNumber.requestFocus();
-        }
 
-      else if (addBikeMake.getText().toString().equals(""))
+      catch(Exception ex)
       {
-          Toast.makeText(this,"Please enter make",Toast.LENGTH_SHORT).show();
-          addBikeMake.requestFocus();
-
-      }
-
-        else {
-
-
-
-          
-        Bike bike = Bike.create(Bike.class);
-  		bike.put("nickname", addBikeNickname.getText().toString());
-  		bike.put("serialNumber", addBikeSerialNumber.getText().toString());
-  		bike.put("make", addBikeMake.getText().toString());
-  		bike.put("userId", ParseUser.getCurrentUser());
-        gs.saveBikePicLocally(prepareBikePicForSave(),addBikeSerialNumber.getText().toString());
-        bike.pinInBackground();
-  		bike.saveEventually(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                gs.saveBikePicToParse(prepareBikePicForSave(),addBikeSerialNumber.getText().toString());
-
-            }
-        });
-
-          Toast.makeText(this, "Bike added", Toast.LENGTH_SHORT).show();
-          startActivity(new Intent(this, Base.class));
+          ex.printStackTrace();
       }
     }
 

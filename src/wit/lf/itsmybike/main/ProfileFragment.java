@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment {
         gs = (GlobalState) getActivity().getApplication();
         ParseQuery<Bike>query=new ParseQuery<Bike>("Bike");
         query.whereEqualTo("userId",ParseUser.getCurrentUser());
-        //query.fromLocalDatastore();
+        query.fromLocalDatastore();
         query.findInBackground(new FindCallback<Bike>() {
             @Override
             public void done(List<Bike> bikes, ParseException e) {
@@ -92,18 +92,23 @@ public class ProfileFragment extends Fragment {
                     ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(), bikes,gs);
                     for (Bike b:bikes)
                     {
-                       ParseFile pf=(ParseFile)b.get("bikePic");
-                       serialNumber=b.getSerialNo();
+                        try {
+                            ParseFile pf = (ParseFile) b.get("bikePic");
+                            serialNumber = b.getSerialNo();
+                            pf.getDataInBackground(new GetDataCallback() {
+                                @Override
+                                public void done(byte[] bytes, ParseException e) {
 
+                                    gs.saveBikePicLocally(bytes, serialNumber);
 
-                        pf.getDataInBackground(new GetDataCallback() {
-                            @Override
-                            public void done(byte[] bytes, ParseException e)
-                            {
-                                gs.saveBikePicLocally(bytes,serialNumber);
-
-                            }
-                        });
+                                }
+                            });
+                        }
+                        catch
+                        (NullPointerException ex)
+                        {
+                            ex.printStackTrace();
+                        }
 
                     }
                     bikeListView = (ListView) getActivity().findViewById(R.id.bikeList);

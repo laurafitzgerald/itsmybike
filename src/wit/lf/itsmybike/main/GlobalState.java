@@ -2,6 +2,9 @@ package wit.lf.itsmybike.main;
 
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.example.itsmybike.R;
@@ -148,7 +151,7 @@ public class GlobalState extends Application {
                         if (e == null) {
                             saveProfilePicLocally(byteArray);
                         } else {
-                            Log.v("FileError", "The feckin parse" + e.toString());
+                            Log.v("SaveEventually","Problem saving profile pic");
                         }
                     }
                 });
@@ -211,7 +214,7 @@ public class GlobalState extends Application {
             public void done(ParseException e) {
 
                 ParseQuery<Bike> query = new ParseQuery<Bike>("Bike");
-                query.whereEqualTo("serialNumber", serialNumber);
+                 query.whereEqualTo("serialNumber", serialNumber);
                 query.findInBackground(new FindCallback<Bike>() {
                     @Override
                     public void done(List<Bike> bikes, ParseException e) {
@@ -271,6 +274,19 @@ public class GlobalState extends Application {
 
 
     }
+
+    public boolean connectedToInternet(Context context) {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+
+        return false;
+    }
+
+
 
 }
 

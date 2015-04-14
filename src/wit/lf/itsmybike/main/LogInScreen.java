@@ -40,37 +40,44 @@ public class LogInScreen extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_log_in);
 
-		gs = (GlobalState) getApplication();
-		
-		registerButton = (Button) findViewById(R.id.editProfilePassword);
-		login = (Button) findViewById(R.id.logInButton);
-		attempts = (TextView) findViewById(R.id.attempts);
-		attempts.setText("3 attempts left");
-		attempts.setTextColor(getResources().getColor(R.color.textbody));
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_log_in);
 
-		usernameInput = (EditText) findViewById(R.id.usernameInput);
-	
-		passwordInput = (EditText) findViewById(R.id.passwordInput);
-				passwordInput.setOnEditorActionListener(new OnEditorActionListener() {
-				    @Override
-				    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				        boolean handled = false;
-				        if (actionId == EditorInfo.IME_ACTION_SEND) {
-				       
-				        	login.performClick();
-				          
-				        }
-				        return handled;
-				    }
+            gs = (GlobalState) getApplication();
 
-				});
+            registerButton = (Button) findViewById(R.id.editProfilePassword);
+            login = (Button) findViewById(R.id.logInButton);
+            attempts = (TextView) findViewById(R.id.attempts);
+            attempts.setText("3 attempts left");
+            attempts.setTextColor(getResources().getColor(R.color.textbody));
 
-        user=new Profile();
+            usernameInput = (EditText) findViewById(R.id.usernameInput);
 
+            passwordInput = (EditText) findViewById(R.id.passwordInput);
+            passwordInput.setOnEditorActionListener(new OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    boolean handled = false;
+                    if (actionId == EditorInfo.IME_ACTION_SEND) {
 
+                        login.performClick();
+
+                    }
+                    return handled;
+                }
+
+            });
+
+            user = new Profile();
+
+        }
+
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
 	}
 
@@ -79,109 +86,69 @@ public class LogInScreen extends Activity {
 	public void logInButtonPressed(View view){
 		
 		
+try {
 
-		
-		Profile.logInInBackground(usernameInput.getText().toString(), passwordInput.getText().toString(), new LogInCallback() {
+    Profile.logInInBackground(usernameInput.getText().toString(), passwordInput.getText().toString(), new LogInCallback() {
 
-			@Override
-			public void done(ParseUser user, ParseException e) {
-				if(user !=null){
+        @Override
+        public void done(ParseUser user, ParseException e) {
+            if (user != null) {
 
-                    ParseFile parseFileWithProfilePic=(ParseFile)user.get("profilePic");
-                    parseFileWithProfilePic.getDataInBackground(new GetDataCallback() {
-                        @Override
-                        public void done(byte[] bytes, ParseException e) {
-                            if (e==null) {
+                ParseFile parseFileWithProfilePic = (ParseFile) user.get("profilePic");
+                parseFileWithProfilePic.getDataInBackground(new GetDataCallback() {
+                    @Override
+                    public void done(byte[] bytes, ParseException e) {
+                        if (e == null) {
 
-                                gs.saveProfilePicLocally(bytes);
-                                Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LogInScreen.this, Base.class);
-                                startActivity(intent);
-                            }
-
-                            else
-                            {
-                                Toast.makeText(LogInScreen.this,"oops",Toast.LENGTH_LONG).show();
-                            }
-
+                            gs.saveProfilePicLocally(bytes);
+                            Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LogInScreen.this, Base.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(LogInScreen.this, "oops", Toast.LENGTH_LONG).show();
                         }
-                    });
+
+                    }
+                });
 
 
-				}else{
+            } else {
 
-					failedAttempt();
+                failedAttempt();
 
-				}
+            }
 
-			}
-
-
-			private void failedAttempt(){
+        }
 
 
-				Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
-				attempts.setBackgroundColor(getResources().getColor(R.color.locationcolor));
-				counter--;
-				attempts.setText( Integer.toString(counter) +" attempts left");
-				attempts.setTextColor(getResources().getColor(R.color.textbody));
-				found =false;
-				if(counter==0){
+        private void failedAttempt() {
 
 
-					login.setEnabled(false);
-				}
-				return;
+            Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
+            attempts.setBackgroundColor(getResources().getColor(R.color.locationcolor));
+            counter--;
+            attempts.setText(Integer.toString(counter) + " attempts left");
+            attempts.setTextColor(getResources().getColor(R.color.textbody));
+            found = false;
+            if (counter == 0) {
 
-			}
+
+                login.setEnabled(false);
+            }
+            return;
+
+        }
 
 
+    });
 
 
+}
 
-		});
-	/*	Profile.findInBackground(usernameInput.getText().toString(), new FindCallback<Profile>(){
-			
-		
-
-			@Override
-			public void done(List<Profile> profiles, ParseException e) {
-				if(profiles.size() == 0 || profiles == null){
-				
-					failedAttempt();
-
-				}else if (profiles.get(0).getPassword().equals(passwordInput.getText().toString()));
-				
-				gs.setProfile(profiles.get(0));
-				
-				 found = true;
-				 
-				
-			}
-			
-			private void failedAttempt(){
-				
-				
-				Toast.makeText(getApplicationContext(), "Wrong Credentials", Toast.LENGTH_SHORT).show();
-				attempts.setBackgroundColor(getResources().getColor(R.color.locationcolor));
-				counter--;
-				attempts.setText( Integer.toString(counter) +" attempts left");
-				attempts.setTextColor(getResources().getColor(R.color.textbody));
-				found =false;
-				if(counter==0){
-					
-					
-					login.setEnabled(false);
-				}
-				return;
-				
-			}
-			
-			
-		});
-		*/
-		
-
+catch (Exception ex)
+{
+    ex.printStackTrace();
+}
 
 		
 	}

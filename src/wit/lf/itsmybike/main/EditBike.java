@@ -43,34 +43,49 @@ public class EditBike extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_bike);
-        gs=(GlobalState)getApplication();
-        editBikeNickname=(EditText)findViewById(R.id.editBikeNickname);
-        editBikeSerialNumber=(EditText)findViewById(R.id.editBikeSerialNumber);
-        editBikeMake=(EditText)findViewById(R.id.editBikeMake);
-        editBikeImage=(ImageView)findViewById(R.id.editBikeImage);
-        editIconEditBikeImage=(ImageView)findViewById(R.id.editIconEditBikeImage);
-        getBikeFromParse(gs.getBikeToEdit().getSerialNo());
+
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_edit_bike);
+            gs = (GlobalState) getApplication();
+            editBikeNickname = (EditText) findViewById(R.id.editBikeNickname);
+            editBikeSerialNumber = (EditText) findViewById(R.id.editBikeSerialNumber);
+            editBikeMake = (EditText) findViewById(R.id.editBikeMake);
+            editBikeImage = (ImageView) findViewById(R.id.editBikeImage);
+            editIconEditBikeImage = (ImageView) findViewById(R.id.editIconEditBikeImage);
+            getBikeFromParse(gs.getBikeToEdit().getSerialNo());
+        }
+
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     public void getBikeFromParse(String serialNumber)
     {
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Bike");
-        query.fromLocalDatastore();
-        query.whereEqualTo("serialNumber",serialNumber);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> bikeList, ParseException e) {
-               Bike  bikeFromParse=(Bike)bikeList.get(0);
-                editBikeNickname.setText(bikeFromParse.getNickname());
-                editBikeSerialNumber.setText(bikeFromParse.getSerialNo());
-                editBikeMake.setText(bikeFromParse.getMake());
-                getBikePicAsBitmap(bikeFromParse);
-                editIconEditBikeImage.setBackgroundResource(R.drawable.edit);
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Bike");
+            query.fromLocalDatastore();
+            query.whereEqualTo("serialNumber", serialNumber);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> bikeList, ParseException e) {
+                    Bike bikeFromParse = (Bike) bikeList.get(0);
+                    editBikeNickname.setText(bikeFromParse.getNickname());
+                    editBikeSerialNumber.setText(bikeFromParse.getSerialNo());
+                    editBikeMake.setText(bikeFromParse.getMake());
+                    getBikePicAsBitmap(bikeFromParse);
+                    editIconEditBikeImage.setBackgroundResource(R.drawable.edit);
 
-            }
-        });
+                }
+            });
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
     }
 
@@ -78,9 +93,16 @@ public class EditBike extends Activity {
 
 
 
-       byte[] data= gs.readLocalBikePic(bike.getSerialNo());
-        scaledBitmap=BitmapFactory.decodeByteArray(data, 0, data.length);
-        editBikeImage.setImageBitmap(scaledBitmap);
+       try {
+           byte[] data = gs.readLocalBikePic(bike.getSerialNo());
+           scaledBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+           editBikeImage.setImageBitmap(scaledBitmap);
+       }
+
+       catch (Exception ex)
+       {
+           ex.printStackTrace();
+       }
 
 
 
@@ -89,60 +111,59 @@ public class EditBike extends Activity {
 
     public void saveBike(View view)
     {
-        Bike bikeFromProfile=new Bike();
+
+       try {
+           Bike bikeFromProfile = new Bike();
 
 
+           if (editBikeNickname.getText().toString().equals("")) {
+               Toast.makeText(this, "Please enter nickname", Toast.LENGTH_SHORT).show();
+               editBikeNickname.requestFocus();
+           } else if (editBikeSerialNumber.getText().toString().equals("")) {
+               Toast.makeText(this, "Please enter serial number", Toast.LENGTH_SHORT).show();
+               editBikeSerialNumber.requestFocus();
+           } else if (editBikeMake.getText().toString().equals("")) {
+               Toast.makeText(this, "Please enter make", Toast.LENGTH_SHORT).show();
+               editBikeMake.requestFocus();
 
-        if (editBikeNickname.getText().toString().equals(""))
+           } else {
+
+
+               ParseQuery<ParseObject> query = ParseQuery.getQuery("Bike");
+               query.fromLocalDatastore();
+               query.whereEqualTo("serialNumber", gs.getBikeToEdit().getSerialNo());
+
+               query.findInBackground(new FindCallback<ParseObject>() {
+                   public void done(List<ParseObject> bikeList, ParseException e) {
+                       Bike bike = (Bike) bikeList.get(0);
+                       bike.put("nickname", editBikeNickname.getText().toString());
+                       bike.put("serialNumber", editBikeSerialNumber.getText().toString());
+                       bike.put("make", editBikeMake.getText().toString());
+                       bike.put("userId", ParseUser.getCurrentUser());
+                       gs.saveBikePicToParse(prepareBikePicForSave(), editBikeSerialNumber.getText().toString());
+                       gs.saveBikePicLocally(prepareBikePicForSave(), editBikeSerialNumber.getText().toString());
+                       bike.saveEventually(new SaveCallback() {
+                           @Override
+                           public void done(ParseException e) {
+                               gs.saveBikePicToParse(prepareBikePicForSave(), editBikeSerialNumber.getText().toString());
+
+                           }
+                       });
+                   }
+               });
+
+               finish();
+
+               //gs.getProfile().getListOfBikes().add(bikeToAdd);
+               Toast.makeText(this, "Bike updated", Toast.LENGTH_SHORT).show();
+               startActivity(new Intent(this, Base.class));
+           }
+
+       }
+
+       catch(Exception ex)
         {
-            Toast.makeText(this,"Please enter nickname",Toast.LENGTH_SHORT).show();
-            editBikeNickname.requestFocus();
-        }
-
-        else if (editBikeSerialNumber.getText().toString().equals(""))
-        {
-            Toast.makeText(this,"Please enter serial number",Toast.LENGTH_SHORT).show();
-            editBikeSerialNumber.requestFocus();
-        }
-
-        else if (editBikeMake.getText().toString().equals(""))
-        {
-            Toast.makeText(this,"Please enter make",Toast.LENGTH_SHORT).show();
-            editBikeMake.requestFocus();
-
-        }
-
-        else {
-
-
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Bike");
-            query.fromLocalDatastore();
-            query.whereEqualTo("serialNumber",gs.getBikeToEdit().getSerialNo());
-
-            query.findInBackground(new FindCallback<ParseObject>() {
-                public void done(List<ParseObject> bikeList, ParseException e) {
-                    Bike  bike=(Bike)bikeList.get(0);
-                    bike.put("nickname", editBikeNickname.getText().toString());
-                    bike.put("serialNumber", editBikeSerialNumber.getText().toString());
-                    bike.put("make", editBikeMake.getText().toString());
-                    bike.put("userId", ParseUser.getCurrentUser());
-                    gs.saveBikePicToParse(prepareBikePicForSave(),editBikeSerialNumber.getText().toString());
-                    gs.saveBikePicLocally(prepareBikePicForSave(), editBikeSerialNumber.getText().toString());
-                    bike.saveEventually(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            gs.saveBikePicToParse(prepareBikePicForSave(),editBikeSerialNumber.getText().toString());
-
-                        }
-                    });
-                }
-            });
-
-
-
-            //gs.getProfile().getListOfBikes().add(bikeToAdd);
-            Toast.makeText(this, "Bike updated", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, Base.class));
+            ex.printStackTrace();
         }
     }
 
@@ -150,7 +171,7 @@ public class EditBike extends Activity {
     {
 
 
-
+    try {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
@@ -162,7 +183,7 @@ public class EditBike extends Activity {
 
                 Intent openGallery = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(openGallery,1);
+                startActivityForResult(openGallery, 1);
             }
         });
 
@@ -180,21 +201,34 @@ public class EditBike extends Activity {
         });
 
 
+        AlertDialog dialog = builder.create();
 
-        AlertDialog dialog=builder.create();
-        dialog.show();
+    }
+
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
     }
 
 
     public byte[] prepareBikePicForSave() {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        return byteArray;
+
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            return byteArray;
+        }
+
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
 
-
+        return null;
     }
 
     @Override

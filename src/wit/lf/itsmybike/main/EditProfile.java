@@ -48,51 +48,74 @@ public class EditProfile extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        galleryFilePath = "";
-        setContentView(R.layout.activity_edit_profile);
-        gs = (GlobalState) getApplication();
-        editProfileFirstName = (EditText) findViewById(R.id.editProfileFirstName);
-        editProfileSurname = (EditText) findViewById(R.id.editProfileSurname);
-        editProfileLocation = (EditText) findViewById(R.id.editProfileLocation);
-        editProfileSaveButton = (Button) findViewById(R.id.editProfileSaveButton);
-        editProfilePicEditIcon=(ImageView)findViewById(R.id.editProfilePicEditIcon);
-        editProfilePic = (ImageView) findViewById(R.id.editProfilePic);
 
-        userProfile=(Profile) ParseUser.getCurrentUser();
+        try {
+            super.onCreate(savedInstanceState);
+            galleryFilePath = "";
+            setContentView(R.layout.activity_edit_profile);
+            gs = (GlobalState) getApplication();
+            editProfileFirstName = (EditText) findViewById(R.id.editProfileFirstName);
+            editProfileSurname = (EditText) findViewById(R.id.editProfileSurname);
+            editProfileLocation = (EditText) findViewById(R.id.editProfileLocation);
+            editProfileSaveButton = (Button) findViewById(R.id.editProfileSaveButton);
+            editProfilePicEditIcon = (ImageView) findViewById(R.id.editProfilePicEditIcon);
+            editProfilePic = (ImageView) findViewById(R.id.editProfilePic);
 
-        editProfileFirstName.setText(userProfile.getFirstName());
-        editProfileSurname.setText(userProfile.getSecondName());
-        editProfileLocation.setText(userProfile.getLocation());
-        getProfilePicAsBitmap();
-        editProfilePicEditIcon.setBackgroundResource(R.drawable.edit);
-        newPassword = (EditText) findViewById(R.id.newPassword);
-        changePasswordButton = (Button) findViewById(R.id.editPasswordButton);
-        retypeNewPassword = (EditText) findViewById(R.id.retypeNewPassword);
-        newPassword.setVisibility(View.INVISIBLE);
-        retypeNewPassword.setVisibility(View.INVISIBLE);
-        passwordBeingChanged = false;
+            userProfile = (Profile) ParseUser.getCurrentUser();
 
+            editProfileFirstName.setText(userProfile.getFirstName());
+            editProfileSurname.setText(userProfile.getSecondName());
+            editProfileLocation.setText(userProfile.getLocation());
+            getProfilePicAsBitmap();
+            editProfilePicEditIcon.setBackgroundResource(R.drawable.edit);
+            newPassword = (EditText) findViewById(R.id.newPassword);
+            changePasswordButton = (Button) findViewById(R.id.editPasswordButton);
+            retypeNewPassword = (EditText) findViewById(R.id.retypeNewPassword);
+            newPassword.setVisibility(View.INVISIBLE);
+            retypeNewPassword.setVisibility(View.INVISIBLE);
+            passwordBeingChanged = false;
+        }
 
-
-
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
     }
 
     public void getProfilePicAsBitmap() {
 
-        byte[] data=gs.readLocalProfilePic();
-        scaledBitmap=BitmapFactory.decodeByteArray(data, 0, data.length);
-        editProfilePic.setImageBitmap(scaledBitmap);
+
+        try {
+
+            byte[] data = gs.readLocalProfilePic();
+            scaledBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            editProfilePic.setImageBitmap(scaledBitmap);
+
+        }
+
+
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
 
     public void changePassword(View view) {
-        newPassword.setVisibility(View.VISIBLE);
-        retypeNewPassword.setVisibility(View.VISIBLE);
-        newPassword.requestFocus();
-        changePasswordButton.setVisibility(View.INVISIBLE);
-        passwordBeingChanged = true;
+
+        try {
+            newPassword.setVisibility(View.VISIBLE);
+            retypeNewPassword.setVisibility(View.VISIBLE);
+            newPassword.requestFocus();
+            changePasswordButton.setVisibility(View.INVISIBLE);
+            passwordBeingChanged = true;
+        }
+
+        catch(Exception ex)
+        {
+             ex.printStackTrace();
+        }
 
 
     }
@@ -100,140 +123,149 @@ public class EditProfile extends Activity {
 
     public void saveProfile(View view) {
 
-        if (passwordBeingChanged) {
+        try {
+
+            if (passwordBeingChanged) {
 
 
-            if (editProfileFirstName.getText().toString().equals("")) {
-                Toast.makeText(this, "Please Enter First Name", Toast.LENGTH_SHORT).show();
-                editProfileFirstName.requestFocus();
-            } else if (editProfileSurname.getText().toString().equals("")) {
-                Toast.makeText(this, "Please Enter Surname", Toast.LENGTH_SHORT).show();
-                editProfileSurname.requestFocus();
-            } else if (editProfileLocation.getText().toString().equals("")) {
-                Toast.makeText(this, "Please Enter Location", Toast.LENGTH_SHORT).show();
-                editProfileLocation.requestFocus();
-            } else if (newPassword.getText().toString().equals("")) {
-                Toast.makeText(this, "Please Enter Password", Toast.LENGTH_SHORT).show();
-                newPassword.requestFocus();
-            } else if (!newPassword.getText().toString().equals(retypeNewPassword.getText().toString())) {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-                newPassword.setText("");
-                retypeNewPassword.setText("");
-                newPassword.requestFocus();
-            } else {
+                if (editProfileFirstName.getText().toString().equals("")) {
+                    Toast.makeText(this, "Please Enter First Name", Toast.LENGTH_SHORT).show();
+                    editProfileFirstName.requestFocus();
+                } else if (editProfileSurname.getText().toString().equals("")) {
+                    Toast.makeText(this, "Please Enter Surname", Toast.LENGTH_SHORT).show();
+                    editProfileSurname.requestFocus();
+                } else if (editProfileLocation.getText().toString().equals("")) {
+                    Toast.makeText(this, "Please Enter Location", Toast.LENGTH_SHORT).show();
+                    editProfileLocation.requestFocus();
+                } else if (newPassword.getText().toString().equals("")) {
+                    Toast.makeText(this, "Please Enter Password", Toast.LENGTH_SHORT).show();
+                    newPassword.requestFocus();
+                } else if (!newPassword.getText().toString().equals(retypeNewPassword.getText().toString())) {
+                    Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    newPassword.setText("");
+                    retypeNewPassword.setText("");
+                    newPassword.requestFocus();
+                } else {
 
-                userProfile.put("firstName", editProfileFirstName.getText().toString());
-                userProfile.put("surName", editProfileSurname.getText().toString());
-                userProfile.put("location", editProfileLocation.getText().toString());
-                gs.saveProfilePicLocally(prepareProfilePicForSaving());
-                userProfile.setPassword(newPassword.getText().toString());
-                userProfile.saveEventually(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
+                    userProfile.put("firstName", editProfileFirstName.getText().toString());
+                    userProfile.put("surName", editProfileSurname.getText().toString());
+                    userProfile.put("location", editProfileLocation.getText().toString());
+                    gs.saveProfilePicLocally(prepareProfilePicForSaving());
+                    userProfile.setPassword(newPassword.getText().toString());
+                    userProfile.saveEventually(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
 
-                        if (e==null)
-                        {
-                            gs.saveProfilePicToParse(prepareProfilePicForSaving());
+                            if (e == null) {
+                                gs.saveProfilePicToParse(prepareProfilePicForSaving());
+                            } else {
+                                Toast.makeText(EditProfile.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                            }
+
                         }
-
-                        else
-                        {
-                            Toast.makeText(EditProfile.this,"Something went wrong",Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                });
+                    });
 
 
-            }
-            Toast.makeText(EditProfile.this, "Profile Updated", Toast.LENGTH_LONG).show();
-
-            startActivity(new Intent(EditProfile.this, Base.class));
-
-        } else {
-
-            if (editProfileFirstName.getText().toString().equals("")) {
-                Toast.makeText(this, "Please Enter First Name", Toast.LENGTH_SHORT).show();
-                editProfileFirstName.requestFocus();
-            } else if (editProfileSurname.getText().toString().equals("")) {
-                Toast.makeText(this, "Please Enter Surname", Toast.LENGTH_SHORT).show();
-                editProfileSurname.requestFocus();
-            } else if (editProfileLocation.getText().toString().equals("")) {
-                Toast.makeText(this, "Please Enter Location", Toast.LENGTH_SHORT).show();
-                editProfileLocation.requestFocus();
-            } else {
-
-                userProfile.put("firstName", editProfileFirstName.getText().toString());
-                userProfile.put("surName", editProfileSurname.getText().toString());
-                userProfile.put("location", editProfileLocation.getText().toString());
-                gs.saveProfilePicLocally(prepareProfilePicForSaving());
-                userProfile.saveEventually(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-
-                        if (e==null)
-                        {
-                            gs.saveProfilePicToParse(prepareProfilePicForSaving());
-                        }
-
-                        else
-                        {
-                            Toast.makeText(EditProfile.this,"Something went wrong",Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                });
+                }
                 Toast.makeText(EditProfile.this, "Profile Updated", Toast.LENGTH_LONG).show();
+                finish();
                 startActivity(new Intent(EditProfile.this, Base.class));
 
+            } else {
+
+                if (editProfileFirstName.getText().toString().equals("")) {
+                    Toast.makeText(this, "Please Enter First Name", Toast.LENGTH_SHORT).show();
+                    editProfileFirstName.requestFocus();
+                } else if (editProfileSurname.getText().toString().equals("")) {
+                    Toast.makeText(this, "Please Enter Surname", Toast.LENGTH_SHORT).show();
+                    editProfileSurname.requestFocus();
+                } else if (editProfileLocation.getText().toString().equals("")) {
+                    Toast.makeText(this, "Please Enter Location", Toast.LENGTH_SHORT).show();
+                    editProfileLocation.requestFocus();
+                } else {
+
+                    userProfile.put("firstName", editProfileFirstName.getText().toString());
+                    userProfile.put("surName", editProfileSurname.getText().toString());
+                    userProfile.put("location", editProfileLocation.getText().toString());
+                    gs.saveProfilePicLocally(prepareProfilePicForSaving());
+                    userProfile.saveEventually(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+
+                            if (e == null) {
+                                gs.saveProfilePicToParse(prepareProfilePicForSaving());
+                            } else {
+                                Toast.makeText(EditProfile.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    });
+
+                    finish();
+                    Toast.makeText(EditProfile.this, "Profile Updated", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(EditProfile.this, Base.class));
+
+                }
+
+            }
+        }
+
+            catch(Exception ex)
+            {
+
             }
 
-        }
 
     }
 
     public void editProfilePic(View view) {
 
 
+        try {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
+            builder.setPositiveButton(getResources().getString(R.string.browse), new DialogInterface.OnClickListener() {
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
-        builder.setPositiveButton(getResources().getString(R.string.browse), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Intent openGallery = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(openGallery,1);
-            }
-        });
-
-        builder.setNegativeButton(getResources().getString(R.string.takePhoto), new DialogInterface.OnClickListener() {
-
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, 2);
+                    Intent openGallery = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(openGallery, 1);
                 }
-            }
-        });
+            });
+
+            builder.setNegativeButton(getResources().getString(R.string.takePhoto), new DialogInterface.OnClickListener() {
 
 
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-        AlertDialog dialog=builder.create();
-        dialog.show();
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(takePictureIntent, 2);
+                    }
+                }
+            });
+
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
 
 
     }
 
-    public byte[] prepareProfilePicForSaving() {
+    public byte[] prepareProfilePicForSaving()
+    {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
