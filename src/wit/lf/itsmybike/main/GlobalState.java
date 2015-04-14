@@ -14,9 +14,11 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,17 +50,23 @@ public class GlobalState extends Application {
     private ParseFile fileContainingBikePic;
 
 
-    public void onCreate() {
+
+	
+	public void onCreate(){
+		
+		
+		Parse.enableLocalDatastore(this);
+		 
+		Parse.initialize(this, getString(com.example.itsmybike.R.string.parse_application_id) , getString(R.string.parse_client_key));
+		
+		ParseObject.registerSubclass(StolenBike.class);
+		ParseUser.registerSubclass(Profile.class);
+
+		ParseObject.registerSubclass(Bike.class);
+		
+		ParseInstallation.getCurrentInstallation().saveInBackground();
 
 
-        Parse.enableLocalDatastore(this);
-
-        Parse.initialize(this, getString(com.example.itsmybike.R.string.parse_application_id), getString(R.string.parse_client_key));
-
-        ParseObject.registerSubclass(StolenBike.class);
-        ParseObject.registerSubclass(Profile.class);
-        ParseObject.registerSubclass(Bike.class);
-        ParseInstallation.getCurrentInstallation().saveInBackground();
          profilePicFile = new File(this.getFilesDir(),"profilePic.txt");
     }
 
