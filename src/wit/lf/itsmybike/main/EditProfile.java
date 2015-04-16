@@ -40,8 +40,9 @@ public class EditProfile extends Activity {
     private ImageView editProfilePicEditIcon;
     private String galleryFilePath;
     private Bitmap scaledBitmap;
-
     private Profile userProfile;
+    private int height;
+    private int width;
 
 
 
@@ -61,11 +62,14 @@ public class EditProfile extends Activity {
             editProfilePicEditIcon = (ImageView) findViewById(R.id.editProfilePicEditIcon);
             editProfilePic = (ImageView) findViewById(R.id.editProfilePic);
 
-            userProfile = (Profile) ParseUser.getCurrentUser();
+             userProfile = (Profile) ParseUser.getCurrentUser();
 
             editProfileFirstName.setText(userProfile.getFirstName());
             editProfileSurname.setText(userProfile.getSecondName());
             editProfileLocation.setText(userProfile.getLocation());
+            Bitmap bmapForSize=BitmapFactory.decodeResource(getResources(), R.drawable.no_profile_pic);
+            height=bmapForSize.getHeight();
+            width=bmapForSize.getWidth();
             getProfilePicAsBitmap();
             editProfilePicEditIcon.setBackgroundResource(R.drawable.edit);
             newPassword = (EditText) findViewById(R.id.newPassword);
@@ -169,8 +173,10 @@ public class EditProfile extends Activity {
 
                 }
                 Toast.makeText(EditProfile.this, "Profile Updated", Toast.LENGTH_LONG).show();
+                Intent i=new Intent(this,Base.class);
+                i.setAction("open profile");
                 finish();
-                startActivity(new Intent(EditProfile.this, Base.class));
+                startActivity(i);
 
             } else {
 
@@ -203,8 +209,10 @@ public class EditProfile extends Activity {
                     });
 
                     finish();
-                    Toast.makeText(EditProfile.this, "Profile Updated", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(EditProfile.this, Base.class));
+                    Intent i=new Intent(this,Base.class);
+                    i.setAction("open profile");
+                    finish();
+                    startActivity(i);
 
                 }
 
@@ -270,7 +278,7 @@ public class EditProfile extends Activity {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-               return byteArray;
+        return byteArray;
 
 
     }
@@ -297,15 +305,7 @@ public class EditProfile extends Activity {
                 galleryFilePath = cursor.getString(columnIndex);
 
                 Bitmap unscaledBitmap=BitmapFactory.decodeFile(galleryFilePath);
-
-                int widthBeforeScale=unscaledBitmap.getWidth();
-                int heightBeforeScale =unscaledBitmap.getHeight();
-                int profilePicWidth=editProfilePic.getWidth();
-                int profilePicHeight=editProfilePic.getHeight();
-                int new_width=profilePicWidth;
-                int new_height=profilePicHeight;
-
-                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,width,height, true);
 
                          editProfilePic.setImageBitmap(scaledBitmap);
 
@@ -322,13 +322,7 @@ public class EditProfile extends Activity {
             {
                 Bundle extras = data.getExtras();
                 Bitmap unscaledBitmap = (Bitmap) extras.get("data");
-                int widthBeforeScale=unscaledBitmap.getWidth();
-                int heightBeforeScale =unscaledBitmap.getHeight();
-                int profilePicWidth=editProfilePic.getWidth();
-                int profilePicHeight=editProfilePic.getHeight();
-                int new_width=profilePicWidth;
-                int new_height=profilePicHeight;
-                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,width,height, true);
                 editProfilePic.setBackgroundResource(0);
                 editProfilePic.setImageBitmap(scaledBitmap);
             }

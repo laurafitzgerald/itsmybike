@@ -37,6 +37,8 @@ public class AddBike extends Activity {
     private String galleryFilePath;
     private Bitmap scaledBitmap;
     private ParseFile fileContainingBikePic;
+    private int height;
+    private int width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +52,10 @@ public class AddBike extends Activity {
             addBikeMake = (EditText) findViewById(R.id.addBikeMake);
             addBikeImage = (ImageView) findViewById(R.id.addBikeImage);
             addIconAddBikeImage = (ImageView) findViewById(R.id.addIconAddBikeImage);
-
             scaledBitmap = BitmapFactory.decodeResource(getResources(),
                     R.drawable.no_bike_pic);
+            height=scaledBitmap.getHeight();
+            width=scaledBitmap.getWidth();
             addBikeImage.setImageBitmap(scaledBitmap);
             addIconAddBikeImage.setBackgroundResource(R.drawable.add);
         }
@@ -151,15 +154,24 @@ public class AddBike extends Activity {
               bike.put("make", addBikeMake.getText().toString());
               bike.put("userId", ParseUser.getCurrentUser());
               Log.v("SaveEventually","user: "+ParseUser.getCurrentUser());
-              gs.saveBikePicLocally(prepareBikePicForSave(), addBikeSerialNumber.getText().toString());
+                 gs.saveBikePicLocally(prepareBikePicForSave(), addBikeSerialNumber.getText().toString());
               bike.saveEventually(new SaveCallback() {
                   @Override
-                  public void done(ParseException e) {
+                  public void done(ParseException ex) {
 
-                      if (e != null) {
+                      if (ex== null)
+                      {
+
+                          gs.populateLocalBikeList();
                           gs.saveBikePicToParse(prepareBikePicForSave(), addBikeSerialNumber.getText().toString());
-                      } else {
-                          Log.v("SaveEventually", "Bike save can't complete");
+                          Log.v("AddBikeSaveEventually", "Bike save complete");
+
+                      }
+                      else {
+
+
+                          Log.v("AddBikeSaveEventually", "Bike save can't complete "+ex.toString());
+
                       }
 
                   }
@@ -167,7 +179,11 @@ public class AddBike extends Activity {
 
               finish();
               Toast.makeText(this, "Bike added", Toast.LENGTH_SHORT).show();
-              startActivity(new Intent(this, Base.class));
+              Intent i=new Intent(this,Base.class);
+              i.setAction("open profile");
+              finish();
+              startActivity(i);
+
           }
 
       }
@@ -202,14 +218,8 @@ public class AddBike extends Activity {
 
                 Bitmap unscaledBitmap= BitmapFactory.decodeFile(galleryFilePath);
 
-                int widthBeforeScale=unscaledBitmap.getWidth();
-                int heightBeforeScale =unscaledBitmap.getHeight();
-                int profilePicWidth=addBikeImage.getWidth();
-                int profilePicHeight=addBikeImage.getHeight();
-                int new_width=profilePicWidth;
-                int new_height=profilePicHeight;
 
-                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,width, height,true);
                 addBikeImage.setImageBitmap(scaledBitmap);
 
 
@@ -226,15 +236,7 @@ public class AddBike extends Activity {
                 Bundle extras = data.getExtras();
                 Bitmap unscaledBitmap = (Bitmap) extras.get("data");
 
-
-
-                int widthBeforeScale=unscaledBitmap.getWidth();
-                int heightBeforeScale =unscaledBitmap.getHeight();
-                int profilePicWidth=addBikeImage.getWidth();
-                int profilePicHeight=addBikeImage.getHeight();
-                int new_width=profilePicWidth;
-                int new_height=profilePicHeight;
-                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,width,height, true);
                 addBikeImage.setImageBitmap(scaledBitmap);
 
             }

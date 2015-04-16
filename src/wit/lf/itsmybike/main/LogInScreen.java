@@ -107,6 +107,7 @@ try {
                             if (e == null) {
 
                                 gs.saveProfilePicLocally(bytes);
+                                gs.populateLocalBikeList();
                                 Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LogInScreen.this, Base.class);
                                 startActivity(intent);

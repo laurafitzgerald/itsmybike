@@ -1,9 +1,11 @@
 package wit.lf.itsmybike.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,7 @@ import java.util.List;
 import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.Profile;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment  {
 
 	
 
@@ -40,6 +42,8 @@ public class ProfileFragment extends Fragment {
     private ImageView plusIcon;
     private String serialNumber;
     private Bike bike;
+    public static  ListBikesAdapterWithEdit adapter;
+
 
 
 
@@ -72,20 +76,22 @@ public class ProfileFragment extends Fragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
+       Log.v("DeleteBike","id: "+getId());
         profileEditIcon = (ImageView) getActivity().findViewById(R.id.profileEditIcon);
-        profileEditIcon.setBackgroundResource(R.drawable.edit);
+        profileEditIcon.setBackgroundResource(R.drawable.ic_action_edit);
         username = (TextView) getActivity().findViewById(R.id.usernameView);
         location = (TextView) getActivity().findViewById(R.id.locView);
         profilePic = (ImageView) getActivity().findViewById(R.id.profileImageView);
         plusIcon = (ImageView) getActivity().findViewById(R.id.plusIcon);
-        plusIcon.setBackgroundResource(R.drawable.add);
+        plusIcon.setBackgroundResource(R.drawable.ic_action_new);
         gs = (GlobalState) getActivity().getApplication();
         ParseQuery<Bike>query=new ParseQuery<Bike>("Bike");
         query.whereEqualTo("userId",ParseUser.getCurrentUser());
         if(gs.connectedToInternet(getActivity())==false)
         {
             query.fromLocalDatastore();
+            Log.v("Querying bikes locally","getting local bikes");
+
         }
         query.findInBackground(new FindCallback<Bike>() {
             @Override
@@ -93,7 +99,8 @@ public class ProfileFragment extends Fragment {
 
                 if (e==null)
                 {
-                    ListBikesAdapterWithEdit adapter = new ListBikesAdapterWithEdit(getActivity(), bikes,gs);
+                    adapter = new ListBikesAdapterWithEdit(getActivity(),bikes,gs);
+                    Log.v("Querying bikes locally","size of local bikes list" + bikes.size());
                     for (Bike b:bikes)
                     {
                         try {
@@ -105,7 +112,6 @@ public class ProfileFragment extends Fragment {
                                 public void done(byte[] bytes, ParseException e) {
 
                                     gs.saveBikePicLocally(bytes, serialNumber);
-                                    bike.saveEventually();
 
 
 
@@ -129,7 +135,7 @@ public class ProfileFragment extends Fragment {
 
                 else
                 {
-
+                    Log.v("Querying bikes locally","getting local bikes failed" +e.toString());
                 }
 
 
@@ -144,16 +150,8 @@ public class ProfileFragment extends Fragment {
     }
 
     public void getProfilePicAsBitmap() {
-
-
-
-
-
         byte[] data = gs.readLocalProfilePic();
-
-
-
-        profilePic.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
+       profilePic.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
 
     }
 
@@ -161,6 +159,11 @@ public class ProfileFragment extends Fragment {
     {
         startActivity(new Intent(getActivity(),EditProfile.class));
 
+    }
+
+    public void refresh(Context context)
+    {
+       Log.v("DeleteBike","refresh pressed");
     }
 
 

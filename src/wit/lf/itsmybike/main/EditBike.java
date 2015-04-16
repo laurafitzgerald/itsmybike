@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,6 +41,8 @@ public class EditBike extends Activity {
     private String galleryFilePath;
     private Bitmap scaledBitmap;
     private ParseFile fileContainingBikePic;
+    private int width;
+    private int height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class EditBike extends Activity {
             editBikeSerialNumber = (EditText) findViewById(R.id.editBikeSerialNumber);
             editBikeMake = (EditText) findViewById(R.id.editBikeMake);
             editBikeImage = (ImageView) findViewById(R.id.editBikeImage);
+            Bitmap bmapForSize=BitmapFactory.decodeResource(getResources(), R.drawable.no_profile_pic);
+            height=bmapForSize.getHeight();
+            width=bmapForSize.getWidth();
             editIconEditBikeImage = (ImageView) findViewById(R.id.editIconEditBikeImage);
             getBikeFromParse(gs.getBikeToEdit().getSerialNo());
         }
@@ -66,6 +72,7 @@ public class EditBike extends Activity {
     {
 
         try {
+
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Bike");
             if(gs.connectedToInternet(this)==false) {
                 query.fromLocalDatastore();
@@ -73,12 +80,21 @@ public class EditBike extends Activity {
             query.whereEqualTo("serialNumber", serialNumber);
             query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> bikeList, ParseException e) {
-                    Bike bikeFromParse = (Bike) bikeList.get(0);
-                    editBikeNickname.setText(bikeFromParse.getNickname());
-                    editBikeSerialNumber.setText(bikeFromParse.getSerialNo());
-                    editBikeMake.setText(bikeFromParse.getMake());
-                    getBikePicAsBitmap(bikeFromParse);
-                    editIconEditBikeImage.setBackgroundResource(R.drawable.edit);
+
+                    if(e==null) {
+                        Bike bikeFromParse = (Bike) bikeList.get(0);
+                        editBikeNickname.setText(bikeFromParse.getNickname());
+                        editBikeSerialNumber.setText(bikeFromParse.getSerialNo());
+                        editBikeMake.setText(bikeFromParse.getMake());
+                        getBikePicAsBitmap(bikeFromParse);
+
+                        editIconEditBikeImage.setBackgroundResource(R.drawable.edit);
+                    }
+
+                    else
+                    {
+                        Log.v("EditBike", "problem retrieving bike to edit");
+                    }
 
                 }
             });
@@ -96,14 +112,19 @@ public class EditBike extends Activity {
 
 
        try {
+
+
            byte[] data = gs.readLocalBikePic(bike.getSerialNo());
            scaledBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
            editBikeImage.setImageBitmap(scaledBitmap);
+           Log.v("EditBike","Image retrieved locally");
        }
 
        catch (Exception ex)
        {
            ex.printStackTrace();
+           Log.v("EditBike","Problem retrieving local image");
+
        }
 
 
@@ -132,33 +153,57 @@ public class EditBike extends Activity {
 
 
                ParseQuery<ParseObject> query = ParseQuery.getQuery("Bike");
-               query.fromLocalDatastore();
+               if (gs.connectedToInternet(this)==false)
+               {
+                   query.fromLocalDatastore();
+               }
                query.whereEqualTo("serialNumber", gs.getBikeToEdit().getSerialNo());
-
+               Log.v("EditBike","serial number of bike to edit: "+gs.getBikeToEdit().getSerialNo());
                query.findInBackground(new FindCallback<ParseObject>() {
                    public void done(List<ParseObject> bikeList, ParseException e) {
+
+                        if(e==null)
+                       {
                        Bike bike = (Bike) bikeList.get(0);
                        bike.put("nickname", editBikeNickname.getText().toString());
                        bike.put("serialNumber", editBikeSerialNumber.getText().toString());
                        bike.put("make", editBikeMake.getText().toString());
                        bike.put("userId", ParseUser.getCurrentUser());
-                       gs.saveBikePicToParse(prepareBikePicForSave(), editBikeSerialNumber.getText().toString());
                        gs.saveBikePicLocally(prepareBikePicForSave(), editBikeSerialNumber.getText().toString());
                        bike.saveEventually(new SaveCallback() {
                            @Override
                            public void done(ParseException e) {
-                               gs.saveBikePicToParse(prepareBikePicForSave(), editBikeSerialNumber.getText().toString());
+                               if(e==null) {
+                                   gs.saveBikePicToParse(prepareBikePicForSave(), editBikeSerialNumber.getText().toString());
+                               }
+
+                               else
+                               {
+                                   Log.v("EditBike","problem saving bike pic to parse from edit screen");
+                               }
 
                            }
                        });
                    }
+
+                   else
+                   {
+                       Log.v("EditBike","problem retrieving bike using query");
+                   }
+                   }
                });
+
+
+
 
                finish();
 
                //gs.getProfile().getListOfBikes().add(bikeToAdd);
                Toast.makeText(this, "Bike updated", Toast.LENGTH_SHORT).show();
-               startActivity(new Intent(this, Base.class));
+               Intent i=new Intent(this,Base.class);
+               i.setAction("open profile");
+               finish();
+               startActivity(i);
            }
 
        }
@@ -171,9 +216,11 @@ public class EditBike extends Activity {
 
     public void changeBikePicture(View view)
     {
-
+        Log.v("EditBike","Edit picture pressed");
 
     try {
+
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
@@ -204,12 +251,16 @@ public class EditBike extends Activity {
 
 
         AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 
         catch (Exception ex)
         {
             ex.printStackTrace();
+
+            Log.v("EditBike","Edit picture pressed but "+ex.toString());
+
         }
 
     }
@@ -255,14 +306,8 @@ public class EditBike extends Activity {
 
                 Bitmap unscaledBitmap=BitmapFactory.decodeFile(galleryFilePath);
 
-                int widthBeforeScale=unscaledBitmap.getWidth();
-                int heightBeforeScale =unscaledBitmap.getHeight();
-                int profilePicWidth=editBikeImage.getWidth();
-                int profilePicHeight=editBikeImage.getHeight();
-                int new_width=profilePicWidth;
-                int new_height=profilePicHeight;
 
-                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,width,height, true);
                 editBikeImage.setImageBitmap(scaledBitmap);
 
 
@@ -286,7 +331,7 @@ public class EditBike extends Activity {
                 int profilePicHeight=editBikeImage.getHeight();
                 int new_width=profilePicWidth;
                 int new_height=profilePicHeight;
-                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,new_width,new_height, true);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,width,height,true);
                 editBikeImage.setImageBitmap(scaledBitmap);
 
             }

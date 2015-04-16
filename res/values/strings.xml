@@ -2,6 +2,7 @@
 
     <string name="app_name">ItsMyBike</string>
     <string name="hello_world">Hello world!</string>
+    <string name="confirm_bike_deletion">Delete this bike? Cannot undo!</string>
     <string name="registerButton">Register</string>
     <string name="logInButton">Log In</string>
     <string name="usernameText">Username</string>
@@ -23,7 +24,9 @@
             <string name="edit_profile">Edit Profile</string>
             <string name="gps_network_not_enabled">Locations Services Must Be On. Open Location Settings?</string>
             <string name = "open_location_settings">OK</string>
+    <string name = "delete_bike">Delete</string>
             <string name = "do_not_open_location_settings">Cancel</string>
+    <string name = "do_not_delete_bike">Cancel</string>
             <string name ="location">Location</string>
             <string name ="serial">Serial No.</string>
             <string name ="nicname">Nickname</string>

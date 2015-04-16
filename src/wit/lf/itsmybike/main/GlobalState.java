@@ -45,7 +45,7 @@ public class GlobalState extends Application {
     private List<Bike> listOfBikes = new ArrayList<Bike>();
     private File profilePicFile;
     private byte[] theBytes;
-
+    private String serialNumber;
     private ParseFile fileContainingProfilePic;
     private ParseFile fileContainingBikePic;
 
@@ -142,24 +142,30 @@ public class GlobalState extends Application {
 
 
         fileContainingProfilePic = new ParseFile("profilePicFile.jpg", byteArray);
-        fileContainingProfilePic.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                ParseUser user=ParseUser.getCurrentUser();
-                user.put("profilePic", fileContainingProfilePic);
-                user.saveEventually(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            saveProfilePicLocally(byteArray);
-                        } else {
-                            Log.v("SaveEventually","Problem saving profile pic");
-                        }
-                    }
-                });
+        try {
+            fileContainingProfilePic.save();
 
-            }
-        });
+            ParseUser user = ParseUser.getCurrentUser();
+            user.put("profilePic", fileContainingProfilePic);
+            user.saveEventually(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        saveProfilePicLocally(byteArray);
+                        Log.v("SaveEventually", "No bother saving profile pic");
+                    } else {
+                        Log.v("SaveEventually", "Problem saving profile pic");
+                    }
+                }
+            });
+
+        }
+
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
 
 
 
@@ -203,6 +209,62 @@ public class GlobalState extends Application {
         return theBytes;
     }
 
+    public void populateLocalBikeList() {
+
+        ParseQuery<Bike> query = new ParseQuery<Bike>("Bike");
+        query.whereEqualTo("userId", ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Bike>() {
+            @Override
+            public void done(List<Bike> bikes, ParseException e) {
+
+                if (e == null) {
+
+                    Log.v("Populate local bikes","size of list: "+bikes.size());
+
+                    for (Bike b : bikes) {
+                        try {
+                            b.pinInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e != null) {
+                                        Log.v("Populate local bikes", "Failed to save bike locally");
+                                    } else {
+                                        Log.v("Populate local bikes", "Bike saved locally");
+                                    }
+
+                                }
+                            });
+                            ParseFile pf = (ParseFile) b.get("bikePic");
+                            serialNumber = b.getSerialNo();
+                            pf.getDataInBackground(new GetDataCallback() {
+                                @Override
+                                public void done(byte[] bytes, ParseException e) {
+
+                                    if(e==null)
+                                    {
+
+                                        saveBikePicLocally(bytes, serialNumber);
+                                    }
+
+                                    else
+                                    {
+                                        Log.v("Populate local bikes","Failed to populate");
+                                    }
+                                }
+                            });
+                        }
+                    catch (Exception ex)
+                    {
+                        ex.printStackTrace();
+                        Log.v("Populate local bikes","Failed to populate");
+                    }
+
+                    }
+                }
+            }
+        });
+    }
+
 
 
     public void saveProfilePicLocally(byte[] byteArray) {
@@ -225,27 +287,41 @@ public class GlobalState extends Application {
     public void saveBikePicToParse(final byte[] byteArray, final String serialNumber)
     {
         fileContainingBikePic = new ParseFile("bikePicFile.jpg", byteArray);
-        fileContainingBikePic.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
+        try {
+            fileContainingBikePic.save();
 
-                ParseQuery<Bike> query = new ParseQuery<Bike>("Bike");
-                 query.whereEqualTo("serialNumber", serialNumber);
-                query.findInBackground(new FindCallback<Bike>() {
-                    @Override
-                    public void done(List<Bike> bikes, ParseException e) {
+            ParseQuery<Bike> query = new ParseQuery<Bike>("Bike");
+            query.whereEqualTo("serialNumber", serialNumber);
+            query.findInBackground(new FindCallback<Bike>() {
+                @Override
+                public void done(List<Bike> bikes, ParseException e) {
+
+                    if(e==null)
+                    {
                         Bike bike = bikes.get(0);
                         bike.put("bikePic", fileContainingBikePic);
                         bike.saveInBackground();
                         saveBikePicLocally(byteArray, serialNumber);
+                        Log.v("SaveBikePicToParse","no problem saving bike pic to parse");
                     }
-                });
+
+                    else
+                    {
+                        Log.v("SaveBikePicToParse","Problem saving bike pic");
+                    }
+                }
+            });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
-            }
-        });
 
-    }
+
+         }
+
+
+
 
 
 
@@ -256,19 +332,21 @@ public class GlobalState extends Application {
         try {
 
             File theFile=new File(this.getFilesDir() + "/"+serialNumber+".txt");
+            Log.v("ReadBikePicLocally", "Bike pic read from: "+theFile.getAbsolutePath()+"File length: "+theFile.length());
             FileInputStream fis = new FileInputStream(theFile);
             byteArray = new byte[(int) theFile.length()];
             fis.read(byteArray);
 
 
 
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
-            Log.v("FileError", "file not found");
-        } catch (IOException e) {
-            e.printStackTrace();
+            Log.v("Test","read local bike pic error:"+ e.toString());
         }
+
+
+
         return byteArray;
     }
 
@@ -276,17 +354,20 @@ public class GlobalState extends Application {
     public void saveBikePicLocally(byte[] byteArray, String serialNumber) {
         try {
 
-            File bikePicFile=new File(this.getFilesDir(),serialNumber+".txt");
+            File bikePicFile = new File(this.getFilesDir() + "/" + serialNumber + ".txt");
             FileOutputStream fos = new FileOutputStream(bikePicFile);
             fos.write(byteArray);
             fos.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-
+            Log.v("SaveBikePicLocally", "Bike Pic Saved Locally"+bikePicFile.getAbsolutePath());
         }
+
+       catch(Exception e)
+            {
+                e.printStackTrace();
+                Log.v("SaveBikePicLocally", "Bike Pic Can't Save Locally"+e.toString());
+            }
+
+
 
 
     }

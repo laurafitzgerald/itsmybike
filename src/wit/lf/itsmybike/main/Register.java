@@ -46,6 +46,8 @@ public class Register extends Activity {
     private GlobalState gs;
     private ParseFile fileContainingProfilePic;
     private Profile user;
+    private int height;
+    private int width;
 
 
     @Override
@@ -54,6 +56,8 @@ public class Register extends Activity {
             super.onCreate(savedInstanceState);
             scaledBitmap = BitmapFactory.decodeResource(getResources(),
                     R.drawable.no_profile_pic);
+            height=scaledBitmap.getHeight();
+            width=scaledBitmap.getWidth();
             setContentView(R.layout.activity_register);
             firstName = (EditText) findViewById(R.id.registerFirstName);
             surname = (EditText) findViewById(R.id.registerSurname);
@@ -144,14 +148,8 @@ public class Register extends Activity {
 
                 Bitmap unscaledBitmap = BitmapFactory.decodeFile(galleryFilePath);
 
-                int widthBeforeScale = unscaledBitmap.getWidth();
-                int heightBeforeScale = unscaledBitmap.getHeight();
-                int profilePicWidth = addProfilePic.getWidth();
-                int profilePicHeight = addProfilePic.getHeight();
-                int new_width = profilePicWidth;
-                int new_height = profilePicHeight;
 
-                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, new_width, new_height, true);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, width,height, true);
 
                 addProfilePic.setBackgroundResource(0);
                 addProfilePic.setImageBitmap(scaledBitmap);
@@ -169,7 +167,7 @@ public class Register extends Activity {
                 int profilePicHeight = addProfilePic.getHeight();
                 int new_width = profilePicWidth;
                 int new_height = profilePicHeight;
-                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, new_width, new_height, true);
+                scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap,width,height, true);
                 addProfilePic.setBackgroundResource(0);
                 addProfilePic.setImageBitmap(scaledBitmap);
                // prepareProfilePicForSaving();
@@ -209,21 +207,14 @@ public class Register extends Activity {
                 user.put("surName", surname.getText().toString());
                 user.put("location", location.getText().toString());
                 user.setUsername(email.getText().toString());
-
-
-
-
-
-
                 user.pinInBackground();
-
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(ParseException e) {
                         if (!(e == null))
                         {
 
-                          Toast.makeText(Register.this,"Unable to login at this time",Toast.LENGTH_LONG);
+                          Toast.makeText(Register.this,"Unable to register at this time",Toast.LENGTH_LONG);
                         }
 
                         else {

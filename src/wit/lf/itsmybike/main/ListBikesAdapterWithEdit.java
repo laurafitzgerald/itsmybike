@@ -77,6 +77,7 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
             viewHolder.make_editable=(TextView)convertView.findViewById(R.id.bike_make_editable);
             viewHolder.imgBike_editable= (ImageView) convertView.findViewById(R.id.img_bike_editable);
             viewHolder.editIcon=(ImageView) convertView.findViewById(R.id.editIcon);
+            viewHolder.deleteIcon=(ImageView)convertView.findViewById(R.id.deleteIcon);
 
 
             convertView.setTag(viewHolder);
@@ -95,7 +96,8 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
         viewHolder.serial_editable.setText(bike.getSerialNo());
         viewHolder.make_editable.setText(bike.getMake());
         getBikePicAsBitmap(bike);
-        viewHolder.editIcon.setImageResource(R.drawable.edit);
+        viewHolder.editIcon.setImageResource(R.drawable.ic_action_edit);
+        viewHolder.deleteIcon.setImageResource(R.drawable.ic_action_discard);
 
         return convertView;
 
@@ -109,24 +111,26 @@ public class ListBikesAdapterWithEdit extends BaseAdapter
         TextView make_editable;
         ImageView imgBike_editable;
         ImageView editIcon;
+        ImageView deleteIcon;
 
     }
 
     public void getBikePicAsBitmap(Bike bike)
     {
 
-       try {
-           if (gs.readLocalBikePic(bike.getSerialNo()) != null) {
+
+         try
+         {
                byte[] data = gs.readLocalBikePic(bike.getSerialNo());
                viewHolder.imgBike_editable.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
-           } else {
-               viewHolder.imgBike_editable.setBackgroundResource(R.drawable.no_bike_pic);
-           }
+
        }
 
        catch (Exception ex)
        {
            ex.printStackTrace();
+
+
        }
 
 

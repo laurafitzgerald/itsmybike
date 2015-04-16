@@ -2,10 +2,13 @@ package wit.lf.itsmybike.main;
 
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 import wit.lf.itsmybike.data.Bike;
 
@@ -26,6 +36,8 @@ public class Base extends FragmentActivity {
 	private TabsAdapter tabsAdapter;
 	private ViewPager viewPager;
 	private ActionBar actionBar;
+    private View view;
+    private ActionBar.Tab profileFragmentTab;
 
 
 	
@@ -86,25 +98,49 @@ public class Base extends FragmentActivity {
 		setContentView(viewPager);
 		
 		 actionBar = getActionBar();
+
 		
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
 		tabsAdapter = new TabsAdapter(this, viewPager);
+        profileFragmentTab=actionBar.newTab();
+        profileFragmentTab.setText("Profile");
+        profileFragmentTab.setTag("profileFragment");
+
+
 
 		tabsAdapter.addTab(actionBar.newTab().setText("Home"), HomeFragment.class, null);
-		tabsAdapter.addTab(actionBar.newTab().setText("Profile"), ProfileFragment.class, null);
+		tabsAdapter.addTab(profileFragmentTab, ProfileFragment.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setText("Report"), ReportFragment.class, null);
-	
+
+
+
+
+        if(getIntent().getAction()!=null)
+        {
+
+
+            if (getIntent().getAction().equals("open profile"))
+            {
+                actionBar.setSelectedNavigationItem(1);
+            }
+        }
 		
 
-		if(savedInstanceState != null){
-			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+		if(savedInstanceState != null)
+        {
+
+
+
+
+            actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+
 			
 		}
-		
 
-	
+
+
 
 	}
 
@@ -178,6 +214,107 @@ public class Base extends FragmentActivity {
 
         
        
+    }
+
+
+    public void deleteBike(View aview)
+    {
+        view=aview;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(this.getResources().getString(R.string.confirm_bike_deletion));
+        builder.setPositiveButton(this.getResources().getString(R.string.delete_bike), new DialogInterface.OnClickListener() {
+
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RelativeLayout rowContainingButton=(RelativeLayout)view.getParent();
+
+                TextView serialNumberTV=(TextView)rowContainingButton.getChildAt(4);
+                String serialNumber=serialNumberTV.getText().toString();
+
+                for (Bike b: gs.getListOfBikes())
+                {
+                    if(b.getSerialNo().equals(serialNumber))
+                    {
+                        gs.setBikeToEdit(b);
+                    }
+                }
+
+
+
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Bike");
+                if (gs.connectedToInternet(Base.this)==false)
+                {
+                    query.fromLocalDatastore();
+                }
+                query.whereEqualTo("serialNumber", gs.getBikeToEdit().getSerialNo());
+                Log.v("EditBike", "serial number of bike to edit: " + gs.getBikeToEdit().getSerialNo());
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> bikeList, ParseException e) {
+
+                        if(e==null)
+                        {
+                            Bike bike = (Bike) bikeList.get(0);
+
+                            bike.deleteEventually(new DeleteCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if(e==null)
+                                    {
+
+                                        Toast.makeText(Base.this,"Bike Deleted",Toast.LENGTH_LONG).show();
+
+                                       Intent i=new Intent(Base.this,Base.class);
+                                       i.setAction("open profile");
+                                       finish();
+                                       startActivity(i);
+
+                                    }
+
+                                    else
+                                    {
+
+                                        Log.v("DeleteBike","problem deleting bike pic");
+                                    }
+
+                                }
+                            });
+                        }
+
+                        else
+                        {
+                            Log.v("DeleteBike","problem retrieving bike using query");
+                        }
+                    }
+                });
+
+
+
+
+
+            }
+        });
+
+        builder.setNegativeButton(this.getResources().getString(R.string.do_not_delete_bike), new DialogInterface.OnClickListener() {
+
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+            }
+        });
+
+
+
+
+        AlertDialog dialog=builder.create();
+        dialog.show();
+
+
+
+
+
     }
 
     public void addBike(View view)

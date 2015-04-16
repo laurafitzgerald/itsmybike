@@ -107,6 +107,21 @@
 
         />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deleteIcon"
+        android:clickable="true"
+        android:onClick="deleteBike"
+        android:focusable="false"
+        android:layout_toLeftOf= "@+id/img_bike_editable"
+        android:layout_alignBottom="@+id/img_bike_editable"
+        android:layout_marginRight= "50dp"
+        android:focusableInTouchMode="false"
+
+
+        />
+
    <!--  <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
