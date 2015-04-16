@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.example.itsmybike.R;
 import com.parse.ParseUser;
@@ -50,8 +51,8 @@ public class SplashScreen extends Activity {
 
 
 
-                    //Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
-                     // mainIntent = new Intent(SplashScreen.this, Base.class);
+                    Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
+                      mainIntent = new Intent(SplashScreen.this, Base.class);
 
                     }
 

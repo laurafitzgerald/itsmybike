@@ -1,5 +1,6 @@
 package wit.lf.itsmybike.main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -28,6 +29,7 @@ import com.example.itsmybike.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import wit.lf.itsmybike.data.Bike;
@@ -102,9 +104,23 @@ public class ReportFragment extends Fragment{
 				@Override
 				public void done(List<Bike> bikes, ParseException e) {
 					
+					List<Bike> finalBikes = new ArrayList<Bike>();
+					
+					for(Bike b: bikes){
+						
+						if (!b.getStolen()){
+							
+							finalBikes.add(b);
+							
+						}
+					}
+					
 					Resources res = getResources();
-					BikeAdapter adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, bikes, res);
+					BikeAdapter adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, finalBikes, res);
 					spinner.setAdapter(adapter);
+					
+					
+					
 					
 				}
 				
@@ -138,14 +154,12 @@ public class ReportFragment extends Fragment{
 					
 					if(input.isChecked()){
 						
-						Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps"));
+						Intent intent = new Intent(getActivity(), SearchMap.class );
 						startActivity(intent);
 						
 						
 						gl.setEnabled(true);
-						editlat.setEnabled(true);
 						editlat.setText("");
-						editlng.setEnabled(true);
 						editlng.setText("");
 						
 					}else if(useCurrent.isChecked()){
@@ -201,36 +215,29 @@ public class ReportFragment extends Fragment{
 	public boolean reportBike(){
 		
 		
-	
-/*	
-		int selected = spinner.getSelectedItemPosition();
+
+
 		
-		
-		if(selected==0){
-			Toast.makeText(getActivity().getApplicationContext(), "Please select a bike first", Toast.LENGTH_SHORT).show();
+		if(input.isChecked()){
 			
-		}
-		Bike testBike = gs.getProfile().getListOfBikes().get(selected-1);
-		if(testBike.isStolen()){
 			
-			return false;
-		}*/
-	
-	
-		
-/*		Time now = new Time();
-		now.setToNow();
-		String date = now.monthDay + "/" + now.month + "/" + now.year;*/
-		
-		//gs.getProfile().getListOfBikes().get(selected-1).setStolen(true);
+			StolenBike stolenBike = new StolenBike();
+			stolenBike.put("lat", gs.selectedLat);
+			stolenBike.put("lng", gs.selectedLng);
+			//stolenBike.put("bikeId", );
+			stolenBike.saveInBackground();
+			
+			
+		}else{
 	
 		StolenBike stolenBike = new StolenBike();
 		stolenBike.put("lat", gs.getCurrentLat());
 		stolenBike.put("lng", gs.getCurrentLng());
-		stolenBike.put("serialNumber", "testSerial - need to fix");
+		//stolenBike.put("bikeId", );
 		stolenBike.saveInBackground();
+	
 		
-		//gs.getStolenBikes().add(new StolenBike(gs.getCurrentLat(), gs.getCurrentLng(), testBike.getSerialNo(), date));
+		}
 		
 		
 		
@@ -256,6 +263,25 @@ public class ReportFragment extends Fragment{
 		gl.setEnabled(false);
 		editlat.setEnabled(false);
 		editlng.setEnabled(false);
+		
+		
+	}
+
+	@Override
+	public void onResume() {
+		
+		super.onResume();
+		
+		
+		if(gs.selectedLat!=null && gs.selectedLng!=null){
+		
+			editlat.setText((gs.selectedLat).toString());
+			editlng.setText((gs.selectedLng).toString());
+		
+		
+		}
+		
+		
 		
 		
 	}

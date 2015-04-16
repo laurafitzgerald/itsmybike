@@ -14,8 +14,8 @@
          <string name = "bikeImage">Your Bike</string>
          <string name = "reportForm1">Use this form to report your bike stolen.</string>
          <string name = "reportForm2">It will then go into our database and be used to show others bike stealing hotspots.</string>
-         <string name = "radiocurrentlocation">Use CurrentLocation</string>
-         <string name = "radioinputlocation">Input a Location using Latitutde and Longitude</string>
+         <string name = "radiocurrentlocation">Use Current Location</string>
+         <string name = "radioinputlocation">Select Location on Map</string>
          <string name = "latitude">Latitude</string>
          <string name = "longitude">Longitude</string>
          <string name = "apptitle">It\u0027s My Bike</string>
@@ -53,6 +53,12 @@
     <string name="title_activity_image_capture">ImageCapture</string>
     <string name="parse_application_id">o6Yb47a9oYQCRb2Lv1MrdFA0E8Op4gIOIR6cKK37</string>
     <string name = "parse_client_key">3I3oXpk4U5O8dfhNvlXwblr0lDJppuk0lVxCINIA</string>
+    <string name = "choosebikesHeading">Choose a Bike</string>
+      <string name = "chooselocationHeading">Choose a Location</string>
+    
+    
+     <string name="useLocation">Use Location</string>
+    <string name="prompt">Click to Select a Location</string>
 
 
 

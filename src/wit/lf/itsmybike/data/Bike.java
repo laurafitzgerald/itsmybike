@@ -60,6 +60,8 @@ public class Bike extends ParseObject{
 		
 	}
 	
+	
+
 
 	
 
@@ -76,6 +78,11 @@ public class Bike extends ParseObject{
 
 
 
+    public Boolean getStolen(){
+    	
+    	return getBoolean("registeredStolen");
+    	
+    }
 
 	public String getMake() {
 		return getString("make");
