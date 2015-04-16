@@ -15,10 +15,13 @@
 
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-     android:background="@color/background" >
+   android:layout_width="match_parent"
+            android:layout_marginTop="39dp"
+        	android:layout_height="wrap_content"
+      		android:background="@color/innerbackground"
+      		android:layout_marginRight="25dp"
+        	android:layout_marginLeft="25dp"
+        	android:padding="25dp" >
 
 
     <EditText

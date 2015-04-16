@@ -85,6 +85,7 @@ public class ProfileFragment extends Fragment  {
         plusIcon = (ImageView) getActivity().findViewById(R.id.plusIcon);
         plusIcon.setBackgroundResource(R.drawable.ic_action_new);
         gs = (GlobalState) getActivity().getApplication();
+<<<<<<< HEAD
         ParseQuery<Bike>query=new ParseQuery<Bike>("Bike");
         query.whereEqualTo("userId",ParseUser.getCurrentUser());
         if(gs.connectedToInternet(getActivity())==false)
@@ -94,6 +95,12 @@ public class ProfileFragment extends Fragment  {
 
         }
         query.findInBackground(new FindCallback<Bike>() {
+=======
+
+        
+        Bike.findInBackground(ParseUser.getCurrentUser(), new FindCallback<Bike>() {
+
+>>>>>>> 25723f18b1de5f6d90f4d4f33b215201d89b42ed
             @Override
             public void done(List<Bike> bikes, ParseException e) {
 

@@ -2,8 +2,8 @@
 <resources>
     
     <color name="textbody">#cecdd4</color>
-    <color name="background"> #0f0017</color>
-    <color name = "innerbackground">#15001f</color>
+    <color name="background"> #410065</color>
+    <color name = "innerbackground">#620097</color>
     <color name="splashbackground">#180023</color>
     <color name="locationcolor">#ff7f7f </color>
     <color name="blacktext">#000000</color>

@@ -52,7 +52,11 @@ public class SplashScreen extends Activity {
 
 
                     Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
+<<<<<<< HEAD
                      mainIntent = new Intent(SplashScreen.this, Base.class);
+=======
+                      mainIntent = new Intent(SplashScreen.this, Base.class);
+>>>>>>> 25723f18b1de5f6d90f4d4f33b215201d89b42ed
 
                     }
 

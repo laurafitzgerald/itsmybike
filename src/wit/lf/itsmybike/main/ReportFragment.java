@@ -1,6 +1,11 @@
 package wit.lf.itsmybike.main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -23,7 +28,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.itsmybike.R;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import wit.lf.itsmybike.data.Bike;
 import wit.lf.itsmybike.data.StolenBike;
@@ -41,6 +50,8 @@ public class ReportFragment extends Fragment{
 	private RadioButton input;
 	private RadioButton useCurrent;
 	private Button report;
+	BikeAdapter adapter;
+	List<Bike> finalBikes;
 	
 	
 	@Override
@@ -83,12 +94,65 @@ public class ReportFragment extends Fragment{
 		gs = (GlobalState) getActivity().getApplication();
 				
 			
+		
+		
+		report = (Button) getActivity().findViewById(R.id.button_report);
+		report.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				
+				reportBike();
+			
+			
+			
+			}
+		});
 			
 			spinner  = (Spinner) getActivity().findViewById(R.id.bikes_spinner);
+			report.setEnabled(true);
 			
-			Resources res = getResources();
-			BikeAdapter adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, gs.getListOfBikes(), res);
-			spinner.setAdapter(adapter);
+			
+			
+			
+			
+			
+			Bike.findInBackground(ParseUser.getCurrentUser(), new FindCallback<Bike>(){
+
+				@Override
+				public void done(List<Bike> bikes, ParseException e) {
+					
+					finalBikes = new ArrayList<Bike>();
+					
+					for(Bike b: bikes){
+						
+						if (!b.getStolen()){
+							
+							finalBikes.add(b);
+							
+						}
+					}
+					
+				
+					
+					Resources res = getResources();
+					adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, finalBikes, res);
+					spinner.setAdapter(adapter);
+					
+					
+					
+					
+				}
+				
+				
+				
+				
+				
+				
+			});
+			
+			
+		
 			
 			gl = (GridLayout) getActivity().findViewById(R.id.lat_lng_grid);
 			
@@ -112,14 +176,12 @@ public class ReportFragment extends Fragment{
 					
 					if(input.isChecked()){
 						
-						Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps"));
+						Intent intent = new Intent(getActivity(), SearchMap.class );
 						startActivity(intent);
 						
 						
 						gl.setEnabled(true);
-						editlat.setEnabled(true);
 						editlat.setText("");
-						editlng.setEnabled(true);
 						editlng.setText("");
 						
 					}else if(useCurrent.isChecked()){
@@ -148,68 +210,88 @@ public class ReportFragment extends Fragment{
 			});
 			
 			
-			report = (Button) getActivity().findViewById(R.id.button_report);
-			report.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					
-					if(reportBike()){
-						
-						Toast.makeText(getActivity().getApplicationContext(), "Bike Registered as Stolen.", Toast.LENGTH_SHORT).show();
-					}else{
-						
-						Toast.makeText(getActivity().getApplicationContext(), "This bike is already Registered as Stolen .", Toast.LENGTH_SHORT).show();
-					}
-					
-				}
-				
-				
-				
-				
-			});
+			
 	}
 	
 
 	
-	public boolean reportBike(){
-		
-		
-	
-/*	
-		int selected = spinner.getSelectedItemPosition();
-		
-		
-		if(selected==0){
-			Toast.makeText(getActivity().getApplicationContext(), "Please select a bike first", Toast.LENGTH_SHORT).show();
-			
-		}
-		Bike testBike = gs.getProfile().getListOfBikes().get(selected-1);
-		if(testBike.isStolen()){
-			
-			return false;
-		}*/
-	
-	
-		
-/*		Time now = new Time();
-		now.setToNow();
-		String date = now.monthDay + "/" + now.month + "/" + now.year;*/
-		
-		//gs.getProfile().getListOfBikes().get(selected-1).setStolen(true);
-	
-		StolenBike stolenBike = new StolenBike();
-		stolenBike.put("lat", gs.getCurrentLat());
-		stolenBike.put("lng", gs.getCurrentLng());
-		stolenBike.put("serialNumber", "testSerial - need to fix");
-		stolenBike.saveInBackground();
-		
-		//gs.getStolenBikes().add(new StolenBike(gs.getCurrentLat(), gs.getCurrentLng(), testBike.getSerialNo(), date));
+	public void reportBike(){
 		
 		
 		
-		return true;
+		 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setMessage(this.getResources().getString(R.string.report_message));
+	        builder.setPositiveButton(this.getResources().getString(R.string.report_bike), new DialogInterface.OnClickListener() {
+
+	        	
+	        	
+	        	@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+	        	StolenBike stolenBike = new StolenBike();
+
+
+	    		
+	    		if(input.isChecked()){
+	    			
+	    			
+	    			
+	    			stolenBike.put("lat", gs.selectedLat);
+	    			stolenBike.put("lng", gs.selectedLng);
+	    			
+	    			
+	    			
+	    		}else{
+	    	
+	    		
+	    		stolenBike.put("lat", gs.getCurrentLat());
+	    		stolenBike.put("lng", gs.getCurrentLng());
+	    		
+	    		
+	    		}
+	    		
+	    		stolenBike.put("bikeId", spinner.getSelectedItem() );
+	    		stolenBike.saveInBackground();
+	    		
+	    		
+	    		Bike bike = finalBikes.get((int)spinner.getSelectedItemPosition());
+
+				
+					
+	    		bike.put("registeredStolen", true);
+	    		
+	    		finalBikes.remove(spinner.getSelectedItemPosition());
+	    		if(finalBikes.size()==0){
+	    			
+	    			report.setEnabled(false);
+	    		}
+	    		adapter.setList(finalBikes);
+	    		adapter.notifyDataSetChanged();
+	    		
+
+	    		
+	    	
+	    		
+	        	}
+	    		
+	          
+	        });
+	        
+	      
+
+	        builder.setNegativeButton(this.getResources().getString(R.string.do_not_report_bike), new DialogInterface.OnClickListener() {
+
+
+	            @Override
+	            public void onClick(DialogInterface dialog, int which) {
+	                dialog.dismiss();
+
+	            }
+	        });
 		
+		
+	AlertDialog dialog = builder.create();
+	dialog.show();
 		
 	}
 
@@ -230,6 +312,25 @@ public class ReportFragment extends Fragment{
 		gl.setEnabled(false);
 		editlat.setEnabled(false);
 		editlng.setEnabled(false);
+		
+		
+	}
+
+	@Override
+	public void onResume() {
+		
+		super.onResume();
+		
+		
+		if(gs.selectedLat!=null && gs.selectedLng!=null){
+		
+			editlat.setText((gs.selectedLat).toString());
+			editlng.setText((gs.selectedLng).toString());
+		
+		
+		}
+		
+		
 		
 		
 	}

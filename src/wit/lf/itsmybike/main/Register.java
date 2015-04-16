@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +53,7 @@ public class Register extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         try {
             super.onCreate(savedInstanceState);
             scaledBitmap = BitmapFactory.decodeResource(getResources(),
@@ -78,6 +80,7 @@ public class Register extends Activity {
         {
             ex.printStackTrace();
         }
+
     }
 
 
@@ -237,6 +240,7 @@ public class Register extends Activity {
         catch (Exception ex)
         {
             ex.printStackTrace();
+
         }
     }
 

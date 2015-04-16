@@ -142,6 +142,7 @@ public class HomeFragment extends  Fragment implements ConnectionCallbacks, OnCo
 		//manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50000, 10, this);
 		
 		
+
 		
 		StolenBike.findInBackground(new FindCallback<StolenBike>(){
 
@@ -264,15 +265,12 @@ public void turnOnLocationServices()
 	@Override
 	public void onMapReady(GoogleMap map) {
 		
-	/*    map.addMarker(new MarkerOptions()
-	        .position()
-	        .title("Hello world"));*/
+
 	}
 	
 	@Override
 	  public void onMapLongClick(LatLng point) {
-	    /* Toast toast = new Toast(this.getActivity());
-	     toast.show();*/
+	
 	  }
 
 
@@ -358,36 +356,7 @@ public void turnOnLocationServices()
 		
 	}
 	
-	public void onTouchEvent(MotionEvent event, MapView mapView){
-		
-		Toast.makeText(getActivity(), "Map point touched", Toast.LENGTH_SHORT).show();
-		
-		if(event.getAction() == 1){
-			
-			
-			
-			
-			
-			
-			GeoPoint p = new GeoPoint(
-					(int) event.getX(),
-					(int) event.getY());
-			controller.animateTo(p);
-			controller.setZoom(12);
-			
-			//MapOverlay mapOverlay = new MapOverlay();
-			
-			
-			Toast.makeText(getActivity(),
-					 p.getLatitudeE6() / 1E6 + "," + 
-				             p.getLongitudeE6() /1E6 , 
-				             Toast.LENGTH_SHORT).show();
-					
-		}
-		
-		
-		
-	}
+
 
 
 	
