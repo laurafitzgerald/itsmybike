@@ -55,6 +55,10 @@
     <string name = "parse_client_key">3I3oXpk4U5O8dfhNvlXwblr0lDJppuk0lVxCINIA</string>
     <string name = "choosebikesHeading">Choose a Bike</string>
       <string name = "chooselocationHeading">Choose a Location</string>
+      <string name = "do_not_report_bike">Cancel</string>
+      
+      <string name = "report_bike">Report</string>
+      <string name = "report_message">Are you sure you want to report this bike as stolen?</string>
     
     
      <string name="useLocation">Use Location</string>

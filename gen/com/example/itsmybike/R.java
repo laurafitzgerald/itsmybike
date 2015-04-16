@@ -739,6 +739,7 @@ containing a value of this type.
         public static final int defaultNickname=0x7f06002c;
         public static final int defaultSerial=0x7f06002d;
         public static final int do_not_open_location_settings=0x7f06003a;
+        public static final int do_not_report_bike=0x7f06005a;
         public static final int dummy_section_text=0x7f060029;
         public static final int editBikeMakeHint=0x7f06004d;
         public static final int editPasswordButton=0x7f060047;
@@ -762,13 +763,15 @@ containing a value of this type.
         public static final int passwordText=0x7f060028;
         public static final int phoneNumberHint=0x7f060041;
         public static final int profile=0x7f06002b;
-        public static final int prompt=0x7f06005b;
+        public static final int prompt=0x7f06005e;
         public static final int radiocurrentlocation=0x7f060031;
         public static final int radioinputlocation=0x7f060032;
         public static final int registerButton=0x7f060025;
         public static final int register_stolen=0x7f06003e;
         public static final int reportForm1=0x7f06002f;
         public static final int reportForm2=0x7f060030;
+        public static final int report_bike=0x7f06005b;
+        public static final int report_message=0x7f06005c;
         public static final int saveProfile=0x7f060045;
         public static final int selectPhotoMethod=0x7f060052;
         public static final int serial=0x7f06003c;
@@ -783,7 +786,7 @@ containing a value of this type.
         public static final int title_activity_edit_profile=0x7f060044;
         public static final int title_activity_image_capture=0x7f060055;
         public static final int title_activity_main=0x7f060042;
-        public static final int useLocation=0x7f06005a;
+        public static final int useLocation=0x7f06005d;
         public static final int usernameText=0x7f060027;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 

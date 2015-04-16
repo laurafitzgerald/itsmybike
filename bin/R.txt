@@ -285,6 +285,7 @@ int string decline 0x7f060003
 int string defaultNickname 0x7f06002c
 int string defaultSerial 0x7f06002d
 int string do_not_open_location_settings 0x7f06003a
+int string do_not_report_bike 0x7f06005a
 int string dummy_section_text 0x7f060029
 int string editBikeMakeHint 0x7f06004d
 int string editPasswordButton 0x7f060047
@@ -308,13 +309,15 @@ int string parse_client_key 0x7f060057
 int string passwordText 0x7f060028
 int string phoneNumberHint 0x7f060041
 int string profile 0x7f06002b
-int string prompt 0x7f06005b
+int string prompt 0x7f06005e
 int string radiocurrentlocation 0x7f060031
 int string radioinputlocation 0x7f060032
 int string registerButton 0x7f060025
 int string register_stolen 0x7f06003e
 int string reportForm1 0x7f06002f
 int string reportForm2 0x7f060030
+int string report_bike 0x7f06005b
+int string report_message 0x7f06005c
 int string saveProfile 0x7f060045
 int string selectPhotoMethod 0x7f060052
 int string serial 0x7f06003c
@@ -329,7 +332,7 @@ int string title_activity_edit_password 0x7f060048
 int string title_activity_edit_profile 0x7f060044
 int string title_activity_image_capture 0x7f060055
 int string title_activity_main 0x7f060042
-int string useLocation 0x7f06005a
+int string useLocation 0x7f06005d
 int string usernameText 0x7f060027
 int string wallet_buy_button_place_holder 0x7f060022
 int style AppBaseTheme 0x7f050005

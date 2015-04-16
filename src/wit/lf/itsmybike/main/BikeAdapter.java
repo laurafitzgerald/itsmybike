@@ -55,4 +55,11 @@ public class BikeAdapter extends ArrayAdapter<Bike> {
 
         return row;
     }
+    
+    public void setList(List<Bike> bikes){
+    	
+    	
+    	this.bikes = bikes;
+    	
+    }
 }

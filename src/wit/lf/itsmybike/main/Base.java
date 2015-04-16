@@ -95,13 +95,26 @@ public class Base extends FragmentActivity {
 		tabsAdapter.addTab(actionBar.newTab().setText("Report"), ReportFragment.class, null);
 	
 		
-
+		if(getIntent().getAction()!=null){
+			
+			if(getIntent().getAction().equals("open report")){
+				
+				actionBar.setSelectedNavigationItem(2);
+				
+			}
+			
+		}
+		
+		
+		
 		if(savedInstanceState != null){
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 			
 		}
 		
 
+		
+		
 	
 
 	}

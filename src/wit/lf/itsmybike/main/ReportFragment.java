@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -48,6 +50,8 @@ public class ReportFragment extends Fragment{
 	private RadioButton input;
 	private RadioButton useCurrent;
 	private Button report;
+	BikeAdapter adapter;
+	List<Bike> finalBikes;
 	
 	
 	@Override
@@ -90,9 +94,23 @@ public class ReportFragment extends Fragment{
 		gs = (GlobalState) getActivity().getApplication();
 				
 			
+		
+		
+		report = (Button) getActivity().findViewById(R.id.button_report);
+		report.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				
+				reportBike();
+			
+			
+			
+			}
+		});
 			
 			spinner  = (Spinner) getActivity().findViewById(R.id.bikes_spinner);
-			
+			report.setEnabled(true);
 			
 			
 			
@@ -104,7 +122,7 @@ public class ReportFragment extends Fragment{
 				@Override
 				public void done(List<Bike> bikes, ParseException e) {
 					
-					List<Bike> finalBikes = new ArrayList<Bike>();
+					finalBikes = new ArrayList<Bike>();
 					
 					for(Bike b: bikes){
 						
@@ -115,8 +133,10 @@ public class ReportFragment extends Fragment{
 						}
 					}
 					
+				
+					
 					Resources res = getResources();
-					BikeAdapter adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, finalBikes, res);
+					adapter = new BikeAdapter(getActivity(), R.layout.bike_spinner_item, finalBikes, res);
 					spinner.setAdapter(adapter);
 					
 					
@@ -131,6 +151,8 @@ public class ReportFragment extends Fragment{
 				
 			});
 			
+			
+		
 			
 			gl = (GridLayout) getActivity().findViewById(R.id.lat_lng_grid);
 			
@@ -188,61 +210,88 @@ public class ReportFragment extends Fragment{
 			});
 			
 			
-			report = (Button) getActivity().findViewById(R.id.button_report);
-			report.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					
-					if(reportBike()){
-						
-						Toast.makeText(getActivity().getApplicationContext(), "Bike Registered as Stolen.", Toast.LENGTH_SHORT).show();
-					}else{
-						
-						Toast.makeText(getActivity().getApplicationContext(), "This bike is already Registered as Stolen .", Toast.LENGTH_SHORT).show();
-					}
-					
-				}
-				
-				
-				
-				
-			});
+			
 	}
 	
 
 	
-	public boolean reportBike(){
+	public void reportBike(){
 		
 		
+		
+		 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setMessage(this.getResources().getString(R.string.report_message));
+	        builder.setPositiveButton(this.getResources().getString(R.string.report_bike), new DialogInterface.OnClickListener() {
+
+	        	
+	        	
+	        	@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+	        	StolenBike stolenBike = new StolenBike();
 
 
+	    		
+	    		if(input.isChecked()){
+	    			
+	    			
+	    			
+	    			stolenBike.put("lat", gs.selectedLat);
+	    			stolenBike.put("lng", gs.selectedLng);
+	    			
+	    			
+	    			
+	    		}else{
+	    	
+	    		
+	    		stolenBike.put("lat", gs.getCurrentLat());
+	    		stolenBike.put("lng", gs.getCurrentLng());
+	    		
+	    		
+	    		}
+	    		
+	    		stolenBike.put("bikeId", spinner.getSelectedItem() );
+	    		stolenBike.saveInBackground();
+	    		
+	    		
+	    		Bike bike = finalBikes.get((int)spinner.getSelectedItemPosition());
+
+				
+					
+	    		bike.put("registeredStolen", true);
+	    		
+	    		finalBikes.remove(spinner.getSelectedItemPosition());
+	    		if(finalBikes.size()==0){
+	    			
+	    			report.setEnabled(false);
+	    		}
+	    		adapter.setList(finalBikes);
+	    		adapter.notifyDataSetChanged();
+	    		
+
+	    		
+	    	
+	    		
+	        	}
+	    		
+	          
+	        });
+	        
+	      
+
+	        builder.setNegativeButton(this.getResources().getString(R.string.do_not_report_bike), new DialogInterface.OnClickListener() {
+
+
+	            @Override
+	            public void onClick(DialogInterface dialog, int which) {
+	                dialog.dismiss();
+
+	            }
+	        });
 		
-		if(input.isChecked()){
-			
-			
-			StolenBike stolenBike = new StolenBike();
-			stolenBike.put("lat", gs.selectedLat);
-			stolenBike.put("lng", gs.selectedLng);
-			//stolenBike.put("bikeId", );
-			stolenBike.saveInBackground();
-			
-			
-		}else{
-	
-		StolenBike stolenBike = new StolenBike();
-		stolenBike.put("lat", gs.getCurrentLat());
-		stolenBike.put("lng", gs.getCurrentLng());
-		//stolenBike.put("bikeId", );
-		stolenBike.saveInBackground();
-	
 		
-		}
-		
-		
-		
-		return true;
-		
+	AlertDialog dialog = builder.create();
+	dialog.show();
 		
 	}
 

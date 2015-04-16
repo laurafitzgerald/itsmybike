@@ -77,7 +77,6 @@ public class Bike extends ParseObject{
 
 
 
-
     public Boolean getStolen(){
     	
     	return getBoolean("registeredStolen");
