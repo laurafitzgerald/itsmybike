@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -151,7 +152,7 @@ public class EditProfile extends Activity {
                     newPassword.requestFocus();
                 } else {
 
-
+                    Log.v("EditProfile","imaged compressed: "+gs.compressProfilePic);
                     userProfile.put("firstName", editProfileFirstName.getText().toString());
                     userProfile.put("surName", editProfileSurname.getText().toString());
                     userProfile.put("location", editProfileLocation.getText().toString());
@@ -190,23 +191,26 @@ public class EditProfile extends Activity {
                     Toast.makeText(this, "Please Enter Location", Toast.LENGTH_SHORT).show();
                     editProfileLocation.requestFocus();
                 } else {
-
+                    Log.v("EditProfile","imaged compressed: "+gs.compressProfilePic);
                     userProfile.put("firstName", editProfileFirstName.getText().toString());
                     userProfile.put("surName", editProfileSurname.getText().toString());
                     userProfile.put("location", editProfileLocation.getText().toString());
-                    gs.saveProfilePicLocally(prepareProfilePicForSaving());
-                    userProfile.saveEventually(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
+                    if(gs.compressProfilePic) {
+                        gs.saveProfilePicLocally(prepareProfilePicForSaving());
 
-                            if (e == null) {
-                                gs.saveProfilePicToParse(prepareProfilePicForSaving());
-                            } else {
-                                Toast.makeText(EditProfile.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                        userProfile.saveEventually(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+
+                                if (e == null) {
+                                    gs.saveProfilePicToParse(prepareProfilePicForSaving());
+                                } else {
+
+                                }
+
                             }
-
-                        }
-                    });
+                        });
+                    }
 
                     finish();
                     Intent i=new Intent(this,Base.class);
@@ -231,7 +235,7 @@ public class EditProfile extends Activity {
 
 
         try {
-
+            gs.compressProfilePic=true;
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(getResources().getString(R.string.selectPhotoMethod));
             builder.setPositiveButton(getResources().getString(R.string.browse), new DialogInterface.OnClickListener() {
@@ -276,7 +280,10 @@ public class EditProfile extends Activity {
     public byte[] prepareProfilePicForSaving()
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
         byte[] byteArray = stream.toByteArray();
         return byteArray;
 

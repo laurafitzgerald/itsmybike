@@ -148,6 +148,7 @@ public class Base extends FragmentActivity {
 
     public void editProfile(View view)
     {
+        gs.compressProfilePic=false;
         startActivity(new Intent(this,EditProfile.class));
     }
 

@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.example.itsmybike.R;
-import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.Parse;
@@ -51,6 +50,7 @@ public class GlobalState extends Application {
     private ParseFile fileContainingBikePic;
     Double selectedLat;
     Double selectedLng;
+    public boolean compressProfilePic;
  
 
 
@@ -59,6 +59,7 @@ public class GlobalState extends Application {
 
 
         Parse.enableLocalDatastore(this);
+        compressProfilePic=false;
 
         Parse.initialize(this, getString(com.example.itsmybike.R.string.parse_application_id), getString(R.string.parse_client_key));
 
