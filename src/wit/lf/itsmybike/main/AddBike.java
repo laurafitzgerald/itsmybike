@@ -155,6 +155,8 @@ public class AddBike extends Activity {
               bike.put("userId", ParseUser.getCurrentUser());
               Log.v("SaveEventually","user: "+ParseUser.getCurrentUser());
                  gs.saveBikePicLocally(prepareBikePicForSave(), addBikeSerialNumber.getText().toString());
+              bike.pin();
+              gs.populateLocalBikeList();
               bike.saveEventually(new SaveCallback() {
                   @Override
                   public void done(ParseException ex) {

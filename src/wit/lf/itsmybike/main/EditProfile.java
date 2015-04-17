@@ -155,7 +155,7 @@ public class EditProfile extends Activity {
                     userProfile.put("firstName", editProfileFirstName.getText().toString());
                     userProfile.put("surName", editProfileSurname.getText().toString());
                     userProfile.put("location", editProfileLocation.getText().toString());
-                     gs.saveProfilePicLocally(prepareProfilePicForSaving());
+                    gs.saveProfilePicLocally(prepareProfilePicForSaving());
                     userProfile.setPassword(newPassword.getText().toString());
                     userProfile.saveEventually(new SaveCallback() {
                         @Override
@@ -171,12 +171,12 @@ public class EditProfile extends Activity {
                     });
 
 
+                    Toast.makeText(EditProfile.this, "Profile Updated", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(this, Base.class);
+                    i.setAction("open profile");
+                    finish();
+                    startActivity(i);
                 }
-                Toast.makeText(EditProfile.this, "Profile Updated", Toast.LENGTH_LONG).show();
-                Intent i=new Intent(this,Base.class);
-                i.setAction("open profile");
-                finish();
-                startActivity(i);
 
             } else {
 

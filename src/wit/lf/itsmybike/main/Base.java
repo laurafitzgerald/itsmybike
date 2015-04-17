@@ -81,94 +81,60 @@ public class Base extends FragmentActivity {
 	}
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
+	public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
 
+        gs = (GlobalState) getApplication();
 
-		
-		gs = (GlobalState) getApplication();
-	
-		viewPager = new ViewPager(this);
-		viewPager.setId(R.id.base);
-		
-		
-		setContentView(viewPager);
-		
-		 actionBar = getActionBar();
+        viewPager = new ViewPager(this);
+        viewPager.setId(R.id.base);
 
-		
-		actionBar.setHomeButtonEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
-		tabsAdapter = new TabsAdapter(this, viewPager);
-        profileFragmentTab=actionBar.newTab();
+
+        setContentView(viewPager);
+
+        actionBar = getActionBar();
+
+
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+        tabsAdapter = new TabsAdapter(this, viewPager);
+        profileFragmentTab = actionBar.newTab();
         profileFragmentTab.setText("Profile");
         profileFragmentTab.setTag("profileFragment");
 
 
-
-		tabsAdapter.addTab(actionBar.newTab().setText("Home"), HomeFragment.class, null);
-		tabsAdapter.addTab(profileFragmentTab, ProfileFragment.class, null);
-		tabsAdapter.addTab(actionBar.newTab().setText("Report"), ReportFragment.class, null);
-
+        tabsAdapter.addTab(actionBar.newTab().setText("Home"), HomeFragment.class, null);
+        tabsAdapter.addTab(profileFragmentTab, ProfileFragment.class, null);
+        tabsAdapter.addTab(actionBar.newTab().setText("Report"), ReportFragment.class, null);
 
 
-
-        if(getIntent().getAction()!=null)
-        {
+        if (getIntent().getAction() != null) {
 
 
-            if (getIntent().getAction().equals("open profile"))
-            {
+            if (getIntent().getAction().equals("open profile")) {
                 actionBar.setSelectedNavigationItem(1);
             }
         }
-		
-<<<<<<< HEAD
-
-		if(savedInstanceState != null)
-        {
 
 
+        if (savedInstanceState != null) {
 
 
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
-
-=======
-		if(getIntent().getAction()!=null){
-			
-			if(getIntent().getAction().equals("open report")){
-				
-				actionBar.setSelectedNavigationItem(2);
-				
-			}
-			
-		}
-		
-		
-		
-		if(savedInstanceState != null){
-			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
->>>>>>> 25723f18b1de5f6d90f4d4f33b215201d89b42ed
-			
-		}
-
-<<<<<<< HEAD
+        }
+    }
 
 
-=======
-		
-		
-	
->>>>>>> 25723f18b1de5f6d90f4d4f33b215201d89b42ed
 
-	}
+
+
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState){
-		
-		
+
+
 		super.onSaveInstanceState(outState);
 		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
 	}

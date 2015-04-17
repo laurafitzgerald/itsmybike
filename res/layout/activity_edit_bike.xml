@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:padding="15dp"
     android:background="@color/background" >
 
     <ScrollView
@@ -17,12 +18,11 @@
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-            android:layout_marginTop="39dp"
+           android:padding="15dp"
         	android:layout_height="wrap_content"
       		android:background="@color/innerbackground"
-      		android:layout_marginRight="25dp"
-        	android:layout_marginLeft="25dp"
-        	android:padding="25dp" >
+
+        	 >
 
 
             <EditText
@@ -31,6 +31,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:ems="10"
+                android:layout_alignRight="@+id/editBikeImage"
+                android:layout_marginRight="10dp"
                 android:id="@+id/editBikeNickname"
                 android:hint="@string/bikeNicknameHint"
                 android:layout_alignParentTop="true"
